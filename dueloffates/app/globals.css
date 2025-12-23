@@ -1,26 +1,275 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  /* === BACKGROUNDS === */
+  --color-bg-main: #0B0E14;
+  --color-bg-secondary: #111827;
+  --color-bg-card: #1F2937;
+  --color-bg-border: #374151;
+  
+  /* === TEXT === */
+  --color-text-primary: #E5E7EB;
+  --color-text-secondary: #9CA3AF;
+  --color-text-muted: #6B7280;
+  
+  /* === ATTACK CARDS === */
+  --color-attack-base: #DC2626;
+  --color-attack-hover: #EF4444;
+  --color-attack-border: #7F1D1D;
+  --color-attack-glow: rgba(220, 38, 38, 0.4);
+  
+  /* === DEFENSE CARDS === */
+  --color-defense-base: #2563EB;
+  --color-defense-hover: #3B82F6;
+  --color-defense-border: #1E3A8A;
+  --color-defense-glow: rgba(37, 99, 235, 0.4);
+  
+  /* === POISON/FATIGUE CARDS === */
+  --color-poison-base: #16A34A;
+  --color-poison-hover: #22C55E;
+  --color-poison-border: #14532D;
+  --color-poison-glow: rgba(22, 163, 74, 0.4);
+  
+  /* === BUFF CARDS === */
+  --color-buff-base: #CA8A04;
+  --color-buff-hover: #EAB308;
+  --color-buff-border: #713F12;
+  --color-buff-glow: rgba(202, 138, 4, 0.4);
+  
+  /* === NEUTRAL/UTILITY === */
+  --color-neutral-base: #6B7280;
+  --color-neutral-hover: #9CA3AF;
+  --color-neutral-border: #374151;
+  
+  /* === STATUS EFFECTS === */
+  --color-status-guard: #60A5FA;
+  --color-status-fatigue: #4ADE80;
+  --color-status-buff: #FACC15;
+  --color-status-debuff: #F87171;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  * {
+    @apply m-0 p-0 box-border;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  body {
+    @apply overflow-x-hidden;
+    background-color: var(--color-bg-main);
+    color: var(--color-text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.6;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* === CARD BASE STYLES === */
+  .card {
+    @apply rounded-xl p-4 transition-all duration-300 cursor-pointer border-2 border-transparent aspect-2/3 ;
+    background-color: var(--color-bg-card);
+  }
+
+  .card:hover {
+    @apply -translate-y-1;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  }
+
+  /* === ATTACK CARDS === */
+  .card-attack {
+    background-color: var(--color-attack-base);
+    border-color: var(--color-attack-border);
+  }
+
+  .card-attack:hover {
+    background-color: var(--color-attack-hover);
+    box-shadow: 0 0 20px var(--color-attack-glow);
+  }
+
+  .card-attack.on-cooldown {
+    @apply opacity-40 grayscale cursor-not-allowed;
+  }
+
+  /* === DEFENSE CARDS === */
+  .card-defense {
+    background-color: var(--color-defense-base);
+    border-color: var(--color-defense-border);
+  }
+
+  .card-defense:hover {
+    background-color: var(--color-defense-hover);
+    box-shadow: 0 0 20px var(--color-defense-glow);
+  }
+
+  .card-defense.on-cooldown {
+    @apply opacity-40 grayscale cursor-not-allowed;
+  }
+
+  /* === POISON/FATIGUE CARDS === */
+  .card-poison {
+    background-color: var(--color-poison-base);
+    border-color: var(--color-poison-border);
+  }
+
+  .card-poison:hover {
+    background-color: var(--color-poison-hover);
+    box-shadow: 0 0 20px var(--color-poison-glow);
+  }
+
+  .card-poison.on-cooldown {
+    @apply opacity-40 grayscale cursor-not-allowed;
+  }
+
+  /* === BUFF CARDS === */
+  .card-buff {
+    background-color: var(--color-buff-base);
+    border-color: var(--color-buff-border);
+  }
+
+  .card-buff:hover {
+    background-color: var(--color-buff-hover);
+    box-shadow: 0 0 20px var(--color-buff-glow);
+  }
+
+  .card-buff.on-cooldown {
+    @apply opacity-40 grayscale cursor-not-allowed;
+  }
+
+  /* === NEUTRAL CARDS === */
+  .card-neutral {
+    background-color: var(--color-neutral-base);
+    border-color: var(--color-neutral-border);
+  }
+
+  .card-neutral:hover {
+    background-color: var(--color-neutral-hover);
+  }
+
+  .card-neutral.on-cooldown {
+    @apply opacity-40 grayscale cursor-not-allowed;
+  }
+
+  /* === SELECTED CARD (CENTER) === */
+  .card-selected {
+    @apply border-2 border-white;
+    background-color: var(--color-bg-secondary);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  }
+
+  /* === STATUS EFFECTS === */
+  .status-pill {
+    @apply inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium;
+    background-color: var(--color-bg-card);
+    border: 1px solid var(--color-bg-border);
+  }
+
+  .status-guard {
+    color: var(--color-status-guard);
+  }
+
+  .status-fatigue {
+    color: var(--color-status-fatigue);
+  }
+
+  .status-buff {
+    color: var(--color-status-buff);
+  }
+
+  .status-debuff {
+    color: var(--color-status-debuff);
+  }
+
+  /* === TIMER === */
+  .timer {
+    @apply text-2xl font-bold;
+    color: var(--color-text-primary);
+  }
+
+  .timer.critical {
+    @apply animate-pulse;
+    color: #EF4444;
+  }
+
+  /* === PANELS === */
+  .panel {
+    @apply rounded-lg p-4;
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-bg-border);
+  }
+
+  .panel-header {
+    @apply text-lg font-semibold mb-3;
+    color: var(--color-text-primary);
+  }
+
+  /* === TEXT STYLES === */
+  .text-primary {
+    color: var(--color-text-primary);
+  }
+
+  .text-secondary {
+    color: var(--color-text-secondary);
+  }
+
+  .text-muted {
+    color: var(--color-text-muted);
+  }
+
+  /* === BUTTONS === */
+  .btn {
+    @apply px-4 py-2 rounded-md font-medium cursor-pointer transition-all duration-200 border-0;
+  }
+
+  .btn-primary {
+    @apply text-white;
+    background-color: var(--color-defense-base);
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-defense-hover);
+  }
+
+  .btn-danger {
+    @apply text-white;
+    background-color: var(--color-attack-base);
+  }
+
+  .btn-danger:hover {
+    background-color: var(--color-attack-hover);
+  }
+
+  /* === HEALTH BARS === */
+  .health-bar {
+    @apply h-6 rounded-full overflow-hidden relative;
+    background-color: var(--color-bg-card);
+    border: 2px solid var(--color-bg-border);
+  }
+
+  .health-bar-fill {
+    @apply h-full transition-all duration-500;
+    background: linear-gradient(90deg, #DC2626, #EF4444);
+  }
+
+  /* === UTILITY === */
+  .divider {
+    @apply h-px my-4;
+    background-color: var(--color-bg-border);
+  }
+
+  .glow-attack {
+    box-shadow: 0 0 20px var(--color-attack-glow);
+  }
+
+  .glow-defense {
+    box-shadow: 0 0 20px var(--color-defense-glow);
+  }
+
+  .glow-poison {
+    box-shadow: 0 0 20px var(--color-poison-glow);
+  }
+
+  .glow-buff {
+    box-shadow: 0 0 20px var(--color-buff-glow);
+  }
 }
