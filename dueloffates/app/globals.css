@@ -273,3 +273,11 @@
     box-shadow: 0 0 20px var(--color-buff-glow);
   }
 }
+
+
+
+
+
+curl -X POST https://your-app.vercel.app/api/generate-scenario \
+  -H "Content-Type: application/json" \
+  -d '{"difficulty":"easy"}'

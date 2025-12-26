@@ -1,0 +1,58 @@
+[
+  {
+    "card_name": "Guard",
+    "card_type": "Defense",
+    "shield_gain": 8,
+    "priority": "High",
+    "cooldown_time": "1 Turn",
+    "multiplier": "1x",
+    "shield_gain_calculation": "Shield Multiplier"
+  },
+  {
+    "card_name": "Reinforced Guard",
+    "card_type": "Defense",
+    "shield_gain": 12,
+    "priority": "Medium",
+    "cooldown_time": "2 Turns",
+    "multiplier": "1x",
+    "shield_gain_calculation": "Shield Multiplier"
+  },
+  {
+    "card_name": "Brace",
+    "card_type": "Defense",
+    "shield_gain": 10,
+    "priority": "High",
+    "cooldown_time": "2 Turns",
+    "multiplier": "1x",
+    "shield_gain_calculation": "Shield Multiplier",
+    "additional_effect": "Reduces Fatigue - 1"
+  },
+  {
+    "card_name": "Fortify",
+    "card_type": "Defense",
+    "shield_gain": 15,
+    "priority": "Low",
+    "cooldown_time": "3 Turns",
+    "multiplier": "1x",
+    "shield_gain_calculation": "Shield Multiplier"
+  },
+  {
+    "card_name": "Reactive Barrier",
+    "card_type": "Defense",
+    "shield_gain": 6,
+    "priority": "High",
+    "cooldown_time": "2 Turns",
+    "multiplier": "1x + 0.2x per Fatigue on self",
+    "shield_gain_calculation": "Shield Multiplier"
+  },
+  {
+    "card_name": "Iron Stance",
+    "card_type": "Defense",
+    "shield_gain": 10,
+    "priority": "High",
+    "cooldown_time": "3 Turns",
+    "multiplier": "1x",
+    "shield_gain_calculation": "Shield Multiplier",
+    "additional_effect": "User Fatigue + 1"
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "card_name": "Poison Infusion",
+    "card_type": "Status Damage",
+    "effect": "Apply Poison +2 to opponent",
+    "cooldown_time": "3 Turns"
+  },
+  {
+    "card_name": "Fatigue Hex",
+    "card_type": "Status Damage",
+    "effect": "Apply Fatigue +2 to opponent",
+    "cooldown_time": "3 Turns"
+  },
+  {
+    "card_name": "Corrosion",
+    "card_type": "Status Damage",
+    "effect": "Apply Poison +1 and Fatigue +1 to opponent",
+    "cooldown_time": "4 Turns"
+  },
+  {
+    "card_name": "Frenzy",
+    "card_type": "Status Damage",
+    "effect": "Apply (-3 to +3) Fatigue/Poison",
+    "cooldown_time": "5 Turns"
+  }
+]
