@@ -1,5 +1,6 @@
 import Cards from "@/components/Cards";
 import HeadUpDisplay from "@/components/HeadUpDisplay";
+import { OpponentCards, userCards } from "@/mock/mockHand";
 import { Icon } from "@iconify/react";
 
 export default function Home() {
@@ -10,9 +11,11 @@ export default function Home() {
 
         {/* Opponent's Cards Row - Hidden */}
         <div className="relative">
-          <div className="grid grid-cols-10 lg:grid-cols-10 md:grid-cols-6 sm:grid-cols-5 gap-2 md:gap-3">
-            {[...Array(10)].map((_, i) => (
-              <div key={`opp-${i}`}></div>
+          <div className="grid grid-cols-10 lg:grid-cols-10 md:grid-cols-6 sm:grid-cols-5 gap-2 md:gap-3 auto-rows-fr">
+            {OpponentCards.map((card, i) => (
+              <div key={`opp-${i}`} className="h-full">
+                <Cards {...card} />
+              </div>
             ))}
           </div>
         </div>
@@ -62,9 +65,13 @@ export default function Home() {
 
         {/* Player's Cards Row - Visible */}
         <div className="relative">
-          <div className="grid grid-cols-10 lg:grid-cols-10 md:grid-cols-6 sm:grid-cols-5 gap-2 md:gap-3">
-            {[...Array(10)].map((_, i) => {
-              return <div key={`player-${i}`}></div>;
+          <div className="grid grid-cols-10 lg:grid-cols-10 md:grid-cols-6 sm:grid-cols-5 gap-2 md:gap-3 auto-rows-fr">
+            {userCards.map((card, i) => {
+              return (
+                <div key={`player-${i}`} className="h-full">
+                  <Cards {...card} />
+                </div>
+              );
             })}
           </div>
         </div>
