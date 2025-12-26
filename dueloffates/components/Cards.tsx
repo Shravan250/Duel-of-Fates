@@ -7,6 +7,7 @@ interface CardProps {
   effect: string;
   type: "attack" | "defense" | "buff" | "neutral" | "poison";
   onCooldown: boolean;
+  userCards: boolean;
 }
 
 const styles = {
@@ -17,11 +18,21 @@ const styles = {
   poison: "card-poison",
 };
 
-const Cards = ({ header, icon, effect, type, onCooldown }: CardProps) => {
+const Cards = ({
+  header,
+  icon,
+  effect,
+  type,
+  onCooldown,
+  userCards,
+}: CardProps) => {
   return (
     <div
       className={clsx(
-        "card flex flex-col justify-around items-center",
+        "card flex flex-col justify-around items-center aspect-2/3",
+        userCards
+          ? "border-2 bg-white border-gray-400 "
+          : " bg-gray-800 rounded",
         styles[type],
         {
           "on-cooldown": onCooldown,

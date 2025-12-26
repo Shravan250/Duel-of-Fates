@@ -4,50 +4,50 @@
 
 @theme {
   /* === BACKGROUNDS === */
-  --color-bg-main: #0B0E14;
+  --color-bg-main: #0b0e14;
   --color-bg-secondary: #111827;
-  --color-bg-card: #1F2937;
+  --color-bg-card: #1f2937;
   --color-bg-border: #374151;
-  
+
   /* === TEXT === */
-  --color-text-primary: #E5E7EB;
-  --color-text-secondary: #9CA3AF;
-  --color-text-muted: #6B7280;
-  
+  --color-text-primary: #e5e7eb;
+  --color-text-secondary: #9ca3af;
+  --color-text-muted: #6b7280;
+
   /* === ATTACK CARDS === */
-  --color-attack-base: #DC2626;
-  --color-attack-hover: #EF4444;
-  --color-attack-border: #7F1D1D;
+  --color-attack-base: #dc2626;
+  --color-attack-hover: #ef4444;
+  --color-attack-border: #7f1d1d;
   --color-attack-glow: rgba(220, 38, 38, 0.4);
-  
+
   /* === DEFENSE CARDS === */
-  --color-defense-base: #2563EB;
-  --color-defense-hover: #3B82F6;
-  --color-defense-border: #1E3A8A;
+  --color-defense-base: #2563eb;
+  --color-defense-hover: #3b82f6;
+  --color-defense-border: #1e3a8a;
   --color-defense-glow: rgba(37, 99, 235, 0.4);
-  
+
   /* === POISON/FATIGUE CARDS === */
-  --color-poison-base: #16A34A;
-  --color-poison-hover: #22C55E;
-  --color-poison-border: #14532D;
+  --color-poison-base: #16a34a;
+  --color-poison-hover: #22c55e;
+  --color-poison-border: #14532d;
   --color-poison-glow: rgba(22, 163, 74, 0.4);
-  
+
   /* === BUFF CARDS === */
-  --color-buff-base: #CA8A04;
-  --color-buff-hover: #EAB308;
-  --color-buff-border: #713F12;
+  --color-buff-base: #ca8a04;
+  --color-buff-hover: #eab308;
+  --color-buff-border: #713f12;
   --color-buff-glow: rgba(202, 138, 4, 0.4);
-  
+
   /* === NEUTRAL/UTILITY === */
-  --color-neutral-base: #6B7280;
-  --color-neutral-hover: #9CA3AF;
+  --color-neutral-base: #6b7280;
+  --color-neutral-hover: #9ca3af;
   --color-neutral-border: #374151;
-  
+
   /* === STATUS EFFECTS === */
-  --color-status-guard: #60A5FA;
-  --color-status-fatigue: #4ADE80;
-  --color-status-buff: #FACC15;
-  --color-status-debuff: #F87171;
+  --color-status-guard: #60a5fa;
+  --color-status-fatigue: #4ade80;
+  --color-status-buff: #facc15;
+  --color-status-debuff: #f87171;
 }
 
 @layer base {
@@ -59,7 +59,8 @@
     @apply overflow-x-hidden;
     background-color: var(--color-bg-main);
     color: var(--color-text-primary);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      "Helvetica Neue", Arial, sans-serif;
     line-height: 1.6;
   }
 }
@@ -67,7 +68,7 @@
 @layer components {
   /* === CARD BASE STYLES === */
   .card {
-    @apply rounded-xl p-4 transition-all duration-300 cursor-pointer border-2 border-transparent aspect-2/3 ;
+    @apply rounded-xl p-4 transition-all duration-300 cursor-pointer border-2 border-transparent aspect-2/3;
     background-color: var(--color-bg-card);
   }
 
@@ -188,7 +189,7 @@
 
   .timer.critical {
     @apply animate-pulse;
-    color: #EF4444;
+    color: #ef4444;
   }
 
   /* === PANELS === */
@@ -248,7 +249,7 @@
 
   .health-bar-fill {
     @apply h-full transition-all duration-500;
-    background: linear-gradient(90deg, #DC2626, #EF4444);
+    background: linear-gradient(90deg, #dc2626, #ef4444);
   }
 
   /* === UTILITY === */
@@ -274,10 +275,6 @@
   }
 }
 
-
-
-
-
-curl -X POST https://your-app.vercel.app/api/generate-scenario \
+/* curl -X POST https://your-app.vercel.app/api/generate-scenario \
   -H "Content-Type: application/json" \
-  -d '{"difficulty":"easy"}'
+  -d '{"difficulty":"easy"}' */
