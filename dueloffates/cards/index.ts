@@ -13,3 +13,12 @@ export {
   statusDamage,
   utilityCards,
 };
+
+export const priority={
+  0:"low",
+  1:"medium",
+  2:"high",
+  3:"immediate"
+}
+
+// 3 everycard except attack def
