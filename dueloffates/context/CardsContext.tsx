@@ -52,10 +52,10 @@ export const CardsContextProvider = ({
   const selectCard = (card: CardProps, side: PlayerSide): void => {
     console.log(card);
     if (side === "PLAYER") {
-      setUserSelectedCard(card);
+      setUserSelectedCard(card === userSelectedCard ? undefined : card);
       setUserCardSelected(!userCardSelected);
     } else {
-      setOpponentSelectedCard(card);
+      setOpponentSelectedCard(card === opponentSelectedCard ? undefined : card);
       setOpponentCardSelected(!opponentCardSelected);
     }
   };

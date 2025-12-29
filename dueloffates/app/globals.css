@@ -153,9 +153,9 @@
 
   /* === SELECTED CARD (CENTER) === */
   .card-selected {
-    @apply border-2 border-white;
+    @apply  rounded-lg;
     background-color: var(--color-bg-secondary);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    /* box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5); */
   }
 
   /* === STATUS EFFECTS === */

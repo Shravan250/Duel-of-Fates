@@ -13,7 +13,8 @@ interface CardProps {
 
 interface Cards2Props {
   card: CardProps;
-  side: PlayerSide;
+  side?: PlayerSide;
+  battleArea?:boolean
 }
 
 const styles = {
@@ -24,7 +25,7 @@ const styles = {
   poison: "card-poison",
 };
 
-const Cards = ({ card, side }: Cards2Props) => {
+const Cards = ({ card, side, battleArea=false }: Cards2Props) => {
   const { header, icon, effect, type, onCooldown, userCards } = card;
   const { selectCard } = useCardsContext();
 
@@ -32,16 +33,17 @@ const Cards = ({ card, side }: Cards2Props) => {
     <div className="relative group">
       <div
         className={clsx(
-          "card flex flex-col justify-around items-center text-center aspect-2/3 cursor-pointer transition-transform hover:scale-105",
+          "card flex flex-col justify-around items-center text-center cursor-pointer transition-transform hover:scale-105",
           userCards
-            ? "border-2 bg-white border-gray-400 rounded"
-            : " bg-gray-800 rounded",
+            ? "border-2 bg-white border-gray-400"
+            : " bg-gray-800 ",
+          battleArea ? "card-selected":"rounded", 
           styles[type],
           {
             "on-cooldown": onCooldown,
           }
         )}
-        onClick={() => selectCard(card, side)}
+        onClick={() =>side && selectCard(card, side)}
       >
         <h2>{header}</h2>
         <Icon icon={icon} width={50} height={50} className="shrink-0" />
