@@ -1,0 +1,26 @@
+export const healCards = [
+  {
+    card_name: "Recover",
+    card_type: "Heal",
+    healing_description: "Restores 10 HP",
+    cooldown_time: "2 Turns",
+  },
+  {
+    card_name: "Second Wind",
+    card_type: "Heal",
+    healing_description: "Restore 15 HP if HP is below 50",
+    cooldown_time: "3 Turns",
+  },
+  {
+    card_name: "Purifying Heal",
+    card_type: "Heal",
+    healing_description: "Restore 10 HP and reduce Fatigue by 1",
+    cooldown_time: "4 Turns",
+  },
+  {
+    card_name: "Emergency Restore",
+    card_type: "Heal",
+    healing_description: "Restore 20 HP, user gains Fatigue +1",
+    cooldown_time: "4 Turns",
+  },
+];
