@@ -1,44 +1,50 @@
 export const buffDebuffCards = [
   {
-    card_name: "Battle Focus",
-    card_type: "Buff",
-    effect_description: "Increase damage of next attack card by +1x",
+    name: "Battle Focus",
+    type: "Buff",
+    effect: "Increase damage of next attack card by +1x",
     effect_multiplier: "+1x",
-    cooldown_time: "3 Turns",
+    cooldown: 3,
+    priority:3
   },
   {
-    card_name: "Defensive Posture",
-    card_type: "Buff",
-    effect_description: "Increase next shield gain by +1x",
+    name: "Defensive Posture",
+    type: "Buff",
+    effect: "Increase next shield gain by +1x",
     effect_multiplier: "+1x",
-    cooldown_time: "3 Turns",
+    cooldown: 3,
+    priority:3
   },
   {
-    card_name: "Adrenaline Rush",
-    card_type: "Buff",
-    effect_description: "Reduce cooldown of next played card by 2 turn",
+    name: "Adrenaline Rush",
+    type: "Buff",
+    effect: "Reduce cooldown of next played card by 2 turn",
     effect_multiplier: "-2 Cooldown",
-    cooldown_time: "4 Turns",
+    cooldown: 4,
+    priority:3
   },
   {
-    card_name: "Weaken",
-    card_type: "Debuff",
-    effect_description: "Opponent's next Attack card deals 40% less damage",
+    name: "Weaken",
+    type: "Debuff",
+    effect: "Opponent's next Attack card deals 40% less damage",
     effect_multiplier: "-0.4x",
-    cooldown_time: "3 Turns",
+    cooldown: 3,
+    priority:3
   },
   {
-    card_name: "Crippling Pressure",
-    card_type: "Debuff",
-    effect_description: "Opponent's next Attack card damage reduced by 60%",
+    name: "Crippling Pressure",
+    type: "Debuff",
+    effect: "Opponent's next Attack card damage reduced by 60%",
     effect_multiplier: "-0.6x",
-    cooldown_time: "4 Turns",
+    cooldown: 4,
+    priority:3
   },
   {
-    card_name: "Guard Break Prep",
-    card_type: "Debuff",
-    effect_description: "Lowers Opponents shield by half",
+    name: "Guard Break Prep",
+    type: "Debuff",
+    effect: "Lowers Opponents shield by half",
     effect_multiplier: "Opponent shield -50%",
-    cooldown_time: "4 Turns",
+    cooldown: 4,
+    priority:3
   },
 ];

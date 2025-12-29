@@ -1,14 +1,16 @@
 export const utilityCards = [
   {
-    card_name: "Reversal",
-    card_type: "Utility",
+    name: "Reversal",
+    type: "Utility",
     effect: "all Poison and Fatigue stacks from self to opponent",
-    cooldown_time: "Can only be used once per match",
+    cooldown: 99999,
+    priority:3
   },
   {
-    card_name: "Swap",
-    card_type: "Utility",
+    name: "Swap",
+    type: "Utility",
     effect: "Swap User and Opponents HP and Shield",
-    cooldown_time: "Can only be used once per match",
+    cooldown: 99999,
+    priority:3
   },
 ];
