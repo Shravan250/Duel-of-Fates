@@ -1,3 +1,4 @@
+import useCardsContext from "@/context/CardsContext";
 import { Icon } from "@iconify/react";
 import clsx from "clsx";
 
@@ -18,14 +19,10 @@ const styles = {
   poison: "card-poison",
 };
 
-const Cards = ({
-  header,
-  icon,
-  effect,
-  type,
-  onCooldown,
-  userCards,
-}: CardProps) => {
+const Cards = ({ card }: { card: CardProps }) => {
+  const { header, icon, effect, type, onCooldown, userCards } = card;
+  const { selectCard } = useCardsContext();
+
   return (
     <div className="relative group">
       <div
@@ -39,6 +36,7 @@ const Cards = ({
             "on-cooldown": onCooldown,
           }
         )}
+        onClick={() => selectCard(card)}
       >
         <h2>{header}</h2>
         <Icon icon={icon} width={50} height={50} className="shrink-0" />

@@ -10,13 +10,13 @@ export default function Home() {
       <div className="max-w-7xl mx-auto space-y-6">
         <HeadUpDisplay player="Player 2" flip={false} />
 
-        {/* Opponent's Cards Row - Hidden */}
+        {/* Opponent Cards - Hidden */}
         <RenderCards user={false} />
 
         {/* Middle Section - Battle Area */}
         <BattleArea />
 
-        {/* Player's Cards Row - Visible */}
+        {/* Player Cards - Visible */}
         <RenderCards user={true} />
 
         <HeadUpDisplay player="Player 1" flip={true} />

@@ -16,18 +16,27 @@ interface CardProps {
 const useCards = () => {
   const [userCards, setUserCards] = useState<CardProps[]>(Player1);
   const [opponentCards, setOpponentCards] = useState<CardProps[]>(Player2);
+  const [userSelectCard, setUserSelectedCard] = useState<CardProps>();
+  const [opponentSelectCard, setOpponentSelectCard] = useState<CardProps>();
 
   // functions
-  const selectCard = () => {};
+  const selectCard = (card: CardProps): void => {
+    console.log(card);
+  };
 
   return {
     //state
     userCards,
     opponentCards,
+    userSelectCard,
+    opponentSelectCard,
 
     //setters
     setOpponentCards,
     setUserCards,
+
+    //functions
+    selectCard,
   };
 };
 

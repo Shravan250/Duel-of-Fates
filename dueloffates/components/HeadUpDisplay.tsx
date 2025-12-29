@@ -9,7 +9,7 @@ interface HeadUpDisplayProps {
 export default function HeadUpDisplay({ player, flip }: HeadUpDisplayProps) {
   return (
     <>
-      {/* Top Section - Player 2 Info */}
+      {/* Top Section - Player 2 */}
       <div
         className={clsx(
           "grid gap-4 items-start",
