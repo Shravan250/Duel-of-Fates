@@ -13,7 +13,7 @@ interface CardProps {
 
 interface Cards2Props {
   card: CardProps;
-  side: PlayerSide;
+  side?: PlayerSide;
 }
 
 const styles = {
@@ -41,7 +41,7 @@ const Cards = ({ card, side }: Cards2Props) => {
             "on-cooldown": onCooldown,
           }
         )}
-        onClick={() => selectCard(card, side)}
+        onClick={() =>side && selectCard(card, side)}
       >
         <h2>{header}</h2>
         <Icon icon={icon} width={50} height={50} className="shrink-0" />
