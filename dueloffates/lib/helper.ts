@@ -16,38 +16,45 @@ interface CardProps {
   userCards: boolean;
 }
 
-const restCatogery = [buffDebuffCards, statusDamage, utilityCards];
 /*  ---------------------------------------------------
     1. Total 10 cards
     2. Atleast 3 attack cards, 2 defence cards , 1 heal cards
     --------------------------------------------------- */
 export function deckRandomizer() {
   const deck: any = [];
+  let attackCardsCopy = shuffleArray(attackCards);
+  let defenceCardsCopy = shuffleArray(defenceCards);
+  let healCardsCopy = shuffleArray(healCards);
+  let restCardsCopy = shuffleArray([
+    ...buffDebuffCards,
+    ...statusDamage,
+    ...utilityCards,
+  ]);
 
   //3 attack
-  for (let i = 0; i < 3; i++) {
-    deck.push(attackCards[random(attackCards.length)]);
-  }
+  deck.push(...attackCardsCopy.splice(0, 3));
 
   //2 defence
-  for (let i = 0; i < 2; i++) {
-    deck.push(defenceCards[random(defenceCards.length)]);
-  }
+  deck.push(...defenceCardsCopy.splice(0, 2));
 
   //1 heal
-  for (let i = 0; i < 1; i++) {
-    deck.push(healCards[random(healCards.length)]);
-  }
+  deck.push(...healCardsCopy.splice(0, 1));
 
   //rest
-  for (let i = 0; i < 4; i++) {
-    const category = restCatogery[random(restCatogery.length)];
-    deck.push(category[random(category.length)]);
-  }
+  deck.push(...restCardsCopy.splice(0, 4));
+
   console.log(deck);
   return deck;
 }
 
-function random(limit: number) {
-  return Math.floor(Math.random() * limit);
+function shuffleArray(array: any) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
 }
+
+// function random(limit: number) {
+//   return Math.floor(Math.random() * limit);
+// }
