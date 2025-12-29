@@ -23,8 +23,8 @@ export default function BattleArea() {
 
       {/* Player 1 Selected Card */}
       <div className="border-2 border-gray-400 bg-white aspect-2/3 flex items-center justify-center text-sm text-gray-600">
-        {userCardSelected ? (
-          <Cards card={userSelectedCard} />
+        {userSelectedCard ? (
+          <Cards card={userSelectedCard!} />
         ) : (
           <>
             Player 1 Card
@@ -38,8 +38,8 @@ export default function BattleArea() {
 
       {/* Player 2 Selected Card */}
       <div className="border-2 border-gray-400 bg-white aspect-2/3 flex items-center justify-center text-sm text-gray-600">
-        {opponentCardSelected ? (
-          <Cards card={opponentSelectedCard} />
+        {opponentSelectedCard ? (
+          <Cards card={opponentSelectedCard!} />
         ) : (
           <>
             Player 2 Card
