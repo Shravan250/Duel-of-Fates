@@ -22,30 +22,30 @@ export default function BattleArea() {
       </div>
 
       {/* Player 1 Selected Card */}
-      <div className="border-2 border-gray-400 bg-white aspect-2/3 flex items-center justify-center text-sm text-gray-600">
+      <div className="aspect-2/3 min-h-80 text-sm text-gray-600">
         {userSelectedCard ? (
-          <Cards card={userSelectedCard!} />
+          <Cards card={userSelectedCard!} battleArea={true} />
         ) : (
-          <>
+          <div className="border-2 border-gray-400 bg-white w-full h-full flex justify-center items-center">
             Player 1 Card
             <br />
             (Selected)
-          </>
+          </div>
         )}
       </div>
 
-      <div className="mx-auto">V/S</div>
+      <div className="mx-auto text-black">V/S</div>
 
       {/* Player 2 Selected Card */}
-      <div className="border-2 border-gray-400 bg-white aspect-2/3 flex items-center justify-center text-sm text-gray-600">
+      <div className=" aspect-2/3 min-h-80 text-sm text-gray-600">
         {opponentSelectedCard ? (
-          <Cards card={opponentSelectedCard!} />
+          <Cards card={opponentSelectedCard!} battleArea={true} />
         ) : (
-          <>
+          <div className="border-2 border-gray-400 bg-white w-full h-full flex justify-center items-center">
             Player 2 Card
             <br />
             (Selected)
-          </>
+          </div>
         )}
       </div>
 
