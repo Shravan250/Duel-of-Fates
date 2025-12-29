@@ -1,6 +1,6 @@
 interface Card{
     name: string;
-    type: string;
+    type: "attack" | "defense" | "buff" | "debuff" | "status damage" | "utility" | "heal";
     cooldown: number;
     priority: number;
     multiplier?: string;
