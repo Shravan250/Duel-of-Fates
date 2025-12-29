@@ -4,16 +4,8 @@ import {
   OpponentCards as Player2,
   userCards as Player1,
 } from "@/mock/mockHand";
+import { CardProps } from "@/types";
 import { createContext, useContext, useState } from "react";
-
-interface CardProps {
-  header: string;
-  icon: string;
-  effect: string;
-  type: "attack" | "defense" | "buff" | "neutral" | "poison";
-  onCooldown: boolean;
-  userCards: boolean;
-}
 
 interface UseCardsContextProps {
   userCards: CardProps[];

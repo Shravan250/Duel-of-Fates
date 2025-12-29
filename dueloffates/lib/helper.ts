@@ -7,15 +7,6 @@ import {
   utilityCards,
 } from "../cards/index";
 
-interface CardProps {
-  header: string;
-  icon: string;
-  effect: string;
-  type: "attack" | "defense" | "buff" | "neutral" | "poison";
-  onCooldown: boolean;
-  userCards: boolean;
-}
-
 /*  ---------------------------------------------------
     1. Total 10 cards
     2. Atleast 3 attack cards, 2 defence cards , 1 heal cards

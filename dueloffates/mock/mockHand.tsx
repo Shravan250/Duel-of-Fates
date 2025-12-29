@@ -2,14 +2,8 @@
 // Attack -> attack, Defense -> defense, Buff/Debuff -> buff,
 // Status Damage -> poison, Heal/Utility -> neutral
 
-interface CardProps {
-  header: string;
-  icon: string;
-  effect: string;
-  type: "attack" | "defense" | "buff" | "neutral" | "poison";
-  onCooldown: boolean;
-  userCards: boolean;
-}
+import { CardProps } from "@/types";
+
 
 export const userCards: CardProps[] = [
   {
@@ -64,7 +58,7 @@ export const userCards: CardProps[] = [
     header: "Recover",
     icon: "mdi:heart-plus",
     effect: "Restores 10 HP",
-    type: "neutral",
+    type: "utility",
     onCooldown: false,
     userCards: true,
   }, //
@@ -72,7 +66,7 @@ export const userCards: CardProps[] = [
     header: "Poison Infusion",
     icon: "mdi:skull",
     effect: "Apply Poison +2",
-    type: "poison",
+    type: "status damage",
     onCooldown: false,
     userCards: true,
   }, // [cite: 74]
@@ -80,7 +74,7 @@ export const userCards: CardProps[] = [
     header: "Reversal",
     icon: "mdi:swap-horizontal",
     effect: "Transfer Stacks to Foe",
-    type: "neutral",
+    type: "utility",
     onCooldown: false,
     userCards: true,
   }, // [cite: 83]
@@ -147,7 +141,7 @@ export const OpponentCards: CardProps[] = [
     header: "Second Wind",
     icon: "mdi:leaf",
     effect: "Restore 15 HP (if <50)",
-    type: "neutral",
+    type: "utility",
     onCooldown: false,
     userCards: false,
   }, //
@@ -155,7 +149,7 @@ export const OpponentCards: CardProps[] = [
     header: "Corrosion",
     icon: "mdi:bottle-tonic-skull",
     effect: "+1 Poison, +1 Fatigue",
-    type: "poison",
+    type: "status damage",
     onCooldown: false,
     userCards: false,
   }, // [cite: 78]
@@ -163,7 +157,7 @@ export const OpponentCards: CardProps[] = [
     header: "Swap",
     icon: "mdi:sync",
     effect: "Swap HP and Shield",
-    type: "neutral",
+    type: "utility",
     onCooldown: false,
     userCards: false,
   }, // [cite: 85]

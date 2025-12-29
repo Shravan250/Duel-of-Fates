@@ -1,15 +1,7 @@
 import useCardsContext, { PlayerSide } from "@/context/CardsContext";
+import { CardProps } from "@/types";
 import { Icon } from "@iconify/react";
 import clsx from "clsx";
-
-interface CardProps {
-  header: string;
-  icon: string;
-  effect: string;
-  type: "attack" | "defense" | "buff" | "neutral" | "poison";
-  onCooldown: boolean;
-  userCards: boolean;
-}
 
 interface Cards2Props {
   card: CardProps;
@@ -21,8 +13,10 @@ const styles = {
   attack: "card-attack",
   defense: "card-defense",
   buff: "card-buff",
-  neutral: "card-neutral",
-  poison: "card-poison",
+  debuff: "card-buff",
+  "status damage": "card-neutral",
+  heal: "card-poison",
+  utility: "card-poison",
 };
 
 const Cards = ({ card, side, battleArea=false }: Cards2Props) => {
