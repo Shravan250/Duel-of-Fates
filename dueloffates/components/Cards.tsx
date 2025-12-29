@@ -1,4 +1,4 @@
-import useCardsContext from "@/context/CardsContext";
+import useCardsContext, { PlayerSide } from "@/context/CardsContext";
 import { Icon } from "@iconify/react";
 import clsx from "clsx";
 
@@ -11,6 +11,11 @@ interface CardProps {
   userCards: boolean;
 }
 
+interface Cards2Props {
+  card: CardProps;
+  side: PlayerSide;
+}
+
 const styles = {
   attack: "card-attack",
   defense: "card-defense",
@@ -19,7 +24,7 @@ const styles = {
   poison: "card-poison",
 };
 
-const Cards = ({ card }: { card: CardProps }) => {
+const Cards = ({ card, side }: Cards2Props) => {
   const { header, icon, effect, type, onCooldown, userCards } = card;
   const { selectCard } = useCardsContext();
 
@@ -36,7 +41,7 @@ const Cards = ({ card }: { card: CardProps }) => {
             "on-cooldown": onCooldown,
           }
         )}
-        onClick={() => selectCard(card)}
+        onClick={() => selectCard(card, side)}
       >
         <h2>{header}</h2>
         <Icon icon={icon} width={50} height={50} className="shrink-0" />

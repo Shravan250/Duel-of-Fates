@@ -1,6 +1,15 @@
+import useCardsContext from "@/context/CardsContext";
 import { Icon } from "@iconify/react";
+import Cards from "./Cards";
 
 export default function BattleArea() {
+  const {
+    userSelectedCard,
+    opponentSelectedCard,
+    userCardSelected,
+    opponentCardSelected,
+  } = useCardsContext();
+
   return (
     <div className="grid grid-cols-[auto_1fr_1fr_1fr_auto] gap-4 items-center py-4">
       {/* Timer */}
@@ -14,18 +23,30 @@ export default function BattleArea() {
 
       {/* Player 1 Selected Card */}
       <div className="border-2 border-gray-400 bg-white aspect-2/3 flex items-center justify-center text-sm text-gray-600">
-        Player 1 Card
-        <br />
-        (Selected)
+        {userCardSelected ? (
+          <Cards card={userSelectedCard} />
+        ) : (
+          <>
+            Player 1 Card
+            <br />
+            (Selected)
+          </>
+        )}
       </div>
 
       <div className="mx-auto">V/S</div>
 
       {/* Player 2 Selected Card */}
       <div className="border-2 border-gray-400 bg-white aspect-2/3 flex items-center justify-center text-sm text-gray-600">
-        Player 2 Card
-        <br />
-        (Selected)
+        {opponentCardSelected ? (
+          <Cards card={opponentSelectedCard} />
+        ) : (
+          <>
+            Player 2 Card
+            <br />
+            (Selected)
+          </>
+        )}
       </div>
 
       {/* Menu */}

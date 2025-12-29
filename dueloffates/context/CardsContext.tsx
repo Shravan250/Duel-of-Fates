@@ -20,10 +20,14 @@ interface UseCardsContextProps {
   opponentCards: CardProps[];
   setUserCards: React.Dispatch<React.SetStateAction<CardProps[]>>;
   setOpponentCards: React.Dispatch<React.SetStateAction<CardProps[]>>;
-  selectCard: (card: CardProps) => void;
-  userSelectCard?: CardProps;
-  opponentSelectCard?: CardProps;
+  selectCard: (card: CardProps, side: PlayerSide) => void;
+  userSelectedCard?: CardProps;
+  opponentSelectedCard?: CardProps;
+  userCardSelected: boolean;
+  opponentCardSelected: boolean;
 }
+
+export type PlayerSide = "PLAYER" | "OPPONENT";
 
 const CardsContext = createContext<UseCardsContextProps | undefined>(undefined);
 
@@ -34,24 +38,45 @@ export const CardsContextProvider = ({
 }) => {
   const [userCards, setUserCards] = useState<CardProps[]>(Player1);
   const [opponentCards, setOpponentCards] = useState<CardProps[]>(Player2);
-  const [userSelectCard, setUserSelectedCard] = useState<CardProps>();
-  const [opponentSelectCard, setOpponentSelectCard] = useState<CardProps>();
+  const [userSelectedCard, setUserSelectedCard] = useState<
+    CardProps | undefined
+  >(undefined);
+  const [opponentSelectedCard, setOpponentSelectedCard] = useState<
+    CardProps | undefined
+  >(undefined);
+  const [userCardSelected, setUserCardSelected] = useState<boolean>(false);
+  const [opponentCardSelected, setOpponentCardSelected] =
+    useState<boolean>(false);
 
   // functions
-  const selectCard = (card: CardProps): void => {
+  const selectCard = (card: CardProps, side: PlayerSide): void => {
     console.log(card);
+    if (side === "PLAYER") {
+      setUserSelectedCard(card);
+      setUserCardSelected(!userCardSelected);
+    } else {
+      setOpponentSelectedCard(card);
+      setOpponentCardSelected(!opponentCardSelected);
+    }
   };
 
   return (
     <CardsContext.Provider
       value={{
+        //state
         userCards,
         opponentCards,
-        setUserCards,
+        userSelectedCard,
+        opponentSelectedCard,
+        userCardSelected,
+        opponentCardSelected,
+
+        //setters
         setOpponentCards,
+        setUserCards,
+
+        //functions
         selectCard,
-        userSelectCard,
-        opponentSelectCard,
       }}
     >
       {children}
