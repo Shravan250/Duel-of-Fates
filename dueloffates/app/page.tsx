@@ -5,6 +5,7 @@ import HeadUpDisplay from "@/components/HeadUpDisplay";
 import RenderCards from "@/components/RenderCards";
 import { HPTest } from "@/components/test/HpTest";
 import { bindHealthEngine } from "@/engine/bindHealthEngine";
+import useCardsContext from "@/context/CardsContext";
 import { deckRandomizer } from "@/lib/helper";
 import { useEffect } from "react";
 
@@ -18,29 +19,25 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    deckRandomizer();
+    setUserCards(deckRandomizer());
   }, []);
+  const {setUserCards}=useCardsContext();
   return (
-    // <div className="min-h-screen bg-gray-100 p-4 md:p-6 lg:p-8">
-    //   <div className="max-w-7xl mx-auto space-y-6">
-    //     <HeadUpDisplay player="Player 2" flip={false} />
+    <div className="min-h-screen bg-gray-100 p-4 md:p-6 lg:p-8">
+      <div className="max-w-7xl mx-auto space-y-6">
+        <HeadUpDisplay player="Player 2" flip={false} />
 
-    //     {/* Opponent Cards - Hidden */}
-    //     <RenderCards user={false} />
+        {/* Opponent Cards - Hidden */}
+        <RenderCards user={false} />
 
-    //     {/* Middle Section - Battle Area */}
-    //     <BattleArea />
+        {/* Middle Section - Battle Area */}
+        <BattleArea />
 
-    //     {/* Player Cards - Visible */}
-    //     <RenderCards user={true} />
+        {/* Player Cards - Visible */}
+        <RenderCards user={true} />
 
-    //     <HeadUpDisplay player="Player 1" flip={true} />
-    //   </div>
-    // </div>
-    <>
-      <HPTest />
-
-      <HPTest />
-    </>
+        <HeadUpDisplay player="Player 1" flip={true} />
+      </div>
+    </div>
   );
 }

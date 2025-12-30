@@ -43,6 +43,12 @@
   --color-neutral-hover: #9ca3af;
   --color-neutral-border: #374151;
 
+  /* === HEAL CARDS === */
+  --color-heal-base: #059669;
+  --color-heal-hover: #10b981;
+  --color-heal-border: #064e3b;
+  --color-heal-glow: rgba(5, 150, 105, 0.4);
+
   /* === STATUS EFFECTS === */
   --color-status-guard: #60a5fa;
   --color-status-fatigue: #4ade80;
@@ -68,8 +74,9 @@
 @layer components {
   /* === CARD BASE STYLES === */
   .card {
-    @apply rounded-xl p-4 transition-all duration-300 cursor-pointer border-2 border-transparent aspect-2/3;
+    @apply rounded-xl p-4 transition-all duration-300 cursor-pointer border-2 border-transparent aspect-2/3 bg-cover bg-center;
     background-color: var(--color-bg-card);
+    font-family: var(--font-inter);
   }
 
   .card:hover {
@@ -79,8 +86,13 @@
 
   /* === ATTACK CARDS === */
   .card-attack {
-    background-color: var(--color-attack-base);
+    @apply text-red-600;
+    background-image: url("../images/attackCard.jpg");
     border-color: var(--color-attack-border);
+  }
+
+  .card-attack h2 {
+    font-family: var(--font-cinzel);
   }
 
   .card-attack:hover {
@@ -94,6 +106,7 @@
 
   /* === DEFENSE CARDS === */
   .card-defense {
+    background-image: url("../images/defenseCard.jpg");
     background-color: var(--color-defense-base);
     border-color: var(--color-defense-border);
   }
@@ -107,9 +120,13 @@
     @apply opacity-40 grayscale cursor-not-allowed;
   }
 
+  .card-defense h2 {
+    font-family: var(--font-cinzel);
+  }
+
   /* === POISON/FATIGUE CARDS === */
   .card-poison {
-    background-color: var(--color-poison-base);
+    background-image: url("../images/fatigueCard.jpg");
     border-color: var(--color-poison-border);
   }
 
@@ -122,9 +139,14 @@
     @apply opacity-40 grayscale cursor-not-allowed;
   }
 
+  .card-poison h2 {
+    font-family: var(--font-fell);
+  }
+
   /* === BUFF CARDS === */
   .card-buff {
-    background-color: var(--color-buff-base);
+    @apply font-bold;
+    background-image: url("../images/buffCard.jpg");
     border-color: var(--color-buff-border);
   }
 
@@ -137,9 +159,13 @@
     @apply opacity-40 grayscale cursor-not-allowed;
   }
 
+  .card-buff h2 {
+    font-family: var(--font-cormorant);
+  }
+
   /* === NEUTRAL CARDS === */
   .card-neutral {
-    background-color: var(--color-neutral-base);
+    background-image: url("../images/utilityCard.jpg");
     border-color: var(--color-neutral-border);
   }
 
@@ -151,9 +177,27 @@
     @apply opacity-40 grayscale cursor-not-allowed;
   }
 
+  .card-heal {
+    background-image: url("../images/healCard.jpg");
+    border-color: var(--color-heal-border);
+  }
+
+  .card-heal h2 {
+    font-family: var(--font-baskerville);
+  }
+
+  .card-heal:hover {
+    background-color: var(--color-heal-hover);
+    box-shadow: 0 0 20px var(--color-heal-glow);
+  }
+
+  .card-heal.on-cooldown {
+    @apply opacity-40 grayscale cursor-not-allowed;
+  }
+
   /* === SELECTED CARD (CENTER) === */
   .card-selected {
-    @apply  rounded-lg;
+    @apply rounded-lg text-3xl;
     background-color: var(--color-bg-secondary);
     /* box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5); */
   }

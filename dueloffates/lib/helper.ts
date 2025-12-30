@@ -1,3 +1,4 @@
+import { Card, CardProps } from "@/types";
 import {
   attackCards,
   defenceCards,
@@ -6,15 +7,6 @@ import {
   statusDamage,
   utilityCards,
 } from "../cards/index";
-
-interface CardProps {
-  header: string;
-  icon: string;
-  effect: string;
-  type: "attack" | "defense" | "buff" | "neutral" | "poison";
-  onCooldown: boolean;
-  userCards: boolean;
-}
 
 /*  ---------------------------------------------------
     1. Total 10 cards
@@ -43,8 +35,32 @@ export function deckRandomizer() {
   //rest
   deck.push(...restCardsCopy.splice(0, 4));
 
-  console.log(deck);
-  return deck;
+  // console.log(deck);
+  const formattedDeck: CardProps[] = deck.map((card: Card) => {
+    return {
+      header: card.name,
+      type: card.type.toLocaleLowerCase(),
+      icon: "mdi:sword",
+      effect: getEffect(card),
+      onCooldown: false,
+      userCards: true,
+    };
+  });
+  // console.log(formattedDeck);
+  return formattedDeck;
+}
+
+function getEffect(card: Card) {
+  switch (card.type.toLocaleLowerCase()) {
+    case "attack":
+      return `${card.damage} Damage`;
+
+    case "defense":
+      return `${card.shield_gain} Shield Gain`;
+
+    default:
+      return card.effect;
+  }
 }
 
 

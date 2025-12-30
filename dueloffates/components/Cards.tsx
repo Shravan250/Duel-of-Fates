@@ -1,15 +1,7 @@
 import useCardsContext, { PlayerSide } from "@/context/CardsContext";
+import { CardProps } from "@/types";
 import { Icon } from "@iconify/react";
 import clsx from "clsx";
-
-interface CardProps {
-  header: string;
-  icon: string;
-  effect: string;
-  type: "attack" | "defense" | "buff" | "neutral" | "poison";
-  onCooldown: boolean;
-  userCards: boolean;
-}
 
 interface Cards2Props {
   card: CardProps;
@@ -21,13 +13,16 @@ const styles = {
   attack: "card-attack",
   defense: "card-defense",
   buff: "card-buff",
-  neutral: "card-neutral",
-  poison: "card-poison",
+  debuff: "card-buff",
+  heal: "card-heal",
+  utility: "card-neutral",
+  "status damage": "card-poison",
 };
 
 const Cards = ({ card, side, battleArea=false }: Cards2Props) => {
   const { header, icon, effect, type, onCooldown, userCards } = card;
   const { selectCard } = useCardsContext();
+
 
   return (
     <div className="relative group">
@@ -44,6 +39,7 @@ const Cards = ({ card, side, battleArea=false }: Cards2Props) => {
           }
         )}
         onClick={() =>side && selectCard(card, side)}
+        onMouseEnter={()=>console.log(card)}
       >
         <h2>{header}</h2>
         <Icon icon={icon} width={50} height={50} className="shrink-0" />
