@@ -1,17 +1,15 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { CardsContextProvider } from "@/context/CardsContext";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import {
+  baskerville,
+  cinzel,
+  cormorant,
+  fell,
+  geistMono,
+  geistSans,
+  inter,
+} from "./fonts";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -26,7 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${cinzel.variable} ${cormorant.variable} ${baskerville.variable} ${fell.variable} ${inter.variable} antialiased`}
       >
         <CardsContextProvider>{children}</CardsContextProvider>
       </body>
