@@ -1,6 +1,6 @@
 type Listner = () => void;
 
-export abstract class GameEngine {
+export class GameEngine {
   private listners = new Set<Listner>();
 
   public subscribe(listner: Listner) {

@@ -1,5 +1,5 @@
-import { shieldEngine } from "@/engine";
-import { useShieldEngineStore } from "@/store/useShieldEngineStore";
+import { shieldEngine } from "@/game/engine";
+import { useShieldEngineStore } from "@/store/useShieldStore";
 
 export function ShieldTest() {
   const shield = useShieldEngineStore((state) => state.shield);

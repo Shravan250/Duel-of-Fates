@@ -4,14 +4,14 @@ import BattleArea from "@/components/BattleArea";
 import HeadUpDisplay from "@/components/HeadUpDisplay";
 import RenderCards from "@/components/RenderCards";
 import useCardsContext from "@/context/CardsContext";
-import { deckRandomizer } from "@/lib/helper";
+import formattedDeckGenerator, { deckRandomizer } from "@/lib/helper";
 import { useEffect } from "react";
 
 export default function Home() {
   const { setUserCards } = useCardsContext();
 
   useEffect(() => {
-    setUserCards(deckRandomizer());
+    setUserCards(formattedDeckGenerator(deckRandomizer()));
   }, []);
 
   return (

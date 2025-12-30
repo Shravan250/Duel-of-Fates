@@ -5,7 +5,7 @@ interface PlayerHPState {
   setHp: (hp: number) => void;
 }
 
-export const useHealthEngineStore = create<PlayerHPState>((set) => ({
+export const useHealthStore = create<PlayerHPState>((set) => ({
   hp: 100,
   setHp: (hp) => set({ hp }),
 }));

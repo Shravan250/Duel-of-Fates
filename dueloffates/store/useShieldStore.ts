@@ -5,7 +5,7 @@ interface PlayerShieldState {
   setShield: (shield: number) => void;
 }
 
-export const useShieldEngineStore = create<PlayerShieldState>((set) => ({
+export const useShieldStore = create<PlayerShieldState>((set) => ({
   shield: 50,
   setShield: (shield) => set({ shield }),
 }));

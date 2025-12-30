@@ -1,5 +1,5 @@
-import { healthEngine } from "@/engine";
-import { useHealthEngineStore } from "@/store/useHealthEngineStore";
+import { healthEngine } from "@/game/engine";
+import { useHealthEngineStore } from "@/store/useHealthStore";
 
 export function HPTest() {
   const hp = useHealthEngineStore((state) => state.hp);

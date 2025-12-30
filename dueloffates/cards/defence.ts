@@ -1,23 +1,28 @@
-export const defenceCards = [
+import { CardDefination } from "@/types";
+
+export const defenceCards: CardDefination[] = [
   {
+    definitionId: "defense_guard",
     name: "Guard",
-    type: "Defense",
+    type: "defense",
     shield_gain: 8,
     priority: 2,
     cooldown: 1,
     multiplier: "1x",
   },
   {
+    definitionId: "defense_reinforced_guard",
     name: "Reinforced Guard",
-    type: "Defense",
+    type: "defense",
     shield_gain: 12,
     priority: 1,
     cooldown: 2,
     multiplier: "1x",
   },
   {
+    definitionId: "defense_brace",
     name: "Brace",
-    type: "Defense",
+    type: "defense",
     shield_gain: 10,
     priority: 2,
     cooldown: 2,
@@ -25,24 +30,27 @@ export const defenceCards = [
     additional_effect: "Reduces Fatigue - 1",
   },
   {
+    definitionId: "defense_fortify",
     name: "Fortify",
-    type: "Defense",
+    type: "defense",
     shield_gain: 15,
     priority: 0,
     cooldown: 3,
     multiplier: "1x",
   },
   {
+    definitionId: "defense_reactive_barrier",
     name: "Reactive Barrier",
-    type: "Defense",
+    type: "defense",
     shield_gain: 6,
     priority: 2,
     cooldown: 2,
     multiplier: "1x + 0.2x per Fatigue on self",
   },
   {
+    definitionId: "defense_iron_stance",
     name: "Iron Stance",
-    type: "Defense",
+    type: "defense",
     shield_gain: 10,
     priority: 2,
     cooldown: 3,

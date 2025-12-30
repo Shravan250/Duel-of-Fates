@@ -1,16 +1,20 @@
-export const utilityCards = [
+import { CardDefination } from "@/types";
+
+export const utilityCards: CardDefination[] = [
   {
+    definitionId: "utility_reversal",
     name: "Reversal",
-    type: "Utility",
+    type: "utility",
     effect: "all Poison and Fatigue stacks from self to opponent",
     cooldown: 99999,
-    priority:3
+    priority: 3,
   },
   {
+    definitionId: "utility_swap",
     name: "Swap",
-    type: "Utility",
+    type: "utility",
     effect: "Swap User and Opponents HP and Shield",
     cooldown: 99999,
-    priority:3
+    priority: 3,
   },
 ];

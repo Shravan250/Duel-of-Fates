@@ -1,4 +1,4 @@
-import { GameEngine } from "./GameEngine";
+import { GameEngine } from "../base/GameEngine";
 
 export class HealthEngine extends GameEngine {
   private hp: number;
@@ -11,7 +11,7 @@ export class HealthEngine extends GameEngine {
 
   // damage
   damage(amount: number) {
-    this.hp = this.hp - amount;
+    this.hp = Math.max(0, this.hp - amount);
     this.notify();
   }
 

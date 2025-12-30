@@ -1,50 +1,58 @@
-export const buffDebuffCards = [
+import { CardDefination } from "@/types";
+
+export const buffDebuffCards: CardDefination[] = [
   {
+    definitionId: "buff_battle_focus",
     name: "Battle Focus",
-    type: "Buff",
+    type: "buff",
     effect: "Increase damage of next attack card by +1x",
-    effect_multiplier: "+1x",
+    multiplier: "+1x",
     cooldown: 3,
-    priority:3
+    priority: 3,
   },
   {
+    definitionId: "buff_defensive_posture",
     name: "Defensive Posture",
-    type: "Buff",
+    type: "buff",
     effect: "Increase next shield gain by +1x",
-    effect_multiplier: "+1x",
+    multiplier: "+1x",
     cooldown: 3,
-    priority:3
+    priority: 3,
   },
   {
+    definitionId: "buff_adrenaline_rush",
     name: "Adrenaline Rush",
-    type: "Buff",
+    type: "buff",
     effect: "Reduce cooldown of next played card by 2 turn",
-    effect_multiplier: "-2 Cooldown",
+    multiplier: "-2 Cooldown",
     cooldown: 4,
-    priority:3
+    priority: 3,
   },
   {
+    definitionId: "debuff_weaken",
     name: "Weaken",
-    type: "Debuff",
+    type: "debuff",
     effect: "Opponent's next Attack card deals 40% less damage",
-    effect_multiplier: "-0.4x",
+    multiplier: "-0.4x",
     cooldown: 3,
-    priority:3
+    priority: 3,
   },
   {
+    definitionId: "debuff_crippling_pressure",
     name: "Crippling Pressure",
-    type: "Debuff",
+    type: "debuff",
     effect: "Opponent's next Attack card damage reduced by 60%",
-    effect_multiplier: "-0.6x",
+    multiplier: "-0.6x",
     cooldown: 4,
-    priority:3
+    priority: 3,
   },
   {
+    definitionId: "debuff_guard_break_prep",
     name: "Guard Break Prep",
-    type: "Debuff",
+    type: "debuff",
     effect: "Lowers Opponents shield by half",
-    effect_multiplier: "Opponent shield -50%",
+    multiplier: "Opponent shield -50%",
     cooldown: 4,
-    priority:3
+    priority: 3,
   },
 ];
