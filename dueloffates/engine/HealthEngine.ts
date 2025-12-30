@@ -1,6 +1,6 @@
 import { GameEngine } from "./GameEngine";
 
-export class playerHPEngine extends GameEngine {
+export class HealthEngine extends GameEngine {
   private hp: number;
 
   // initialHp assign
@@ -21,7 +21,7 @@ export class playerHPEngine extends GameEngine {
     this.notify();
   }
 
-  getHP() {
+  getHp() {
     return this.hp;
   }
 }

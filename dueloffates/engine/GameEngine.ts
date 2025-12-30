@@ -5,7 +5,9 @@ export abstract class GameEngine {
 
   public subscribe(listner: Listner) {
     this.listners.add(listner);
-    return () => this.listners.delete(listner);
+    return () => {
+      this.listners.delete(listner);
+    };
   }
 
   protected notify() {
