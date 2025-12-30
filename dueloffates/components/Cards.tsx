@@ -14,14 +14,15 @@ const styles = {
   defense: "card-defense",
   buff: "card-buff",
   debuff: "card-buff",
-  "status damage": "card-neutral",
-  heal: "card-poison",
-  utility: "card-poison",
+  heal: "card-heal",
+  utility: "card-neutral",
+  "status damage": "card-poison",
 };
 
 const Cards = ({ card, side, battleArea=false }: Cards2Props) => {
   const { header, icon, effect, type, onCooldown, userCards } = card;
   const { selectCard } = useCardsContext();
+
 
   return (
     <div className="relative group">
@@ -38,6 +39,7 @@ const Cards = ({ card, side, battleArea=false }: Cards2Props) => {
           }
         )}
         onClick={() =>side && selectCard(card, side)}
+        onMouseEnter={()=>console.log(card)}
       >
         <h2>{header}</h2>
         <Icon icon={icon} width={50} height={50} className="shrink-0" />
