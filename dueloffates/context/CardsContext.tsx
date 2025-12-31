@@ -1,21 +1,23 @@
 "use client";
 
-import {
-  OpponentCards as Player2,
-  userCards as Player1,
-} from "@/mock/mockHand";
+import { opponentDeck, playerDeck } from "@/game/engine/cards/CardInstance";
+import { formattedDeckGenerator } from "@/lib/helper";
+// import {
+//   OpponentCards as Player2,
+//   playerCards as Player1,
+// } from "@/mock/mockHand";
 import { CardProps } from "@/types";
 import { createContext, useContext, useState } from "react";
 
 interface UseCardsContextProps {
-  userCards: CardProps[];
+  playerCards: CardProps[];
   opponentCards: CardProps[];
-  setUserCards: React.Dispatch<React.SetStateAction<CardProps[]>>;
+  setPlayerCards: React.Dispatch<React.SetStateAction<CardProps[]>>;
   setOpponentCards: React.Dispatch<React.SetStateAction<CardProps[]>>;
   selectCard: (card: CardProps, side: PlayerSide) => void;
-  userSelectedCard?: CardProps;
+  playerSelectedCard?: CardProps;
   opponentSelectedCard?: CardProps;
-  userCardSelected: boolean;
+  playerCardSelected: boolean;
   opponentCardSelected: boolean;
 }
 
@@ -28,15 +30,19 @@ export const CardsContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [userCards, setUserCards] = useState<CardProps[]>(Player1);
-  const [opponentCards, setOpponentCards] = useState<CardProps[]>(Player2);
-  const [userSelectedCard, setUserSelectedCard] = useState<
+  const [playerCards, setPlayerCards] = useState<CardProps[]>(
+    formattedDeckGenerator(playerDeck)
+  );
+  const [opponentCards, setOpponentCards] = useState<CardProps[]>(
+    formattedDeckGenerator(opponentDeck)
+  );
+  const [playerSelectedCard, setPlayerSelectedCard] = useState<
     CardProps | undefined
   >(undefined);
   const [opponentSelectedCard, setOpponentSelectedCard] = useState<
     CardProps | undefined
   >(undefined);
-  const [userCardSelected, setUserCardSelected] = useState<boolean>(false);
+  const [playerCardSelected, setPlayerCardSelected] = useState<boolean>(false);
   const [opponentCardSelected, setOpponentCardSelected] =
     useState<boolean>(false);
 
@@ -44,8 +50,8 @@ export const CardsContextProvider = ({
   const selectCard = (card: CardProps, side: PlayerSide): void => {
     console.log(card);
     if (side === "PLAYER") {
-      setUserSelectedCard(card === userSelectedCard ? undefined : card);
-      setUserCardSelected(!userCardSelected);
+      setPlayerSelectedCard(card === playerSelectedCard ? undefined : card);
+      setPlayerCardSelected(!playerCardSelected);
     } else {
       setOpponentSelectedCard(card === opponentSelectedCard ? undefined : card);
       setOpponentCardSelected(!opponentCardSelected);
@@ -56,16 +62,16 @@ export const CardsContextProvider = ({
     <CardsContext.Provider
       value={{
         //state
-        userCards,
+        playerCards,
         opponentCards,
-        userSelectedCard,
+        playerSelectedCard,
         opponentSelectedCard,
-        userCardSelected,
+        playerCardSelected,
         opponentCardSelected,
 
         //setters
         setOpponentCards,
-        setUserCards,
+        setPlayerCards,
 
         //functions
         selectCard,

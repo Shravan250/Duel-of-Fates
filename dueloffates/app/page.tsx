@@ -4,14 +4,11 @@ import BattleArea from "@/components/BattleArea";
 import HeadUpDisplay from "@/components/HeadUpDisplay";
 import RenderCards from "@/components/RenderCards";
 import useCardsContext from "@/context/CardsContext";
-import formattedDeckGenerator, { deckRandomizer } from "@/lib/helper";
 import { useEffect } from "react";
 
 export default function Home() {
-  const { setUserCards } = useCardsContext();
-
   useEffect(() => {
-    setUserCards(formattedDeckGenerator(deckRandomizer()));
+    // setUserCards(formattedDeckGenerator(deckRandomizer()));
   }, []);
 
   return (
@@ -20,13 +17,13 @@ export default function Home() {
         <HeadUpDisplay player="Player 2" flip={false} />
 
         {/* Opponent Cards - Hidden */}
-        <RenderCards user={false} />
+        <RenderCards player={false} />
 
         {/* Middle Section - Battle Area */}
         <BattleArea />
 
         {/* Player Cards - Visible */}
-        <RenderCards user={true} />
+        <RenderCards player={true} />
 
         <HeadUpDisplay player="Player 1" flip={true} />
       </div>

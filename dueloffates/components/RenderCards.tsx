@@ -2,14 +2,14 @@ import Cards from "./Cards";
 import useCardsContext, { PlayerSide } from "@/context/CardsContext";
 
 interface RenderCardsProps {
-  user: boolean;
+  player: boolean;
 }
 
-export default function RenderCards({ user }: RenderCardsProps) {
-  const { userCards, opponentCards } = useCardsContext();
-  const cards = user ? userCards : opponentCards;
-  const side: PlayerSide = user ? "PLAYER" : "OPPONENT";
-  const keyPrefix = user ? "player" : "opp";
+export default function RenderCards({ player }: RenderCardsProps) {
+  const { playerCards, opponentCards } = useCardsContext();
+  const cards = player ? playerCards : opponentCards;
+  const side: PlayerSide = player ? "PLAYER" : "OPPONENT";
+  const keyPrefix = player ? "player" : "opp";
 
   return (
     <div className="relative">
