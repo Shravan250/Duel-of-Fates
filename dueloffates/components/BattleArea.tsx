@@ -1,6 +1,7 @@
 import useCardsContext from "@/context/CardsContext";
 import { Icon } from "@iconify/react";
 import Cards from "./Cards";
+import { useEffect, useState } from "react";
 
 export default function BattleArea() {
   const {
@@ -9,6 +10,21 @@ export default function BattleArea() {
     userCardSelected,
     opponentCardSelected,
   } = useCardsContext();
+  const [timer, setTimer] = useState(15);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimer((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="grid grid-cols-[auto_1fr_1fr_1fr_auto] gap-4 items-center py-4">
@@ -18,7 +34,7 @@ export default function BattleArea() {
           icon="lets-icons:clock-light"
           className="w-12 h-12 text-gray-700"
         />
-        <div className="text-sm font-medium">10 sec</div>
+        <div className="text-sm font-medium">{timer} sec</div>
       </div>
 
       {/* Player 1 Selected Card */}
