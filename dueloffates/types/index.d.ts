@@ -18,6 +18,14 @@ export interface CardDefination {
   shield_gain?: number;
 }
 
+export interface CardInstance {
+  id: string;
+  definitionId: string;
+  cooldown: number;
+  multiplier: number;
+  owner: "PLAYER" | "OPPONENT";
+}
+
 export interface CardProps {
   header: string;
   icon: string;

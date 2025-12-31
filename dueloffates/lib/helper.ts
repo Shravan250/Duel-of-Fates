@@ -6,7 +6,7 @@ import {
   buffDebuffCards,
   statusDamage,
   utilityCards,
-} from "../cards/index";
+} from "../game/engine/cards/CardDefinations";
 
 /*  ---------------------------------------------------
     1. Total 10 cards

@@ -1,4 +1,4 @@
-import { healthEngine } from "@/game/engine";
+import { healthEngine } from "@/game";
 import { useHealthEngineStore } from "@/store/useHealthStore";
 
 export function HPTest() {

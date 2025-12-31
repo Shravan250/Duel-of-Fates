@@ -1,4 +1,4 @@
-import { shieldEngine } from "@/game/engine";
+import { shieldEngine } from "@/game";
 import { useShieldEngineStore } from "@/store/useShieldStore";
 
 export function ShieldTest() {
