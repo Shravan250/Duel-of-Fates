@@ -1,4 +1,4 @@
-import { CardDefination, CardProps } from "@/types";
+import { CardDefination, CardInstance, CardProps } from "@/types";
 import {
   attackCards,
   defenceCards,
@@ -51,7 +51,23 @@ function getEffect(card: CardDefination): string {
   }
 }
 
-export default function formattedDeckGenerator(deck: CardDefination[]) {
+export function createCardInstances(deck: CardDefination[], owner: string) {
+  const cardInstances: CardInstance[] = deck.map(
+    (card: CardDefination, i: number) => {
+      return {
+        id: `${owner}-${i}`,
+        definitionId: card.definitionId,
+        cooldown: card.cooldown,
+        multiplier: card.multiplier,
+        owner: owner as CardInstance["owner"],
+      };
+    }
+  );
+
+  return cardInstances;
+}
+
+export function formattedDeckGenerator(deck: CardDefination[]) {
   const formattedDeck: CardProps[] = deck.map((card: CardDefination) => {
     return {
       header: card.name,
