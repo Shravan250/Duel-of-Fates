@@ -5,9 +5,9 @@ import { useEffect, useState } from "react";
 
 export default function BattleArea() {
   const {
-    userSelectedCard,
+    playerSelectedCard,
     opponentSelectedCard,
-    userCardSelected,
+    playerCardSelected,
     opponentCardSelected,
   } = useCardsContext();
   const [timer, setTimer] = useState(15);
@@ -39,8 +39,8 @@ export default function BattleArea() {
 
       {/* Player 1 Selected Card */}
       <div className="aspect-2/3 min-h-80 text-sm text-gray-600">
-        {userSelectedCard ? (
-          <Cards card={userSelectedCard!} battleArea={true} />
+        {playerSelectedCard ? (
+          <Cards card={playerSelectedCard!} battleArea={true} />
         ) : (
           <div className="border-2 border-gray-400 bg-white w-full h-full flex justify-center items-center">
             Player 1 Card
