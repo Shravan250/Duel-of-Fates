@@ -1,6 +1,6 @@
 import { createCardInstances, deckRandomizer } from "@/lib/helper";
 import { GameEngine } from "../base/GameEngine";
-import { CardDefination, CardInstance } from "@/types";
+import { CardDefination, CardInstance, CardProps } from "@/types";
 
 export class DeckEngine extends GameEngine {
   private playerDeck: CardDefination[] = [];
@@ -40,6 +40,16 @@ export class DeckEngine extends GameEngine {
 
   public getOpponentInstances(): CardInstance[] {
     return this.opponentInstances;
+  }
+
+  public getInstanceById(
+    instanceId: string,
+    side: "PLAYER" | "OPPONENT"
+  ): CardInstance | null {
+    const list =
+      side === "PLAYER" ? this.playerInstances : this.opponentInstances;
+
+    return list.find((c) => c.id === instanceId) ?? null;
   }
 
   // getState form zustand (current)

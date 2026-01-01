@@ -67,19 +67,30 @@ export function createCardInstances(deck: CardDefination[], owner: string) {
   return cardInstances;
 }
 
-export function formattedDeckGenerator(deck: CardDefination[]) {
-  const formattedDeck: CardProps[] = deck.map((card: CardDefination) => {
+export function formattedDeckGenerator(
+  instances: CardInstance[],
+  definitions: CardDefination[]
+): CardProps[] {
+  return instances.map((instance) => {
+    const definition = definitions.find(
+      (d) => d.definitionId === instance.definitionId
+    );
+
+    if (!definition) {
+      throw new Error(`Card definition not found for ${instance.definitionId}`);
+    }
+
     return {
-      header: card.name,
-      type: card.type.toLocaleLowerCase() as CardProps["type"],
+      instanceId: instance.id,
+      definitionId: definition.definitionId,
+      header: definition.name,
+      type: definition.type,
       icon: "mdi:sword",
-      effect: getEffect(card),
-      onCooldown: false,
-      userCards: true,
+      effect: getEffect(definition),
+      onCooldown: instance.cooldown > 0,
+      userCards: instance.owner === "PLAYER",
     };
   });
-
-  return formattedDeck;
 }
 
 function shuffleArray(array: CardDefination[]) {

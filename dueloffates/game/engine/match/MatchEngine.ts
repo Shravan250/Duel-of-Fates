@@ -1,4 +1,4 @@
-import { CardInstance } from "@/types";
+import { CardInstance, CardProps } from "@/types";
 import { GameEngine } from "../base/GameEngine";
 import { DeckEngine } from "../deck/DeckEngine";
 import { HealthEngine } from "../health/HealthEngine";
@@ -6,7 +6,7 @@ import { ShieldEngine } from "../shield/ShieldEngine";
 
 type MatchPhase = "SETUP" | "PLAY" | "RESOLVE" | "END";
 
-class MatchEngine extends GameEngine {
+export class MatchEngine extends GameEngine {
   private currentPhase: MatchPhase = "SETUP";
   private currentTurn: number = 0;
   private selectedPlayerCard: CardInstance | null = null;
@@ -24,7 +24,7 @@ class MatchEngine extends GameEngine {
     this.healthEngine.subscribe(() => this.checkWinCondition());
   }
 
-  // functions
+  // public functions
 
   public startMatch() {
     console.log("Starting Match...");
@@ -36,14 +36,30 @@ class MatchEngine extends GameEngine {
 
     // Initializing all Engiens
     this.deckEngine.InitilizeDeck();
-    this.healthEngine.reset();
-    this.shieldEngine.reset();
+    this.healthEngine.reset(100);
+    this.shieldEngine.reset(100);
 
     this.notify();
 
     this.transitionToPlayState();
   }
 
+  public selectCard(instanceId: string, side: "PLAYER" | "OPPONENT") {
+    if (this.currentPhase !== "PLAY") return;
+
+    const instance = this.deckEngine.getInstanceById(instanceId, side);
+    if (!instance) return;
+
+    if (side === "PLAYER") {
+      this.selectedPlayerCard = instance;
+    } else {
+      this.selectedOpponentCard = instance;
+    }
+
+    this.notify();
+  }
+
+  // private functions
   private transitionToPlayState() {
     this.currentPhase = "PLAY";
     this.notify();
@@ -76,7 +92,8 @@ class MatchEngine extends GameEngine {
       this.selectedPlayerCard,
       this.selectedOpponentCard,
       this.healthEngine,
-      this.shieldEngine
+      this.shieldEngine,
+      this.deckEngine
     );
 
     this.cleanupTurn();
@@ -93,5 +110,15 @@ class MatchEngine extends GameEngine {
   private checkWinCondition() {
     if (this.healthEngine.getHp("PLAYER")) {
     }
+  }
+
+  getState() {
+    return {
+      phase: this.currentPhase,
+      currentTurn: this.currentTurn,
+      isMatchOver: this.isMatchOver,
+      winner: this.winner,
+      canSelectCard: this.currentPhase === "PLAY",
+    };
   }
 }
