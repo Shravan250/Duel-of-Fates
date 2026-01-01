@@ -1,11 +1,14 @@
 import { create } from "zustand";
+import { getterResponse } from "./useShieldStore";
 
 interface PlayerHPState {
-  hp: number;
-  setHp: (hp: number) => void;
+  playerHp: number;
+  opponentHp: number;
+  setHp: (res: getterResponse) => void;
 }
 
 export const useHealthStore = create<PlayerHPState>((set) => ({
-  hp: 100,
-  setHp: (hp) => set({ hp }),
+  playerHp: 100,
+  opponentHp: 100,
+  setHp: (res) => set({ playerHp: res.player, opponentHp: res.opponent }),
 }));
