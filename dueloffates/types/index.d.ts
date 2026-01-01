@@ -16,6 +16,9 @@ export interface CardDefination {
   effect?: string;
   damage?: number;
   shield_gain?: number;
+  health_gain?: number;
+  sideEffects?: string;
+  condition?: string;
 }
 
 export interface CardInstance {
