@@ -4,11 +4,21 @@ import BattleArea from "@/components/BattleArea";
 import HeadUpDisplay from "@/components/HeadUpDisplay";
 import RenderCards from "@/components/RenderCards";
 import useCardsContext from "@/context/CardsContext";
+import { bindDeckEngine } from "@/game/binders/bindDeckEngine";
+import { useGameStore } from "@/store/useGameStore";
 import { useEffect } from "react";
 
 export default function Home() {
   useEffect(() => {
     // setUserCards(formattedDeckGenerator(deckRandomizer()));
+    const deckController = bindDeckEngine();
+    useGameStore.getState().bindDeckController(deckController);
+
+    useGameStore.getState().initializeGame();
+
+    return () => {
+      deckController.unsubscribe();
+    };
   }, []);
 
   return (
