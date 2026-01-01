@@ -1,34 +1,44 @@
 import { GameEngine } from "../base/GameEngine";
 
 export class ShieldEngine extends GameEngine {
-  private shield: number;
+  private playerShield: number;
+  private opponentShield: number;
 
-  // initialShield assign
+  // initialize shield engine
   constructor(shield: number) {
     super();
-    this.shield = shield;
+    this.playerShield = shield;
+    this.opponentShield = shield;
   }
 
-  // absorb
-  // loseShield(amount: number) {
-  //   this.shield = this.shield - amount;
-  //   this.notify();
-  // }
-
-  absorbShield(amount: number) {
-    const absorbed = Math.min(this.shield, amount);
-    this.shield -= absorbed;
+  // ? reduce shield based on damage taken
+  absorbShield(amount: number, target: "player" | "opponent") {
+    let absorbed = 0;
+    if (target === "player") {
+      absorbed = Math.min(this.playerShield, amount);
+      this.playerShield = this.playerShield - absorbed;
+    } else {
+      absorbed = Math.min(this.opponentShield, amount);
+      this.opponentShield = this.opponentShield - absorbed;
+    }
     this.notify();
     return amount - absorbed;
   }
 
-  // gain
-  gainShield(amount: number) {
-    this.shield = this.shield + amount;
+  // ? regen shield based on amount
+  gainShield(amount: number, target: "player" | "opponent") {
+    if (target === "player") this.playerShield = this.playerShield + amount;
+    else this.opponentShield = this.opponentShield + amount;
+    this.notify();
+  }
+
+  reset(shield:number) {
+    this.playerShield = shield;
+    this.opponentShield = shield;
     this.notify();
   }
 
   getShield() {
-    return this.shield;
+    return { player: this.playerShield, opponent: this.opponentShield };
   }
 }
