@@ -77,10 +77,10 @@ export class cardEngine extends GameEngine {
       remDamage > 0 && this.healthEngine.damage(remDamage, target);
     }
     else if(card.type ==='defense'){
-        this.shieldEngine.gainShield(card.shield_gain!, role);
+        this.shieldEngine.gainShield(card.shield_gain!, target);
     }
     else if(card.type==='heal'){
-        this.healthEngine.heal(card.damage!, role);
+        this.healthEngine.heal(card.health_gain!, target);
     }
   }
 
