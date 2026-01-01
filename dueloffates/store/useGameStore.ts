@@ -33,7 +33,6 @@ interface GameStoreState {
 
   // public actions (called by UI)
   bindDeckController: (controller: DeckController) => void;
-  selectCard: (card: CardProps, side: PlayerSide) => void;
   initializeGame: () => void;
   resetGame: () => void;
 }
@@ -52,30 +51,27 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   deckController: null,
 
   //internal Setters
-  setPlayerDeck: (d) =>
-    set({ playerDeck: d, playerCards: formattedDeckGenerator(d) }),
-  setOpponentDeck: (d) =>
-    set({ opponentDeck: d, opponentCards: formattedDeckGenerator(d) }),
+  setPlayerDeck: (d) => set({ playerDeck: d }),
+  setOpponentDeck: (d) => set({ opponentDeck: d }),
 
-  setPlayerInstances: (i) => set({ playerInstances: i }),
-  setOpponentInstances: (i) => set({ opponentInstances: i }),
+  setPlayerInstances: (i) => {
+    const defs = get().playerDeck;
+    set({
+      playerInstances: i,
+      playerCards: formattedDeckGenerator(i, defs),
+    });
+  },
+  setOpponentInstances: (i) => {
+    const defs = get().opponentDeck;
+    set({
+      opponentInstances: i,
+      opponentCards: formattedDeckGenerator(i, defs),
+    });
+  },
 
   // bind Controller
   bindDeckController: (controller) => {
     set({ deckController: controller });
-  },
-
-  // public Actions
-  selectCard: (card, side) => {
-    if (side === "PLAYER") {
-      set(({ playerSelectedCard }) => ({
-        playerSelectedCard: playerSelectedCard === card ? undefined : card,
-      }));
-    } else {
-      set(({ opponentSelectedCard }) => ({
-        opponentSelectedCard: opponentSelectedCard === card ? undefined : card,
-      }));
-    }
   },
 
   initializeGame: () => {

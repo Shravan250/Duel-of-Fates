@@ -27,6 +27,8 @@ export interface CardInstance {
 }
 
 export interface CardProps {
+  instanceId: string;
+  definitionId: string;
   header: string;
   icon: string;
   effect?: string;
