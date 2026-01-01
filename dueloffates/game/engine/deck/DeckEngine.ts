@@ -10,7 +10,6 @@ export class DeckEngine extends GameEngine {
 
   constructor() {
     super();
-    this.InitilizeDeck();
   }
 
   public InitilizeDeck() {

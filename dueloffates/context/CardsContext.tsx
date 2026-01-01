@@ -1,11 +1,10 @@
 "use client";
 
-import { opponentDeck, playerDeck } from "@/game/engine/cards/CardInstance";
 import { formattedDeckGenerator } from "@/lib/helper";
-// import {
-//   OpponentCards as Player2,
-//   playerCards as Player1,
-// } from "@/mock/mockHand";
+import {
+  OpponentCards as Player2,
+  userCards as Player1,
+} from "@/mock/mockHand";
 import { CardProps } from "@/types";
 import { createContext, useContext, useState } from "react";
 
@@ -31,10 +30,10 @@ export const CardsContextProvider = ({
   children: React.ReactNode;
 }) => {
   const [playerCards, setPlayerCards] = useState<CardProps[]>(
-    formattedDeckGenerator(playerDeck)
+    formattedDeckGenerator(Player1)
   );
   const [opponentCards, setOpponentCards] = useState<CardProps[]>(
-    formattedDeckGenerator(opponentDeck)
+    formattedDeckGenerator(Player2)
   );
   const [playerSelectedCard, setPlayerSelectedCard] = useState<
     CardProps | undefined
