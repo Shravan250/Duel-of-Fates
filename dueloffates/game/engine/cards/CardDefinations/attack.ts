@@ -28,6 +28,7 @@ export const attackCards: CardDefination[] = [
     cooldown: 3,
     multiplier: "1x (default)",
     additional_effect: "User Gains Fatigue + 1",
+    sideEffects: "Fatigue +1",
   },
   {
     definitionId: "attack_crushing_strike",
@@ -56,6 +57,7 @@ export const attackCards: CardDefination[] = [
     cooldown: 2,
     multiplier: "1x (default)",
     additional_effect: "Applies fatigue + 1",
+    sideEffects: "Fatigue +1",
   },
   {
     definitionId: "attack_opportunist_hit",
@@ -75,5 +77,6 @@ export const attackCards: CardDefination[] = [
     cooldown: 4,
     multiplier: "1x (default)",
     additional_effect: "User Gains Fatigue + 2",
+    sideEffects: "Fatigue +2",
   },
 ];

@@ -28,6 +28,7 @@ export const defenceCards: CardDefination[] = [
     cooldown: 2,
     multiplier: "1x",
     additional_effect: "Reduces Fatigue - 1",
+    sideEffects: "Fatigue -1",
   },
   {
     definitionId: "defense_fortify",
@@ -56,5 +57,6 @@ export const defenceCards: CardDefination[] = [
     cooldown: 3,
     multiplier: "1x",
     additional_effect: "User Fatigue + 1",
+    sideEffects: "Fatigue +1",
   },
 ];
