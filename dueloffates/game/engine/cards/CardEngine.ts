@@ -44,7 +44,7 @@ export class CardEngine extends GameEngine {
     this.shieldEngine = shieldEngine;
     this.deckEngine = deckEngine;
   }
-  public resolve(playerCardInstanceId: string, opponentCardInstanceId: string) {
+  public async resolve (playerCardInstanceId: string, opponentCardInstanceId: string) {
     const playerCardInstance = this.deckEngine.getInstanceById(
       playerCardInstanceId,
       "PLAYER"

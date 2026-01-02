@@ -4,10 +4,14 @@ import { useEffect, useState } from "react";
 import { useMatchStore } from "@/store/useMatchStore";
 
 export default function BattleArea() {
-  const { selectedPlayerCard, selectedOpponentCard } = useMatchStore();
+  const { selectedPlayerCard, selectedOpponentCard, phase } = useMatchStore();
   const [timer, setTimer] = useState(15);
 
   useEffect(() => {
+    if (phase !== "PLAY") return;
+    setTimer(15);
+    console.log("phase", phase);
+
     const interval = setInterval(() => {
       setTimer((prev) => {
         if (prev <= 1) {
@@ -17,9 +21,8 @@ export default function BattleArea() {
         return prev - 1;
       });
     }, 1000);
-
     return () => clearInterval(interval);
-  }, []);
+  }, [phase]);
 
   return (
     <div className="grid grid-cols-[auto_1fr_1fr_1fr_auto] gap-4 items-center py-4">
