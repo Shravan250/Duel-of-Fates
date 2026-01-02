@@ -14,13 +14,13 @@ import {
     --------------------------------------------------- */
 export function deckRandomizer() {
   const deck: CardDefination[] = [];
-  let attackCardsCopy: CardDefination[] = shuffleArray(attackCards);
-  let defenceCardsCopy: CardDefination[] = shuffleArray(defenceCards);
-  let healCardsCopy: CardDefination[] = shuffleArray(healCards);
+  let attackCardsCopy: CardDefination[] = shuffleArray([...attackCards]);
+  let defenceCardsCopy: CardDefination[] = shuffleArray([...defenceCards]);
+  let healCardsCopy: CardDefination[] = shuffleArray([...healCards]);
   let restCardsCopy: CardDefination[] = shuffleArray([
-    ...buffDebuffCards,
-    ...statusDamage,
-    ...utilityCards,
+    ...[...buffDebuffCards],
+    ...[...statusDamage],
+    ...[...utilityCards],
   ]);
 
   //3 attack
@@ -57,7 +57,7 @@ export function createCardInstances(deck: CardDefination[], owner: string) {
       return {
         id: `${owner}-${i}`,
         definitionId: card.definitionId,
-        cooldown: card.cooldown,
+        cooldown: 0,
         multiplier: card.multiplier,
         owner: owner as CardInstance["owner"],
       };

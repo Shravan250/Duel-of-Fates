@@ -1,4 +1,3 @@
-import { PlayerSide } from "@/context/CardsContext";
 import { DeckController } from "@/game/binders/bindDeckEngine";
 import { formattedDeckGenerator } from "@/lib/helper";
 import { CardDefination, CardInstance, CardProps } from "@/types";
@@ -33,7 +32,6 @@ interface GameStoreState {
 
   // public actions (called by UI)
   bindDeckController: (controller: DeckController) => void;
-  initializeGame: () => void;
   resetGame: () => void;
 }
 
@@ -74,23 +72,11 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     set({ deckController: controller });
   },
 
-  initializeGame: () => {
-    const { deckController } = get();
-
-    if (!deckController) {
-      console.log("DeckENgine not Bound");
-      return;
-    }
-
-    deckController.initializeGame();
-    set({ isGameInitialized: true });
-  },
-
   resetGame: () => {
     const { deckController } = get();
 
     if (!deckController) {
-      console.log("DeckENgine not Bound");
+      console.log("DeckEngine not Bound");
       return;
     }
 

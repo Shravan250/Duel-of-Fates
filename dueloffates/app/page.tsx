@@ -5,19 +5,33 @@ import HeadUpDisplay from "@/components/HeadUpDisplay";
 import RenderCards from "@/components/RenderCards";
 import useCardsContext from "@/context/CardsContext";
 import { bindDeckEngine } from "@/game/binders/bindDeckEngine";
+import { bindMatchEngine } from "@/game/binders/bindMatchEngine";
 import { useGameStore } from "@/store/useGameStore";
+import { useMatchStore } from "@/store/useMatchStore";
 import { useEffect } from "react";
 
 export default function Home() {
+  // useEffect(() => {
+  //   // setUserCards(formattedDeckGenerator(deckRandomizer()));
+  //   const deckController = bindDeckEngine();
+  //   useGameStore.getState().bindDeckController(deckController);
+
+  //   useGameStore.getState().initializeGame();
+
+  //   return () => {
+  //     deckController.unsubscribe();
+  //   };
+  // }, []);
   useEffect(() => {
-    // setUserCards(formattedDeckGenerator(deckRandomizer()));
+    const matchController = bindMatchEngine();
     const deckController = bindDeckEngine();
+    useMatchStore.getState().bindMatchController(matchController);
     useGameStore.getState().bindDeckController(deckController);
 
-    useGameStore.getState().initializeGame();
+    useMatchStore.getState().startMatch();
 
     return () => {
-      deckController.unsubscribe();
+      matchController.unsubscribe();
     };
   }, []);
 

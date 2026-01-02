@@ -2,7 +2,6 @@ import { useGameStore } from "@/store/useGameStore";
 import { deckEngine } from "../index";
 
 export interface DeckController {
-  initializeGame: () => void;
   resetGame: () => void;
   unsubscribe: () => void;
 }
@@ -19,11 +18,6 @@ export function bindDeckEngine(): DeckController {
   });
 
   return {
-    initializeGame: () => {
-      console.log("Controller: Initializing game...");
-      deckEngine.InitilizeDeck();
-    },
-
     resetGame: () => {
       console.log("Controller: Resetting game...");
       deckEngine.resetCards();

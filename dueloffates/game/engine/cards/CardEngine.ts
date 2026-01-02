@@ -21,7 +21,7 @@ type cardType =
   | "utility"
   | "heal";
 
-export class cardEngine extends GameEngine {
+export class CardEngine extends GameEngine {
   private typeCardMap: Record<cardType, CardDefination[]> = {
     attack: attackCards,
     defense: defenceCards,
@@ -57,17 +57,18 @@ export class cardEngine extends GameEngine {
     if (!playerCardInstance || !opponentCardInstance) return;
 
     const playerCardType = this.getCardType(playerCardInstance.definitionId);
+
     const opponentCardType = this.getCardType(
       opponentCardInstance.definitionId
     );
 
-    const playerCard = this.getCard(
-      playerCardInstance.definitionId,
-      playerCardType
-    );
     const opponentCard = this.getCard(
       opponentCardInstance.definitionId,
       opponentCardType
+    );
+    const playerCard = this.getCard(
+      playerCardInstance.definitionId,
+      playerCardType
     );
 
     if (!playerCard || !opponentCard) {
@@ -90,15 +91,10 @@ export class cardEngine extends GameEngine {
 
       const remDamage = this.shieldEngine.absorbShield(card.damage!, target);
       remDamage > 0 && this.healthEngine.damage(remDamage, target);
-
     } else if (card.type === "defense") {
-
       this.shieldEngine.gainShield(card.shield_gain!, target);
-
     } else if (card.type === "heal") {
-
       this.healthEngine.heal(card.health_gain!, target);
-      
     }
   }
 
@@ -107,9 +103,9 @@ export class cardEngine extends GameEngine {
   }
 
   private getCard(cardId: string, cardType: cardType) {
-    return this.typeCardMap[cardType].find(
-      (card) => card.definitionId === cardId
-    );
+    return this.typeCardMap[cardType].find((card) => {
+      return card.definitionId === cardId;
+    });
   }
 
   private invertRole(role: "player" | "opponent") {

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { CardsContextProvider } from "@/context/CardsContext";
 import {
   baskerville,
   cinzel,
@@ -26,7 +25,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${cinzel.variable} ${cormorant.variable} ${baskerville.variable} ${fell.variable} ${inter.variable} antialiased`}
       >
-        <CardsContextProvider>{children}</CardsContextProvider>
+        {children}
       </body>
     </html>
   );

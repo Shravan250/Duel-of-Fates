@@ -1,7 +1,11 @@
 import { useMatchStore } from "@/store/useMatchStore";
 import { matchEngine } from "../index";
 
-interface matchEngineController {}
+export interface matchEngineController {
+  selectCard: (instanceId: string, side: "PLAYER" | "OPPONENT") => void;
+  unsubscribe: () => void;
+  startMatch: () => void;
+}
 
 export function bindMatchEngine(): matchEngineController {
   const unsubscribe = matchEngine.subscribe(() => {
@@ -17,7 +21,12 @@ export function bindMatchEngine(): matchEngineController {
   });
 
   return {
-    selectCard: (instanceId: string, side: "PLAYER" | "OPPONENT") => {
+    startMatch: () => {
+      console.log("Starting Match....");
+      matchEngine.startMatch();
+    },
+
+    selectCard: (instanceId, side) => {
       matchEngine.selectCard(instanceId, side);
     },
 

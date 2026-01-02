@@ -32,7 +32,7 @@ export class ShieldEngine extends GameEngine {
     this.notify();
   }
 
-  reset(shield:number) {
+  reset(shield: number) {
     this.playerShield = shield;
     this.opponentShield = shield;
     this.notify();

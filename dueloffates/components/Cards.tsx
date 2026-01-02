@@ -1,11 +1,11 @@
-import useCardsContext, { PlayerSide } from "@/context/CardsContext";
+import { useMatchStore } from "@/store/useMatchStore";
 import { CardProps } from "@/types";
 import { Icon } from "@iconify/react";
 import clsx from "clsx";
 
 interface Cards2Props {
   card: CardProps;
-  side?: PlayerSide;
+  side?: "PLAYER" | "OPPONENT";
   battleArea?: boolean;
 }
 
@@ -21,7 +21,7 @@ const styles = {
 
 const Cards = ({ card, side, battleArea = false }: Cards2Props) => {
   const { header, icon, effect, type, onCooldown, userCards } = card;
-  const { selectCard } = useCardsContext();
+  const { selectCard } = useMatchStore();
 
   return (
     <div className="relative group">
@@ -36,7 +36,6 @@ const Cards = ({ card, side, battleArea = false }: Cards2Props) => {
           }
         )}
         onClick={() => side && selectCard(card, side)}
-        // onMouseEnter={() => console.log(card)}
       >
         <h2>{header}</h2>
         <Icon icon={icon} width={50} height={50} className="shrink-0" />
