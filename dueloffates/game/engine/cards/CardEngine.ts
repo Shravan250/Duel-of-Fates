@@ -10,6 +10,7 @@ import {
 } from "./CardDefinations";
 import { HealthEngine } from "../health/HealthEngine";
 import { ShieldEngine } from "../shield/ShieldEngine";
+import { DeckEngine } from "../deck/DeckEngine";
 
 type cardType =
   | "attack"
@@ -32,15 +33,29 @@ export class cardEngine extends GameEngine {
   };
   private healthEngine: HealthEngine;
   private shieldEngine: ShieldEngine;
-  constructor(healthEngine: HealthEngine, shieldEngine: ShieldEngine) {
+  private deckEngine: DeckEngine;
+  constructor(
+    healthEngine: HealthEngine,
+    shieldEngine: ShieldEngine,
+    deckEngine: DeckEngine
+  ) {
     super();
     this.healthEngine = healthEngine;
     this.shieldEngine = shieldEngine;
+    this.deckEngine = deckEngine;
   }
-  public resolve(
-    playerCardInstance: CardInstance,
-    opponentCardInstance: CardInstance
-  ) {
+  public resolve(playerCardInstanceId: string, opponentCardInstanceId: string) {
+    const playerCardInstance = this.deckEngine.getInstanceById(
+      playerCardInstanceId,
+      "PLAYER"
+    );
+    const opponentCardInstance = this.deckEngine.getInstanceById(
+      opponentCardInstanceId,
+      "OPPONENT"
+    );
+
+    if (!playerCardInstance || !opponentCardInstance) return;
+
     const playerCardType = this.getCardType(playerCardInstance.definitionId);
     const opponentCardType = this.getCardType(
       opponentCardInstance.definitionId
@@ -72,15 +87,18 @@ export class cardEngine extends GameEngine {
     let target: "player" | "opponent" = role;
     if (card.type === "attack") {
       target = this.invertRole(role);
-      
+
       const remDamage = this.shieldEngine.absorbShield(card.damage!, target);
       remDamage > 0 && this.healthEngine.damage(remDamage, target);
-    }
-    else if(card.type ==='defense'){
-        this.shieldEngine.gainShield(card.shield_gain!, target);
-    }
-    else if(card.type==='heal'){
-        this.healthEngine.heal(card.health_gain!, target);
+
+    } else if (card.type === "defense") {
+
+      this.shieldEngine.gainShield(card.shield_gain!, target);
+
+    } else if (card.type === "heal") {
+
+      this.healthEngine.heal(card.health_gain!, target);
+      
     }
   }
 
