@@ -1,16 +1,22 @@
 import { create } from "zustand";
 
-export type getterResponse = { player: number; opponent: number };
+export type getterResponse = { player: number; opponent: number; max: number };
 
 interface PlayerShieldState {
   playerShield: number;
   opponentShield: number;
+  maxShield: number;
   setShield: (res: getterResponse) => void;
 }
 
 export const useShieldStore = create<PlayerShieldState>((set) => ({
   playerShield: 50,
   opponentShield: 50,
+  maxShield: 50,
   setShield: (res) =>
-    set({ playerShield: res.player, opponentShield: res.opponent }),
+    set({
+      playerShield: res.player,
+      opponentShield: res.opponent,
+      maxShield: res.max,
+    }),
 }));

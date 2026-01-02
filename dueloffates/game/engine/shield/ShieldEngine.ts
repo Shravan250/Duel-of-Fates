@@ -3,12 +3,14 @@ import { GameEngine } from "../base/GameEngine";
 export class ShieldEngine extends GameEngine {
   private playerShield: number;
   private opponentShield: number;
+  private maxShield: number;
 
   // initialize shield engine
   constructor(shield: number) {
     super();
     this.playerShield = shield;
     this.opponentShield = shield;
+    this.maxShield = shield;
   }
 
   // ? reduce shield based on damage taken
@@ -27,18 +29,28 @@ export class ShieldEngine extends GameEngine {
 
   // ? regen shield based on amount
   gainShield(amount: number, target: "player" | "opponent") {
-    if (target === "player") this.playerShield = this.playerShield + amount;
-    else this.opponentShield = this.opponentShield + amount;
+    if (target === "player")
+      this.playerShield = Math.min(this.playerShield + amount, this.maxShield);
+    else
+      this.opponentShield = Math.min(
+        this.opponentShield + amount,
+        this.maxShield
+      );
     this.notify();
   }
 
   reset(shield: number) {
     this.playerShield = shield;
     this.opponentShield = shield;
+    this.maxShield = shield;
     this.notify();
   }
 
   getShield() {
-    return { player: this.playerShield, opponent: this.opponentShield };
+    return {
+      player: this.playerShield,
+      opponent: this.opponentShield,
+      max: this.maxShield,
+    };
   }
 }
