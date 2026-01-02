@@ -63,7 +63,7 @@ export class MatchEngine extends GameEngine {
     this.notify();
     setTimeout(() => {
       this.transitionToResolveState();
-    }, 5000);
+    }, 15000);
   }
 
   private transitionToResolveState() {
@@ -86,10 +86,10 @@ export class MatchEngine extends GameEngine {
   }
 
   // player actions
-  private resolveTurn() {
+  private async resolveTurn() {
     if (!this.selectedPlayerCard || !this.selectedOpponentCard) return;
 
-    this.cardResolver.resolve(
+    await this.cardResolver.resolve(
       this.selectedPlayerCard,
       this.selectedOpponentCard
     );
