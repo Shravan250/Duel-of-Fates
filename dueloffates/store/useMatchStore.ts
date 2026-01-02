@@ -1,3 +1,4 @@
+import { matchEngineController } from "@/game/binders/bindMatchEngine";
 import { CardProps } from "@/types";
 import { create } from "zustand";
 
@@ -18,11 +19,12 @@ interface MatchStoreState {
   canPlay: boolean;
 
   // controller
-  matchController: MatchController | null;
+  matchController: matchEngineController | null;
 
   //actions
-  bindMatchController: (controller: MatchController | null) => void;
+  bindMatchController: (controller: matchEngineController | null) => void;
   selectCard: (card: CardProps, side: "PLAYER" | "OPPONENT") => void;
+  startMatch: () => void;
 }
 
 export const useMatchStore = create<MatchStoreState>((set, get) => ({
@@ -43,6 +45,17 @@ export const useMatchStore = create<MatchStoreState>((set, get) => ({
   },
 
   // public Actions
+  startMatch: () => {
+    const { matchController } = get();
+
+    if (!matchController) {
+      console.log("matchController not Bound");
+      return;
+    }
+
+    matchController.startMatch();
+  },
+
   selectCard: (card: CardProps, side) => {
     const controller = get().matchController;
     if (!controller) return;

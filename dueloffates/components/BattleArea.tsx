@@ -1,15 +1,10 @@
-import useCardsContext from "@/context/CardsContext";
 import { Icon } from "@iconify/react";
 import Cards from "./Cards";
 import { useEffect, useState } from "react";
+import { useMatchStore } from "@/store/useMatchStore";
 
 export default function BattleArea() {
-  const {
-    playerSelectedCard,
-    opponentSelectedCard,
-    playerCardSelected,
-    opponentCardSelected,
-  } = useCardsContext();
+  const { selectedPlayerCard, selectedOpponentCard } = useMatchStore();
   const [timer, setTimer] = useState(15);
 
   useEffect(() => {
@@ -39,8 +34,8 @@ export default function BattleArea() {
 
       {/* Player 1 Selected Card */}
       <div className="aspect-2/3 min-h-80 text-sm text-gray-600">
-        {playerSelectedCard ? (
-          <Cards card={playerSelectedCard!} battleArea={true} />
+        {selectedPlayerCard ? (
+          <Cards card={selectedPlayerCard!} battleArea={true} />
         ) : (
           <div className="border-2 border-gray-400 bg-white w-full h-full flex justify-center items-center">
             Player 1 Card
@@ -54,8 +49,8 @@ export default function BattleArea() {
 
       {/* Player 2 Selected Card */}
       <div className=" aspect-2/3 min-h-80 text-sm text-gray-600">
-        {opponentSelectedCard ? (
-          <Cards card={opponentSelectedCard!} battleArea={true} />
+        {selectedOpponentCard ? (
+          <Cards card={selectedOpponentCard!} battleArea={true} />
         ) : (
           <div className="border-2 border-gray-400 bg-white w-full h-full flex justify-center items-center">
             Player 2 Card

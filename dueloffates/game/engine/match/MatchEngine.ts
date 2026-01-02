@@ -3,14 +3,15 @@ import { GameEngine } from "../base/GameEngine";
 import { DeckEngine } from "../deck/DeckEngine";
 import { HealthEngine } from "../health/HealthEngine";
 import { ShieldEngine } from "../shield/ShieldEngine";
+import { CardEngine } from "../cards/CardEngine";
 
 type MatchPhase = "SETUP" | "PLAY" | "RESOLVE" | "END";
 
 export class MatchEngine extends GameEngine {
   private currentPhase: MatchPhase = "SETUP";
   private currentTurn: number = 0;
-  private selectedPlayerCard: CardInstance | null = null;
-  private selectedOpponentCard: CardInstance | null = null;
+  private selectedPlayerCard: string | null = null;
+  private selectedOpponentCard: string | null = null;
   private winner: "PLAYER" | "OPPONENT" | null = null;
   private isMatchOver: boolean = false;
 
@@ -36,8 +37,8 @@ export class MatchEngine extends GameEngine {
 
     // Initializing all Engiens
     this.deckEngine.InitilizeDeck();
-    this.healthEngine.reset(100);
-    this.shieldEngine.reset(100);
+    this.healthEngine.reset(5);
+    this.shieldEngine.reset(0);
 
     this.notify();
 
@@ -47,13 +48,10 @@ export class MatchEngine extends GameEngine {
   public selectCard(instanceId: string, side: "PLAYER" | "OPPONENT") {
     if (this.currentPhase !== "PLAY") return;
 
-    const instance = this.deckEngine.getInstanceById(instanceId, side);
-    if (!instance) return;
-
     if (side === "PLAYER") {
-      this.selectedPlayerCard = instance;
+      this.selectedPlayerCard = instanceId;
     } else {
-      this.selectedOpponentCard = instance;
+      this.selectedOpponentCard = instanceId;
     }
 
     this.notify();
@@ -65,19 +63,22 @@ export class MatchEngine extends GameEngine {
     this.notify();
     setTimeout(() => {
       this.transitionToResolveState();
-    }, 15000);
+    }, 5000);
   }
 
   private transitionToResolveState() {
     this.currentPhase = "RESOLVE";
-    this.notify();
+    // this.notify();
 
-    if (!this.selectedPlayerCard) {
-      this.selectedPlayerCard = this.deckEngine.autoSelectCard("PLAYER");
-    }
+    // if (!this.selectedPlayerCard) {
+    //   this.selectedPlayerCard = this.deckEngine.autoSelectCard("PLAYER");
+    // }
 
-    if (!this.selectedOpponentCard) {
-      this.selectedOpponentCard = this.deckEngine.autoSelectCard("OPPONENT");
+    // if (!this.selectedOpponentCard) {
+    //   this.selectedOpponentCard = this.deckEngine.autoSelectCard("OPPONENT");
+    // }
+    if (!this.selectedPlayerCard || !this.selectedOpponentCard) {
+      this.transitionToPlayState();
     }
 
     this.notify();
@@ -90,10 +91,7 @@ export class MatchEngine extends GameEngine {
 
     this.cardResolver.resolve(
       this.selectedPlayerCard,
-      this.selectedOpponentCard,
-      this.healthEngine,
-      this.shieldEngine,
-      this.deckEngine
+      this.selectedOpponentCard
     );
 
     this.cleanupTurn();
@@ -103,12 +101,22 @@ export class MatchEngine extends GameEngine {
     this.selectedPlayerCard = null;
     this.selectedOpponentCard = null;
     this.currentTurn += 1;
-
     this.transitionToPlayState();
   }
 
   private checkWinCondition() {
-    if (this.healthEngine.getHp("PLAYER")) {
+    const health = this.healthEngine.getHp();
+
+    if (health.player === 0) {
+      this.winner = "OPPONENT";
+      this.isMatchOver = true;
+      this.currentPhase = "END";
+    } else if (health.opponent === 0) {
+      this.winner = "PLAYER";
+      this.isMatchOver = true;
+      this.currentPhase = "END";
+    } else {
+      this.currentPhase = "PLAY";
     }
   }
 

@@ -1,13 +1,15 @@
 import { useGameStore } from "@/store/useGameStore";
 import Cards from "./Cards";
-import { PlayerSide } from "@/context/CardsContext";
 
 interface RenderCardsProps {
   player: boolean;
 }
 
+type PlayerSide = "PLAYER" | "OPPONENT";
+
 export default function RenderCards({ player }: RenderCardsProps) {
   const { playerCards, opponentCards } = useGameStore();
+
   const cards = player ? playerCards : opponentCards;
   const side: PlayerSide = player ? "PLAYER" : "OPPONENT";
   const keyPrefix = player ? "player" : "opp";

@@ -13,8 +13,9 @@ export class HealthEngine extends GameEngine {
 
   // ? reduce health based on damage taken
   damage(amount: number, target: "player" | "opponent") {
-    if (target === "player") this.playerHp = this.playerHp - amount;
-    else this.opponentHp = this.opponentHp - amount;
+    if (target === "player")
+      this.playerHp = Math.max(0, this.playerHp - amount);
+    else this.opponentHp = Math.max(0, this.opponentHp - amount);
     this.notify();
   }
 
