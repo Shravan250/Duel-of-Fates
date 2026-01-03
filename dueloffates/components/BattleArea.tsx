@@ -1,28 +1,29 @@
 import { Icon } from "@iconify/react";
 import Cards from "./Cards";
-import { useEffect, useState } from "react";
+import { useGameStore } from "@/store/useGameStore";
 import { useMatchStore } from "@/store/useMatchStore";
 
 export default function BattleArea() {
-  const { selectedPlayerCard, selectedOpponentCard, phase } = useMatchStore();
-  const [timer, setTimer] = useState(15);
+  const { phase, timer } = useMatchStore();
+  const { selectedOpponentCard, selectedPlayerCard } = useGameStore();
+  // const [timer, setTimer] = useState(15);
 
-  useEffect(() => {
-    if (phase !== "PLAY") return;
-    setTimer(15);
-    console.log("phase", phase);
+  // useEffect(() => {
+  //   if (phase !== "PLAY") return;
+  //   setTimer(15);
+  //   console.log("phase", phase);
 
-    const interval = setInterval(() => {
-      setTimer((prev) => {
-        if (prev <= 1) {
-          clearInterval(interval);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [phase]);
+  //   const interval = setInterval(() => {
+  //     setTimer((prev) => {
+  //       if (prev <= 1) {
+  //         clearInterval(interval);
+  //         return 0;
+  //       }
+  //       return prev - 1;
+  //     });
+  //   }, 1000);
+  //   return () => clearInterval(interval);
+  // }, [phase]);
 
   return (
     <div className="grid grid-cols-[auto_1fr_1fr_1fr_auto] gap-4 items-center py-4">
@@ -33,6 +34,11 @@ export default function BattleArea() {
           className="w-12 h-12 text-gray-700"
         />
         <div className="text-sm font-medium">{timer} sec</div>
+        {phase === "RESOLVE" && (
+          <div className="text-xs text-blue-600 font-semibold mt-1">
+            RESOLVING...
+          </div>
+        )}
       </div>
 
       {/* Player 1 Selected Card */}
@@ -53,7 +59,11 @@ export default function BattleArea() {
       {/* Player 2 Selected Card */}
       <div className=" aspect-2/3 min-h-80 text-sm text-gray-600">
         {selectedOpponentCard ? (
-          <Cards side="OPPONENT" card={selectedOpponentCard!} battleArea={true} />
+          <Cards
+            side="OPPONENT"
+            card={selectedOpponentCard!}
+            battleArea={true}
+          />
         ) : (
           <div className="border-2 border-gray-400 bg-white w-full h-full flex justify-center items-center">
             Player 2 Card

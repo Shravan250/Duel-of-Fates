@@ -14,9 +14,9 @@ interface GameStoreState {
   playerCards: CardProps[];
   opponentCards: CardProps[];
 
-  // Selected cards
-  playerSelectedCard: CardProps | undefined;
-  opponentSelectedCard: CardProps | undefined;
+  // selection
+  selectedPlayerCard: CardProps | null;
+  selectedOpponentCard: CardProps | null;
 
   // Game status
   isGameInitialized: boolean;
@@ -29,9 +29,12 @@ interface GameStoreState {
   setOpponentDeck: (d: CardDefination[]) => void;
   setPlayerInstances: (i: CardInstance[]) => void;
   setOpponentInstances: (i: CardInstance[]) => void;
+  setAutoSelectedPlayerCard: (cardId: string) => void;
+  setAutoSelectedOpponentCard: (cardId: string) => void;
 
   // public actions (called by UI)
   bindDeckController: (controller: DeckController) => void;
+  selectCard: (card: CardProps, side: "PLAYER" | "OPPONENT") => void;
   resetGame: () => void;
 }
 
@@ -43,8 +46,8 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   opponentInstances: [],
   playerCards: [],
   opponentCards: [],
-  playerSelectedCard: undefined,
-  opponentSelectedCard: undefined,
+  selectedPlayerCard: null,
+  selectedOpponentCard: null,
   isGameInitialized: false,
   deckController: null,
 
@@ -67,6 +70,20 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     });
   },
 
+  setAutoSelectedPlayerCard: (cardId: string) => {
+    const card = get().playerCards.find((c) => c.instanceId === cardId);
+    set({
+      selectedPlayerCard: card,
+    });
+  },
+
+  setAutoSelectedOpponentCard: (cardId: string) => {
+    const card = get().opponentCards.find((c) => c.instanceId === cardId);
+    set({
+      selectedOpponentCard: card,
+    });
+  },
+
   // bind Controller
   bindDeckController: (controller) => {
     set({ deckController: controller });
@@ -82,8 +99,21 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
 
     deckController.resetGame();
     set({
-      playerSelectedCard: undefined,
-      opponentSelectedCard: undefined,
+      selectedPlayerCard: undefined,
+      selectedOpponentCard: undefined,
     });
+  },
+
+  selectCard: (card: CardProps, side) => {
+    const controller = get().deckController;
+    if (!controller) return;
+
+    controller.selectCard(card.instanceId, side);
+
+    if (side === "PLAYER") {
+      set({ selectedPlayerCard: card });
+    } else {
+      set({ selectedOpponentCard: card });
+    }
   },
 }));

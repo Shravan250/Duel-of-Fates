@@ -1,4 +1,4 @@
-import { useMatchStore } from "@/store/useMatchStore";
+import { useGameStore } from "@/store/useGameStore";
 import { CardProps } from "@/types";
 import { Icon } from "@iconify/react";
 import clsx from "clsx";
@@ -21,11 +21,11 @@ const styles = {
 
 const Cards = ({ card, side, battleArea = false }: Cards2Props) => {
   const { header, icon, effect, type, userCards } = card;
-  const { selectCard, matchController } = useMatchStore();
+  const { selectCard, deckController } = useGameStore();
 
   const canPlay =
-    side && matchController
-      ? matchController.canPlayCard(card.instanceId, side)
+    side && deckController
+      ? deckController.canPlayCard(card.instanceId, side)
       : false;
 
   return (

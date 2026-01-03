@@ -7,6 +7,8 @@ export class DeckEngine extends GameEngine {
   private opponentDeck: CardDefination[] = [];
   private playerInstances: CardInstance[] = [];
   private opponentInstances: CardInstance[] = [];
+  private selectedPlayerCard: string | null = null;
+  private selectedOpponentCard: string | null = null;
 
   constructor() {
     super();
@@ -23,6 +25,12 @@ export class DeckEngine extends GameEngine {
 
   public resetCards() {
     this.InitilizeDeck();
+  }
+
+  public clearSelections() {
+    this.selectedPlayerCard = null;
+    this.selectedOpponentCard = null;
+    this.notify();
   }
 
   //getters
@@ -78,6 +86,50 @@ export class DeckEngine extends GameEngine {
     this.notify();
   }
 
+  public autoSelectCard(side: "PLAYER" | "OPPONENT") {
+    //selecting the instance array
+    let list =
+      side === "PLAYER" ? this.playerInstances : this.opponentInstances;
+
+    //filtering
+    const remainingInstances = list.filter((c) => c.cooldown === 0);
+
+    const selectedCard =
+      remainingInstances[Math.floor(Math.random() * remainingInstances.length)];
+
+    if (side === "PLAYER") {
+      this.selectedPlayerCard = selectedCard.id;
+    } else {
+      this.selectedOpponentCard = selectedCard.id;
+    }
+
+    this.notify();
+    return selectedCard.id;
+  }
+
+  public selectCard(instanceId: string, side: "PLAYER" | "OPPONENT") {
+    // if (this.currentPhase !== "PLAY") return;
+
+    if (!this.canPlayCard(instanceId, side)) return;
+
+    if (side === "PLAYER") {
+      this.selectedPlayerCard = instanceId;
+    } else {
+      this.selectedOpponentCard = instanceId;
+    }
+
+    this.notify();
+  }
+
+  //check if player can play the card
+  public canPlayCard(
+    cardInstanceId: string,
+    side: "PLAYER" | "OPPONENT"
+  ): boolean {
+    const card = this.getInstanceById(cardInstanceId, side);
+    return card ? card.cooldown === 0 : false;
+  }
+
   // getState form zustand (current)
   public getState() {
     return {
@@ -85,6 +137,8 @@ export class DeckEngine extends GameEngine {
       opponentDeck: this.opponentDeck,
       playerInstances: this.playerInstances,
       opponentInstances: this.opponentInstances,
+      selectedPlayerCard: this.selectedPlayerCard,
+      selectedOpponentCard: this.selectedOpponentCard,
     };
   }
 }

@@ -9,10 +9,11 @@ interface MatchStoreState {
   currentTurn: number;
   isMatchOver: boolean;
   winner: "PLAYER" | "OPPONENT" | null;
+  timer: number;
 
-  // selection
-  selectedPlayerCard: CardProps | null;
-  selectedOpponentCard: CardProps | null;
+  // // selection
+  // selectedPlayerCard: CardProps | null;
+  // selectedOpponentCard: CardProps | null;
 
   // permissoin
   canSelectCard: boolean;
@@ -22,7 +23,7 @@ interface MatchStoreState {
 
   //actions
   bindMatchController: (controller: matchEngineController | null) => void;
-  selectCard: (card: CardProps, side: "PLAYER" | "OPPONENT") => void;
+  // selectCard: (card: CardProps, side: "PLAYER" | "OPPONENT") => void;
   startMatch: () => void;
 }
 
@@ -36,6 +37,7 @@ export const useMatchStore = create<MatchStoreState>((set, get) => ({
   selectedOpponentCard: null,
   canSelectCard: false,
   matchController: null,
+  timer: 15,
 
   // bind Controller
   bindMatchController: (controller) => {
@@ -52,18 +54,5 @@ export const useMatchStore = create<MatchStoreState>((set, get) => ({
     }
 
     matchController.startMatch();
-  },
-
-  selectCard: (card: CardProps, side) => {
-    const controller = get().matchController;
-    if (!controller) return;
-
-    controller.selectCard(card.instanceId, side);
-
-    if (side === "PLAYER") {
-      set({ selectedPlayerCard: card });
-    } else {
-      set({ selectedOpponentCard: card });
-    }
   },
 }));
