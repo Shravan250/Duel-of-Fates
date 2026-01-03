@@ -20,8 +20,13 @@ const styles = {
 };
 
 const Cards = ({ card, side, battleArea = false }: Cards2Props) => {
-  const { header, icon, effect, type, onCooldown, userCards } = card;
-  const { selectCard } = useMatchStore();
+  const { header, icon, effect, type, userCards } = card;
+  const { selectCard, matchController } = useMatchStore();
+
+  const canPlay =
+    side && matchController
+      ? matchController.canPlayCard(card.instanceId, side)
+      : false;
 
   return (
     <div className="relative group">
@@ -32,10 +37,13 @@ const Cards = ({ card, side, battleArea = false }: Cards2Props) => {
           battleArea ? "card-selected" : "rounded",
           styles[type],
           {
-            "on-cooldown": onCooldown,
+            "on-cooldown": !canPlay,
           }
         )}
-        onClick={() => side && selectCard(card, side)}
+        onClick={() => {
+          if (!canPlay) return;
+          side && selectCard(card, side);
+        }}
       >
         <h2>{header}</h2>
         <Icon icon={icon} width={50} height={50} className="shrink-0" />
@@ -65,8 +73,8 @@ const Cards = ({ card, side, battleArea = false }: Cards2Props) => {
 
           <div>
             <span className="text-gray-400">Status:</span>
-            <span className={onCooldown ? "text-red-400" : "text-green-400"}>
-              {onCooldown ? "On Cooldown" : "Ready"}
+            <span className={!canPlay ? "text-red-400" : "text-green-400"}>
+              {!canPlay ? "On Cooldown" : "Ready"}
             </span>
           </div>
         </div>

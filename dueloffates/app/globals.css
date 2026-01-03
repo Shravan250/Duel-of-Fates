@@ -72,6 +72,11 @@
 }
 
 @layer components {
+  .game-background {
+    @apply bg-no-repeat bg-center bg-cover w-full min-h-screen;
+    background-image: url("../images/background.png");
+  }
+
   /* === CARD BASE STYLES === */
   .card {
     @apply rounded-xl p-4 transition-all duration-300 cursor-pointer border-2 border-transparent aspect-2/3 bg-cover bg-center;

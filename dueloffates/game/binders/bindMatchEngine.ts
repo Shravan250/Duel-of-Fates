@@ -4,6 +4,7 @@ import { matchEngine } from "../index";
 export interface matchEngineController {
   selectCard: (instanceId: string, side: "PLAYER" | "OPPONENT") => void;
   unsubscribe: () => void;
+  canPlayCard: (instanceId: string, side: "PLAYER" | "OPPONENT") => boolean;
   startMatch: () => void;
 }
 
@@ -28,6 +29,10 @@ export function bindMatchEngine(): matchEngineController {
 
     selectCard: (instanceId, side) => {
       matchEngine.selectCard(instanceId, side);
+    },
+
+    canPlayCard: (instanceId, side) => {
+      return matchEngine.canPlayCard(instanceId, side);
     },
 
     unsubscribe: () => {

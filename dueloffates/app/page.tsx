@@ -3,7 +3,6 @@
 import BattleArea from "@/components/BattleArea";
 import HeadUpDisplay from "@/components/HeadUpDisplay";
 import RenderCards from "@/components/RenderCards";
-import useCardsContext from "@/context/CardsContext";
 import { bindDeckEngine } from "@/game/binders/bindDeckEngine";
 import { bindMatchEngine } from "@/game/binders/bindMatchEngine";
 import { useGameStore } from "@/store/useGameStore";
@@ -36,7 +35,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4 md:p-6 lg:p-8">
+    <div className="min-h-screen bg-gray-100 p-4 md:p-6 lg:p-8 game-background">
       <div className="max-w-7xl mx-auto space-y-6">
         <HeadUpDisplay player="Player 2" flip={false} />
 

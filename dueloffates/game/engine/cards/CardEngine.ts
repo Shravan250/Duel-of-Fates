@@ -44,7 +44,10 @@ export class CardEngine extends GameEngine {
     this.shieldEngine = shieldEngine;
     this.deckEngine = deckEngine;
   }
-  public async resolve (playerCardInstanceId: string, opponentCardInstanceId: string) {
+  public async resolve(
+    playerCardInstanceId: string,
+    opponentCardInstanceId: string
+  ) {
     const playerCardInstance = this.deckEngine.getInstanceById(
       playerCardInstanceId,
       "PLAYER"
@@ -71,20 +74,26 @@ export class CardEngine extends GameEngine {
       playerCardType
     );
 
+    console.log(playerCard);
+
     if (!playerCard || !opponentCard) {
       return;
     }
 
     if (playerCard.priority >= opponentCard.priority) {
-      this.applyEffects("player", playerCard);
-      this.applyEffects("opponent", opponentCard);
+      this.applyEffects("player", playerCard, playerCardInstanceId);
+      this.applyEffects("opponent", opponentCard, opponentCardInstanceId);
     } else {
-      this.applyEffects("opponent", opponentCard);
-      this.applyEffects("player", playerCard);
+      this.applyEffects("opponent", opponentCard, opponentCardInstanceId);
+      this.applyEffects("player", playerCard, playerCardInstanceId);
     }
   }
 
-  private applyEffects(role: "player" | "opponent", card: CardDefination) {
+  private applyEffects(
+    role: "player" | "opponent",
+    card: CardDefination,
+    instanceId: string
+  ) {
     let target: "player" | "opponent" = role;
     if (card.type === "attack") {
       target = this.invertRole(role);
@@ -96,6 +105,12 @@ export class CardEngine extends GameEngine {
     } else if (card.type === "heal") {
       this.healthEngine.heal(card.health_gain!, target);
     }
+
+    this.deckEngine.applyCooldown(
+      instanceId,
+      card.cooldown,
+      role.toUpperCase()
+    );
   }
 
   private getCardType(cardId: string): cardType {
