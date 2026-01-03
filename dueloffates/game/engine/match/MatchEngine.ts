@@ -37,8 +37,8 @@ export class MatchEngine extends GameEngine {
 
     // Initializing all Engiens
     this.deckEngine.InitilizeDeck();
-    this.healthEngine.reset(5);
-    this.shieldEngine.reset(0);
+    this.healthEngine.reset(100);
+    this.shieldEngine.reset(50);
 
     this.notify();
 
