@@ -38,7 +38,7 @@ export default function BattleArea() {
       {/* Player 1 Selected Card */}
       <div className="aspect-2/3 min-h-80 text-sm text-gray-600">
         {selectedPlayerCard ? (
-          <Cards card={selectedPlayerCard!} battleArea={true} />
+          <Cards side="PLAYER" card={selectedPlayerCard!} battleArea={true} />
         ) : (
           <div className="border-2 border-gray-400 bg-white w-full h-full flex justify-center items-center">
             Player 1 Card
@@ -53,7 +53,7 @@ export default function BattleArea() {
       {/* Player 2 Selected Card */}
       <div className=" aspect-2/3 min-h-80 text-sm text-gray-600">
         {selectedOpponentCard ? (
-          <Cards card={selectedOpponentCard!} battleArea={true} />
+          <Cards side="OPPONENT" card={selectedOpponentCard!} battleArea={true} />
         ) : (
           <div className="border-2 border-gray-400 bg-white w-full h-full flex justify-center items-center">
             Player 2 Card
