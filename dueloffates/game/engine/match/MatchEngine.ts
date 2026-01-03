@@ -16,6 +16,9 @@ export class MatchEngine extends GameEngine {
   private isMatchOver: boolean = false;
   private timer: number = 15;
   private timerInterval: NodeJS.Timeout | null = null;
+  private delay(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
 
   constructor(
     private deckEngine: DeckEngine,
@@ -122,7 +125,7 @@ export class MatchEngine extends GameEngine {
     //   return;
     // }
 
-    console.log("transitionToResolveState-2", this.currentPhase);
+    // console.log("transitionToResolveState-2", this.currentPhase);
     this.notify();
 
     this.resolveTurn();
@@ -131,6 +134,8 @@ export class MatchEngine extends GameEngine {
   // player actions
   private async resolveTurn() {
     if (!this.selectedPlayerCard || !this.selectedOpponentCard) return;
+
+    await this.delay(5000);
 
     console.log("resolveTurn", this.currentPhase);
     await this.cardResolver.resolve(
