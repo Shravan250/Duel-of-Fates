@@ -39,7 +39,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4 md:p-6 lg:p-8">
+    <div className="min-h-screen bg-gray-100 p-4 md:p-6 lg:p-8 game-background">
       <div className="max-w-7xl mx-auto space-y-6">
         <HeadUpDisplay player="Player 2" flip={false} />
 

@@ -52,6 +52,32 @@ export class DeckEngine extends GameEngine {
     return list.find((c) => c.id === instanceId) ?? null;
   }
 
+  public applyCooldown(instanceId: string, cooldown: number, side: string) {
+    let list =
+      side === "PLAYER" ? this.playerInstances : this.opponentInstances;
+
+    const cardToUpdate = list.find((card) => card.id === instanceId);
+
+    if (!cardToUpdate) return;
+
+    cardToUpdate.cooldown = cooldown + 1;
+
+    this.notify();
+  }
+
+  //reduce cooldown
+  public tickCooldown() {
+    const allInstances = [...this.playerInstances, ...this.opponentInstances];
+
+    for (const card of allInstances) {
+      if (card.cooldown > 0) {
+        card.cooldown -= 1;
+      }
+    }
+
+    this.notify();
+  }
+
   // getState form zustand (current)
   public getState() {
     return {

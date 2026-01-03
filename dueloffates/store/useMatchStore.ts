@@ -16,7 +16,6 @@ interface MatchStoreState {
 
   // permissoin
   canSelectCard: boolean;
-  canPlay: boolean;
 
   // controller
   matchController: matchEngineController | null;
@@ -36,7 +35,6 @@ export const useMatchStore = create<MatchStoreState>((set, get) => ({
   selectedPlayerCard: null,
   selectedOpponentCard: null,
   canSelectCard: false,
-  canPlay: false,
   matchController: null,
 
   // bind Controller

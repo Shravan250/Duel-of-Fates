@@ -48,6 +48,8 @@ export class MatchEngine extends GameEngine {
   public selectCard(instanceId: string, side: "PLAYER" | "OPPONENT") {
     if (this.currentPhase !== "PLAY") return;
 
+    if (!this.canPlayCard(instanceId, side)) return;
+
     if (side === "PLAYER") {
       this.selectedPlayerCard = instanceId;
     } else {
@@ -55,6 +57,15 @@ export class MatchEngine extends GameEngine {
     }
 
     this.notify();
+  }
+
+  //check if player can play the card
+  public canPlayCard(
+    cardInstanceId: string,
+    side: "PLAYER" | "OPPONENT"
+  ): boolean {
+    const card = this.deckEngine.getInstanceById(cardInstanceId, side);
+    return card ? card.cooldown === 0 : false;
   }
 
   // private functions
@@ -98,6 +109,7 @@ export class MatchEngine extends GameEngine {
   }
 
   private cleanupTurn() {
+    this.deckEngine.tickCooldown();
     this.selectedPlayerCard = null;
     this.selectedOpponentCard = null;
     this.currentTurn += 1;

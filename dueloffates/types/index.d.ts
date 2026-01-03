@@ -43,6 +43,6 @@ export interface CardProps {
     | "status damage"
     | "utility"
     | "heal";
-  onCooldown: boolean;
+  // onCooldown: boolean;
   userCards: boolean;
 }
