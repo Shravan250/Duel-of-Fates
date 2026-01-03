@@ -13,8 +13,9 @@ export function bindDeckEngine(): DeckController {
     const state = deckEngine.getState();
     const store = useGameStore.getState();
 
-    store.setAutoSelectedPlayerCard(state.selectedPlayerCard!),
-      store.setAutoSelectedOpponentCard(state.selectedOpponentCard!);
+    store.setAutoSelectedPlayerCard(state.selectedPlayerCard!);
+    store.setAutoSelectedOpponentCard(state.selectedOpponentCard!);
+
     store.setPlayerDeck(state.playerDeck);
     store.setOpponentDeck(state.opponentDeck);
     store.setPlayerInstances(state.playerInstances);
