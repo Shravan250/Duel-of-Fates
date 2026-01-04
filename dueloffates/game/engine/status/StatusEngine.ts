@@ -4,7 +4,7 @@ import { ShieldEngine } from "../shield/ShieldEngine";
 
 type Side = "player" | "opponent";
 
-interface StatusState {
+export interface StatusState {
   poison: number;
   fatigue: number;
 }

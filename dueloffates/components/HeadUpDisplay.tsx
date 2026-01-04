@@ -1,7 +1,10 @@
 import { useHealthStore } from "@/store/useHealthStore";
 import { useShieldStore } from "@/store/useShieldStore";
+import { useStatusStore } from "@/store/useStatusStore";
 import { Icon } from "@iconify/react";
 import clsx from "clsx";
+import StatusBar from "./StatusBar";
+import StatBar from "./StatBar";
 
 interface HeadUpDisplayProps {
   player: string;
@@ -13,11 +16,11 @@ export default function HeadUpDisplay({ player, flip }: HeadUpDisplayProps) {
     flip ? s.playerShield : s.opponentShield
   );
   const maxShield = useShieldStore((s) => s.maxShield);
-  const shieldPercent = (shield / maxShield) * 100;
 
   const hp = useHealthStore((s) => (flip ? s.playerHp : s.opponentHp));
   const maxHp = useHealthStore((s) => s.maxHp);
-  const hpPercent = (hp / maxHp) * 100;
+
+  const status = useStatusStore((s) => (flip ? s.player : s.opponent));
 
   return (
     <>
@@ -35,41 +38,26 @@ export default function HeadUpDisplay({ player, flip }: HeadUpDisplayProps) {
             flip ? "order-3" : "order-1"
           )}
         >
-          <div className="text-sm font-semibold mb-2">Status Effects</div>
+          <div className="text-sm font-semibold mb-2">
+            Status Effects
+            <StatusBar status={status} />
+          </div>
         </div>
 
         {/* Health/Shield Bars */}
         <div className="space-y-2 order-2">
-          <div className="border-2 border-gray-400 bg-gray-200 h-8 relative overflow-hidden">
-            <div
-              className="absolute top-0 h-full bg-blue-500 transition-all duration-300"
-              style={
-                flip
-                  ? { left: 0, width: `${shieldPercent}%` }
-                  : { right: 0, width: `${shieldPercent}%` }
-              }
-            />
-
-            {/* Centered HP Text */}
-            <div className="absolute inset-0 flex items-center justify-center font-semibold text-sm text-black pointer-events-none">
-              {shield} / {maxShield}
-            </div>
-          </div>
-          <div className="border-2 border-gray-400 bg-gray-200 h-8 relative overflow-hidden">
-            <div
-              className="absolute top-0 h-full bg-red-500 transition-all duration-300"
-              style={
-                flip
-                  ? { left: 0, width: `${hpPercent}%` }
-                  : { right: 0, width: `${hpPercent}%` }
-              }
-            />
-
-            {/* Centered HP Text */}
-            <div className="absolute inset-0 flex items-center justify-center font-semibold text-sm text-black pointer-events-none">
-              {hp} / {maxHp}
-            </div>
-          </div>
+          <StatBar
+            value={shield}
+            max={maxShield}
+            colorClass="bg-blue-500"
+            flip={flip}
+          />
+          <StatBar
+            value={hp}
+            max={maxHp}
+            colorClass="bg-red-500"
+            flip={flip}
+          />
         </div>
 
         {/* Player 2 Icon */}
