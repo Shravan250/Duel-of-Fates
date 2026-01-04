@@ -20,7 +20,7 @@ const styles = {
 };
 
 const Cards = ({ card, side, battleArea = false }: Cards2Props) => {
-  const { header, icon, effect, type, userCards } = card;
+  const { header, icon, desc, type, userCards } = card;
   const { selectCard, deckController } = useGameStore();
 
   const canPlay =
@@ -68,7 +68,7 @@ const Cards = ({ card, side, battleArea = false }: Cards2Props) => {
           </div>
 
           <div>
-            <span className="text-gray-400">Effect:</span> <span>{effect}</span>
+            <span className="text-gray-400">Effect:</span> <span>{desc}</span>
           </div>
 
           <div>

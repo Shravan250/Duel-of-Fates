@@ -1,9 +1,9 @@
-import { CardInstance, CardProps } from "@/types";
 import { GameEngine } from "../base/GameEngine";
 import { DeckEngine } from "../deck/DeckEngine";
 import { HealthEngine } from "../health/HealthEngine";
 import { ShieldEngine } from "../shield/ShieldEngine";
 import { CardEngine } from "../cards/CardEngine";
+import { StatusEngine } from "../status/StatusEngine";
 
 type MatchPhase = "SETUP" | "PLAY" | "RESOLVE" | "END";
 
@@ -24,7 +24,8 @@ export class MatchEngine extends GameEngine {
     private deckEngine: DeckEngine,
     private healthEngine: HealthEngine,
     private shieldEngine: ShieldEngine,
-    private cardResolver: CardEngine
+    private cardResolver: CardEngine,
+    private statusEngine: StatusEngine
   ) {
     super();
     this.healthEngine.subscribe(() => this.checkWinCondition());
@@ -120,12 +121,7 @@ export class MatchEngine extends GameEngine {
       this.selectedOpponentCard = this.deckEngine.autoSelectCard("OPPONENT");
     }
 
-    // if (!this.selectedPlayerCard || !this.selectedOpponentCard) {
-    //   this.transitionToPlayState();
-    //   return;
-    // }
-
-    // console.log("transitionToResolveState-2", this.currentPhase);
+    console.log("transitionToResolveState-2", this.currentPhase);
     this.notify();
 
     this.resolveTurn();
@@ -147,12 +143,13 @@ export class MatchEngine extends GameEngine {
   }
 
   private cleanupTurn() {
+    this.statusEngine.resolveTurn();
     this.deckEngine.tickCooldown();
     this.selectedPlayerCard = null;
     this.selectedOpponentCard = null;
     this.currentTurn += 1;
     this.checkWinCondition();
-
+    console.log(`[TURN END] Turn ${this.currentTurn}`);
     if (!this.isMatchOver) {
       this.transitionToPlayState();
     }
@@ -169,8 +166,6 @@ export class MatchEngine extends GameEngine {
       this.winner = "PLAYER";
       this.isMatchOver = true;
       this.currentPhase = "END";
-    } else {
-      this.currentPhase = "PLAY";
     }
   }
 

@@ -11,6 +11,7 @@ import {
 import { HealthEngine } from "../health/HealthEngine";
 import { ShieldEngine } from "../shield/ShieldEngine";
 import { DeckEngine } from "../deck/DeckEngine";
+import { StatusEngine } from "../status/StatusEngine";
 
 type cardType =
   | "attack"
@@ -34,15 +35,18 @@ export class CardEngine extends GameEngine {
   private healthEngine: HealthEngine;
   private shieldEngine: ShieldEngine;
   private deckEngine: DeckEngine;
+  private statusEngine: StatusEngine;
   constructor(
     healthEngine: HealthEngine,
     shieldEngine: ShieldEngine,
-    deckEngine: DeckEngine
+    deckEngine: DeckEngine,
+    statusEngine: StatusEngine
   ) {
     super();
     this.healthEngine = healthEngine;
     this.shieldEngine = shieldEngine;
     this.deckEngine = deckEngine;
+    this.statusEngine = statusEngine;
   }
   public async resolve(
     playerCardInstanceId: string,
@@ -74,8 +78,6 @@ export class CardEngine extends GameEngine {
       playerCardType
     );
 
-    console.log(playerCard);
-
     if (!playerCard || !opponentCard) {
       return;
     }
@@ -95,15 +97,43 @@ export class CardEngine extends GameEngine {
     instanceId: string
   ) {
     let target: "player" | "opponent" = role;
+
+    const damageMultiplier = this.statusEngine.getDamageMultiplier(role);
+
     if (card.type === "attack") {
+      const totalDamage = Math.floor(card.damage! * damageMultiplier);
       target = this.invertRole(role);
 
-      const remDamage = this.shieldEngine.absorbShield(card.damage!, target);
+      const remDamage = this.shieldEngine.absorbShield(totalDamage, target);
       remDamage > 0 && this.healthEngine.damage(remDamage, target);
     } else if (card.type === "defense") {
       this.shieldEngine.gainShield(card.shield_gain!, target);
     } else if (card.type === "heal") {
       this.healthEngine.heal(card.health_gain!, target);
+    } else if (card.type === "status damage" && card.effect) {
+      let stack = { fatigue: 0, poison: 0 };
+
+      if (card.effect.random) {
+        const effectKeys = Object.keys(card.effect.random) as (
+          | "poison"
+          | "fatigue"
+        )[];
+        const chosenEffectKey =
+          effectKeys[Math.floor(Math.random() * effectKeys.length)];
+        const values = card.effect.random[chosenEffectKey]!;
+        const effectValue = values[Math.floor(Math.random() * values.length)];
+
+        stack[chosenEffectKey] = effectValue;
+      } else {
+        stack = {
+          poison: card.effect.poison ?? 0,
+          fatigue: card.effect.fatigue ?? 0,
+        };
+      }
+
+      const target = this.invertRole(role);
+
+      this.statusEngine.applyStatus(target, stack);
     }
 
     this.deckEngine.applyCooldown(

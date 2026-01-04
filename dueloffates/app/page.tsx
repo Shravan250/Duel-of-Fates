@@ -4,7 +4,9 @@ import BattleArea from "@/components/BattleArea";
 import HeadUpDisplay from "@/components/HeadUpDisplay";
 import RenderCards from "@/components/RenderCards";
 import { bindDeckEngine } from "@/game/binders/bindDeckEngine";
+import { bindHealthEngine } from "@/game/binders/bindHealthEngine";
 import { bindMatchEngine } from "@/game/binders/bindMatchEngine";
+import { bindShieldEngine } from "@/game/binders/bindShieldEngine";
 import { useGameStore } from "@/store/useGameStore";
 import { useMatchStore } from "@/store/useMatchStore";
 import { useEffect } from "react";
@@ -12,6 +14,8 @@ import { useEffect } from "react";
 export default function Home() {
   useEffect(() => {
     const matchController = bindMatchEngine();
+    const healthController = bindHealthEngine();
+    const shieldController = bindShieldEngine();
     const deckController = bindDeckEngine();
 
     useMatchStore.getState().bindMatchController(matchController);

@@ -13,7 +13,15 @@ export interface CardDefination {
   priority: number;
   multiplier?: string;
   additional_effect?: string;
-  effect?: string;
+  desc?: string;
+  effect?: {
+    poison?: number;
+    fatigue?: number;
+    random?: {
+      poison?: number[];
+      fatigue?: number[];
+    };
+  };
   damage?: number;
   shield_gain?: number;
   health_gain?: number;
@@ -35,6 +43,7 @@ export interface CardProps {
   header: string;
   icon: string;
   effect?: string;
+  desc?: string;
   type:
     | "attack"
     | "defense"

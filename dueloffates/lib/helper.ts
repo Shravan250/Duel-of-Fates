@@ -38,18 +38,18 @@ export function deckRandomizer() {
   return deck;
 }
 
-function getEffect(card: CardDefination): string {
-  switch (card.type.toLocaleLowerCase()) {
-    case "attack":
-      return `${card.damage ?? 0} Damage`;
+// function getEffect(card: CardDefination): string {
+//   switch (card.type.toLocaleLowerCase()) {
+//     case "attack":
+//       return `${card.damage ?? 0} Damage`;
 
-    case "defense":
-      return `${card.shield_gain ?? 0} Shield Gain`;
+//     case "defense":
+//       return `${card.shield_gain ?? 0} Shield Gain`;
 
-    default:
-      return card.effect ?? "";
-  }
-}
+//     default:
+//       return card.effect ?? "";
+//   }
+// }
 
 export function createCardInstances(deck: CardDefination[], owner: string) {
   const cardInstances: CardInstance[] = deck.map(
@@ -86,7 +86,8 @@ export function formattedDeckGenerator(
       header: definition.name,
       type: definition.type,
       icon: "mdi:sword",
-      effect: getEffect(definition),
+      // effect: getEffect(definition),
+      desc: definition.desc,
       onCooldown: instance.cooldown > 0,
       userCards: instance.owner === "PLAYER",
     };
