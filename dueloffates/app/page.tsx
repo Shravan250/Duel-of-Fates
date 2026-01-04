@@ -7,6 +7,7 @@ import { bindDeckEngine } from "@/game/binders/bindDeckEngine";
 import { bindHealthEngine } from "@/game/binders/bindHealthEngine";
 import { bindMatchEngine } from "@/game/binders/bindMatchEngine";
 import { bindShieldEngine } from "@/game/binders/bindShieldEngine";
+import { bindStatusEngine } from "@/game/binders/bindStatusEngine";
 import { useGameStore } from "@/store/useGameStore";
 import { useMatchStore } from "@/store/useMatchStore";
 import { useEffect } from "react";
@@ -16,6 +17,7 @@ export default function Home() {
     const matchController = bindMatchEngine();
     const healthController = bindHealthEngine();
     const shieldController = bindShieldEngine();
+    const statusController=bindStatusEngine();
     const deckController = bindDeckEngine();
 
     useMatchStore.getState().bindMatchController(matchController);
