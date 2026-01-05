@@ -90,34 +90,6 @@ export class StatusEngine extends GameEngine {
     return this.state[side].poison * 5;
   }
 
-  //   public applypoison(side: Side, stack: number) {
-  //     this.state[side].poison = this.clamp(this.state[side].poison + stack, 0, 5);
-  //     this.notify();
-  //   }
-
-  //   public reducepoison(side: Side, stack: number) {
-  //     this.state[side].poison = this.clamp(this.state[side].poison - stack, 0, 5);
-  //     this.notify();
-  //   }
-
-  //   public applyFatigue(side: Side, stack: number) {
-  //     this.state[side].fatigue = this.clamp(
-  //       this.state[side].fatigue + stack,
-  //       0,
-  //       5
-  //     );
-  //     this.notify();
-  //   }
-
-  //   public reduceFatigue(side: Side, stack: number) {
-  //     this.state[side].fatigue = this.clamp(
-  //       this.state[side].fatigue - stack,
-  //       0,
-  //       5
-  //     );
-  //     this.notify();
-  //   }
-
   public applyStatus(side: Side, stack: { fatigue: number; poison: number }) {
     this.state[side].fatigue = this.clamp(
       this.state[side].fatigue + stack.fatigue
@@ -148,8 +120,22 @@ export class StatusEngine extends GameEngine {
         remDamage > 0 && this.healthEngine.damage(remDamage, side);
       }
 
-      this.state[side].poison = this.clamp(this.state[side].poison - 1);
-      this.state[side].fatigue = this.clamp(this.state[side].fatigue - 1);
+      // emitting new objects
+      this.state = {
+        ...this.state,
+        [side]: {
+          ...this.state[side],
+          poison: this.clamp(this.state[side].poison - 1),
+        },
+      };
+
+      this.state = {
+        ...this.state,
+        [side]: {
+          ...this.state[side],
+          fatigue: this.clamp(this.state[side].fatigue - 1),
+        },
+      };
     });
     this.notify();
   }
@@ -179,23 +165,74 @@ export class StatusEngine extends GameEngine {
   }
 
   public consumeAttackModifier(side: Side) {
-    this.state[side].modifiers.nextAttackMultiplier = 1;
+    this.state = {
+      ...this.state,
+      [side]: {
+        ...this.state[side],
+        modifiers: {
+          ...this.state[side].modifiers,
+          nextAttackMultiplier: 1,
+        },
+      },
+    };
+    this.notify();
   }
 
   public consumeReduceIncommingAttackModifier(side: Side) {
-    this.state[side].modifiers.incomingAttackMultiplier = 1;
+    this.state = {
+      ...this.state,
+      [side]: {
+        ...this.state[side],
+        modifiers: {
+          ...this.state[side].modifiers,
+          incomingAttackMultiplier: 1,
+        },
+      },
+    };
+    this.notify();
   }
 
   public consumeShieldModifier(side: Side) {
-    this.state[side].modifiers.nextShieldMultiplier = 1;
+    this.state = {
+      ...this.state,
+      [side]: {
+        ...this.state[side],
+        modifiers: {
+          ...this.state[side].modifiers,
+          nextShieldMultiplier: 1,
+        },
+      },
+    };
+    this.notify();
   }
 
   public consumeReducedShieldModifier(side: Side) {
-    this.state[side].modifiers.halveShield = false;
+    this.state = {
+      ...this.state,
+      [side]: {
+        ...this.state[side],
+        modifiers: {
+          ...this.state[side].modifiers,
+          halveShield: false,
+        },
+      },
+    };
+    this.notify();
   }
 
   public consumeCooldownModifier(side: Side) {
-    this.state[side].modifiers.cooldownReduction = 0;
+    this.state = {
+      ...this.state,
+      [side]: {
+        ...this.state[side],
+        modifiers: {
+          ...this.state[side].modifiers,
+          cooldownReduction: 0,
+        },
+      },
+    };
+
+    this.notify();
   }
 
   private clamp(num: number) {

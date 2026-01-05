@@ -131,6 +131,8 @@ export class MatchEngine extends GameEngine {
   private async resolveTurn() {
     if (!this.selectedPlayerCard || !this.selectedOpponentCard) return;
 
+    this.beginBatch();
+
     await this.delay(5000);
 
     console.log("resolveTurn", this.currentPhase);
@@ -139,12 +141,15 @@ export class MatchEngine extends GameEngine {
       this.selectedOpponentCard
     );
 
+    this.statusEngine.resolveTurn();
+
+    this.deckEngine.tickCooldown();
+
+    this.endBatch();
     this.cleanupTurn();
   }
 
   private cleanupTurn() {
-    this.statusEngine.resolveTurn();
-    this.deckEngine.tickCooldown();
     this.selectedPlayerCard = null;
     this.selectedOpponentCard = null;
     this.currentTurn += 1;

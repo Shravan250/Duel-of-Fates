@@ -52,12 +52,7 @@ export default function HeadUpDisplay({ player, flip }: HeadUpDisplayProps) {
             colorClass="bg-blue-500"
             flip={flip}
           />
-          <StatBar
-            value={hp}
-            max={maxHp}
-            colorClass="bg-red-500"
-            flip={flip}
-          />
+          <StatBar value={hp} max={maxHp} colorClass="bg-red-500" flip={flip} />
         </div>
 
         {/* Player 2 Icon */}

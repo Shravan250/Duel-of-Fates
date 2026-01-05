@@ -16,11 +16,11 @@ export default function Home() {
   const [startGame, setStartGame] = useState<boolean>(false);
 
   useEffect(() => {
-    const matchController = bindMatchEngine();
-    const healthController = bindHealthEngine();
-    const shieldController = bindShieldEngine();
-    const statusController = bindStatusEngine();
     const deckController = bindDeckEngine();
+    const statusController = bindStatusEngine();
+    const shieldController = bindShieldEngine();
+    const healthController = bindHealthEngine();
+    const matchController = bindMatchEngine();
 
     useMatchStore.getState().bindMatchController(matchController);
     useGameStore.getState().bindDeckController(deckController);
