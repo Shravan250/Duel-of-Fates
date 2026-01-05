@@ -97,6 +97,8 @@ export class CardEngine extends GameEngine {
     instanceId: string
   ) {
     let target: "player" | "opponent" = role;
+    const reduceCooldown =
+      this.statusEngine.getState()[role].modifiers.cooldownReduction;
     if (card.type === "attack") {
       target = this.invertRole(role);
 
@@ -179,6 +181,16 @@ export class CardEngine extends GameEngine {
       this.handleUtility(card, role);
     }
 
+    if (reduceCooldown > 0) {
+      this.deckEngine.applyCooldown(
+        instanceId,
+        Math.max(0, card.cooldown - reduceCooldown),
+        role.toUpperCase()
+      );
+      this.statusEngine.consumeCooldownModifier(role);
+      return;
+    }
+
     this.deckEngine.applyCooldown(
       instanceId,
       card.cooldown,
@@ -190,10 +202,9 @@ export class CardEngine extends GameEngine {
     if (card.name === "Swap") {
       this.healthEngine.swapHealth();
       this.shieldEngine.swapShield();
-    }
-    else if(card.name==='Reversal'){
-      const target=this.invertRole(role);
-      this.statusEngine.transferStatus(role,target);
+    } else if (card.name === "Reversal") {
+      const target = this.invertRole(role);
+      this.statusEngine.transferStatus(role, target);
     }
   }
 
