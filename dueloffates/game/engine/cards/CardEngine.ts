@@ -127,8 +127,27 @@ export class CardEngine extends GameEngine {
 
       const remDamage = this.shieldEngine.absorbShield(totalDamage, target);
       remDamage > 0 && this.healthEngine.damage(remDamage, target);
+
+
     } else if (card.type === "defense") {
-      this.shieldEngine.gainShield(card.shield_gain!, target);
+
+      const shieldMuliplier=this.statusEngine.getShieldMultiplier(target)
+
+      const totalShield = Math.floor(card.shield_gain! * shieldMuliplier);
+
+      console.log("🔥 SHIELD GAIN CALCULATION RESULT");
+      console.log({
+        baseGain: card.shield_gain,
+        multiplier:shieldMuliplier ,
+        totalShield,
+      });
+
+      // consume modifiers
+      this.statusEngine.consumeShieldModifier(target);
+      this.statusEngine.consumeReducedShieldModifier(target);
+
+      this.shieldEngine.gainShield(totalShield, target);
+
     } else if (card.type === "heal") {
       this.healthEngine.heal(card.health_gain!, target);
     } else if (card.type === "status damage" && card.effect) {
