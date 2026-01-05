@@ -70,6 +70,22 @@ export class StatusEngine extends GameEngine {
     return fatigueMult * attackMult * incomingMult;
   }
 
+  getShieldMultiplier(side: Side) {
+    const buffMult = this.state[side].modifiers.nextShieldMultiplier;
+    const debuffMult = this.state[side].modifiers.halveShield ? 0.5 : 1;
+
+    console.log("🧮 SHIELD MULTIPLIER BREAKDOWN");
+    console.log({
+      shieldRegainer: side,
+      shieldGainMultiplier: buffMult,
+      halveShield: debuffMult,
+      finalMultiplier: buffMult * debuffMult,
+    });
+    console.log("────────────────────────────");
+
+    return buffMult * debuffMult;
+  }
+
   public calculatePoisonDamage(side: Side) {
     return this.state[side].poison * 5;
   }
@@ -163,27 +179,23 @@ export class StatusEngine extends GameEngine {
   }
 
   public consumeAttackModifier(side: Side) {
-    const multiplier = this.state[side].modifiers.nextAttackMultiplier;
     this.state[side].modifiers.nextAttackMultiplier = 1;
-    return multiplier;
-  }
-
-  public consumeShieldModifier(side: Side) {
-    const multiplier = this.state[side].modifiers.nextShieldMultiplier;
-    this.state[side].modifiers.nextShieldMultiplier = 1;
-    return multiplier;
-  }
-
-  public consumeCooldownModifier(side: Side) {
-    const reduceBy = this.state[side].modifiers.cooldownReduction;
-    this.state[side].modifiers.cooldownReduction = 0;
-    return reduceBy;
   }
 
   public consumeReduceIncommingAttackModifier(side: Side) {
-    const multiplier = this.state[side].modifiers.incomingAttackMultiplier;
     this.state[side].modifiers.incomingAttackMultiplier = 1;
-    return multiplier;
+  }
+
+  public consumeShieldModifier(side: Side) {
+    this.state[side].modifiers.nextShieldMultiplier = 1;
+  }
+
+  public consumeReducedShieldModifier(side: Side) {
+    this.state[side].modifiers.halveShield = false;
+  }
+
+  public consumeCooldownModifier(side: Side) {
+    this.state[side].modifiers.cooldownReduction = 0;
   }
 
   private clamp(num: number) {
