@@ -72,6 +72,10 @@
 }
 
 @layer components {
+  .start-screen {
+    @apply w-full h-screen bg-transparent cursor-not-allowed absolute left-0 top-0 flex items-center justify-center;
+  }
+
   .game-background {
     @apply bg-no-repeat bg-center bg-cover w-full min-h-screen;
     background-image: url("../images/background.png");

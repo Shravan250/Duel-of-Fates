@@ -97,12 +97,33 @@ export class CardEngine extends GameEngine {
     instanceId: string
   ) {
     let target: "player" | "opponent" = role;
-
-    const damageMultiplier = this.statusEngine.getDamageMultiplier(role);
-
     if (card.type === "attack") {
-      const totalDamage = Math.floor(card.damage! * damageMultiplier);
       target = this.invertRole(role);
+
+      console.log("⚔️ ATTACK INITIATED");
+      console.log({
+        attacker: role,
+        defender: target,
+        baseDamage: card.damage,
+        cardId: card.definitionId,
+      });
+
+      const damageMultiplier = this.statusEngine.getDamageMultiplier(
+        role,
+        target
+      );
+      const totalDamage = Math.floor(card.damage! * damageMultiplier);
+
+      console.log("🔥 DAMAGE CALCULATION RESULT");
+      console.log({
+        baseDamage: card.damage,
+        multiplier: damageMultiplier,
+        totalDamage,
+      });
+
+      // consume modifiers
+      this.statusEngine.consumeAttackModifier(role);
+      this.statusEngine.consumeReduceIncommingAttackModifier(target);
 
       const remDamage = this.shieldEngine.absorbShield(totalDamage, target);
       remDamage > 0 && this.healthEngine.damage(remDamage, target);
@@ -134,6 +155,10 @@ export class CardEngine extends GameEngine {
       const target = this.invertRole(role);
 
       this.statusEngine.applyStatus(target, stack);
+    } else if (card.type === "buff" && card.modifiers) {
+      this.statusEngine.applyBuff(role, card.modifiers);
+    } else if (card.type === "debuff" && card.modifiers) {
+      this.statusEngine.applyDebuff(role, card.modifiers);
     }
 
     this.deckEngine.applyCooldown(

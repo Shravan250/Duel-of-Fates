@@ -1,3 +1,11 @@
+export interface Modifiers {
+  nextAttackMultiplier?: number;
+  incomingAttackMultiplier?: number;
+  nextShieldMultiplier?: number;
+  cooldownReduction?: number;
+  halveShield?: boolean;
+}
+
 export interface CardDefination {
   definitionId: string;
   name: string;
@@ -22,6 +30,7 @@ export interface CardDefination {
       fatigue?: number[];
     };
   };
+  modifiers?: Modifiers;
   damage?: number;
   shield_gain?: number;
   health_gain?: number;
