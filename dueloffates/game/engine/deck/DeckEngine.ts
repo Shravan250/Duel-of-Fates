@@ -130,6 +130,11 @@ export class DeckEngine extends GameEngine {
     return card ? card.cooldown === 0 : false;
   }
 
+  public cooldownRemaning(cardId: string, side: "PLAYER" | "OPPONENT") {
+    const card = this.getInstanceById(cardId, side);
+    return card ? card.cooldown : 0;
+  }
+
   // getState form zustand (current)
   public getState() {
     return {

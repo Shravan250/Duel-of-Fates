@@ -5,6 +5,7 @@ export interface DeckController {
   resetGame: () => void;
   unsubscribe: () => void;
   selectCard: (instanceId: string, side: "PLAYER" | "OPPONENT") => void;
+  cooldownRemaning: (instanceId: string, side: "PLAYER" | "OPPONENT") => number;
   canPlayCard: (instanceId: string, side: "PLAYER" | "OPPONENT") => boolean;
 }
 
@@ -33,6 +34,10 @@ export function bindDeckEngine(): DeckController {
 
     canPlayCard: (instanceId, side) => {
       return deckEngine.canPlayCard(instanceId, side);
+    },
+
+    cooldownRemaning: (instanceId, side) => {
+      return deckEngine.cooldownRemaning(instanceId, side);
     },
 
     unsubscribe: () => {

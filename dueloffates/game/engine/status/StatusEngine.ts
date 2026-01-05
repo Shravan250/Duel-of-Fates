@@ -120,22 +120,22 @@ export class StatusEngine extends GameEngine {
         remDamage > 0 && this.healthEngine.damage(remDamage, side);
       }
 
-      // emitting new objects
-      this.state = {
-        ...this.state,
-        [side]: {
-          ...this.state[side],
-          poison: this.clamp(this.state[side].poison - 1),
-        },
-      };
+      // // emitting new objects
+      // this.state = {
+      //   ...this.state,
+      //   [side]: {
+      //     ...this.state[side],
+      //     poison: this.clamp(this.state[side].poison - 1),
+      //   },
+      // };
 
-      this.state = {
-        ...this.state,
-        [side]: {
-          ...this.state[side],
-          fatigue: this.clamp(this.state[side].fatigue - 1),
-        },
-      };
+      // this.state = {
+      //   ...this.state,
+      //   [side]: {
+      //     ...this.state[side],
+      //     fatigue: this.clamp(this.state[side].fatigue - 1),
+      //   },
+      // };
     });
     this.notify();
   }

@@ -28,6 +28,11 @@ const Cards = ({ card, side, battleArea = false }: Cards2Props) => {
       ? deckController.canPlayCard(card.instanceId, side)
       : false;
 
+  const cooldownRemaning =
+    side && deckController
+      ? deckController.cooldownRemaning(card.instanceId, side)
+      : 0;
+
   return (
     <div className="relative group">
       <div
@@ -74,7 +79,7 @@ const Cards = ({ card, side, battleArea = false }: Cards2Props) => {
           <div>
             <span className="text-gray-400">Status:</span>
             <span className={!canPlay ? "text-red-400" : "text-green-400"}>
-              {!canPlay ? "On Cooldown" : "Ready"}
+              {!canPlay ? `On Cooldown: ${cooldownRemaning}` : "Ready"}
             </span>
           </div>
         </div>
