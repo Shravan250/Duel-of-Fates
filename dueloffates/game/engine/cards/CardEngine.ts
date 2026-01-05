@@ -97,6 +97,8 @@ export class CardEngine extends GameEngine {
     instanceId: string
   ) {
     let target: "player" | "opponent" = role;
+    const reduceCooldown =
+      this.statusEngine.getState()[role].modifiers.cooldownReduction;
     if (card.type === "attack") {
       target = this.invertRole(role);
 
@@ -127,18 +129,15 @@ export class CardEngine extends GameEngine {
 
       const remDamage = this.shieldEngine.absorbShield(totalDamage, target);
       remDamage > 0 && this.healthEngine.damage(remDamage, target);
-
-
     } else if (card.type === "defense") {
-
-      const shieldMuliplier=this.statusEngine.getShieldMultiplier(target)
+      const shieldMuliplier = this.statusEngine.getShieldMultiplier(target);
 
       const totalShield = Math.floor(card.shield_gain! * shieldMuliplier);
 
       console.log("🔥 SHIELD GAIN CALCULATION RESULT");
       console.log({
         baseGain: card.shield_gain,
-        multiplier:shieldMuliplier ,
+        multiplier: shieldMuliplier,
         totalShield,
       });
 
@@ -147,7 +146,6 @@ export class CardEngine extends GameEngine {
       this.statusEngine.consumeReducedShieldModifier(target);
 
       this.shieldEngine.gainShield(totalShield, target);
-
     } else if (card.type === "heal") {
       this.healthEngine.heal(card.health_gain!, target);
     } else if (card.type === "status damage" && card.effect) {
@@ -177,7 +175,20 @@ export class CardEngine extends GameEngine {
     } else if (card.type === "buff" && card.modifiers) {
       this.statusEngine.applyBuff(role, card.modifiers);
     } else if (card.type === "debuff" && card.modifiers) {
-      this.statusEngine.applyDebuff(role, card.modifiers);
+      target = this.invertRole(role);
+      this.statusEngine.applyDebuff(target, card.modifiers);
+    } else if (card.type === "utility") {
+      this.handleUtility(card, role);
+    }
+
+    if (reduceCooldown > 0) {
+      this.deckEngine.applyCooldown(
+        instanceId,
+        Math.max(0, card.cooldown - reduceCooldown),
+        role.toUpperCase()
+      );
+      this.statusEngine.consumeCooldownModifier(role);
+      return;
     }
 
     this.deckEngine.applyCooldown(
@@ -185,6 +196,16 @@ export class CardEngine extends GameEngine {
       card.cooldown,
       role.toUpperCase()
     );
+  }
+
+  private handleUtility(card: CardDefination, role: "player" | "opponent") {
+    if (card.name === "Swap") {
+      this.healthEngine.swapHealth();
+      this.shieldEngine.swapShield();
+    } else if (card.name === "Reversal") {
+      const target = this.invertRole(role);
+      this.statusEngine.transferStatus(role, target);
+    }
   }
 
   private getCardType(cardId: string): cardType {
