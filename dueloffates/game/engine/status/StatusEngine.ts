@@ -235,6 +235,22 @@ export class StatusEngine extends GameEngine {
     this.notify();
   }
 
+  public transferStatus(side: Side, target: Side) {
+    this.state = {
+      ...this.state,
+      [target]: {
+        ...this.state[target],
+        fatigue: this.state[side].fatigue + 1,
+        poison: this.state[side].poison + 1,
+      },
+      [side]: {
+        ...this.state[side],
+        fatigue: 0,
+        poison: 0,
+      },
+    };
+  }
+
   private clamp(num: number) {
     return Math.min(Math.max(num, 0), 5);
   }

@@ -1,45 +1,62 @@
 import { GameEngine } from "../base/GameEngine";
 
+type Side = "player" | "opponent";
+
 export class HealthEngine extends GameEngine {
-  private playerHp: number;
-  private opponentHp: number;
+  private hp: Record<Side, number>;
   private maxHp: number;
 
-  // initialise Health engine
   constructor(hp: number) {
     super();
-    this.playerHp = hp;
-    this.opponentHp = hp;
+    this.hp = {
+      player: hp,
+      opponent: hp,
+    };
     this.maxHp = hp;
   }
 
-  // ? reduce health based on damage taken
-  damage(amount: number, target: "player" | "opponent") {
-    if (target === "player")
-      this.playerHp = Math.max(0, this.playerHp - amount);
-    else this.opponentHp = Math.max(0, this.opponentHp - amount);
+  // reduce health
+  damage(amount: number, target: Side) {
+    this.hp = {
+      ...this.hp,
+      [target]: Math.max(0, this.hp[target] - amount),
+    };
     this.notify();
   }
 
-  // ? regen health based on amount
-  heal(amount: number, target: "player" | "opponent") {
-    if (target === "player")
-      this.playerHp = Math.min(this.playerHp + amount, this.maxHp);
-    else this.opponentHp = Math.min(this.opponentHp + amount, this.maxHp);
+  // heal health
+  heal(amount: number, target: Side) {
+    this.hp = {
+      ...this.hp,
+      [target]: Math.min(this.hp[target] + amount, this.maxHp),
+    };
     this.notify();
   }
 
   reset(hp: number) {
-    this.playerHp = hp;
-    this.opponentHp = hp;
+    this.hp = {
+      player: hp,
+      opponent: hp,
+    };
     this.maxHp = hp;
     this.notify();
   }
 
+  swapHealth() {
+    const { player, opponent } = this.hp;
+
+    this.hp = {
+      player: opponent,
+      opponent: player,
+    };
+    this.notify();
+  }
+
+  // 🔒 SAME LOGIC AS BEFORE — NOT CHANGED
   getHp() {
     return {
-      player: this.playerHp,
-      opponent: this.opponentHp,
+      player: this.hp.player,
+      opponent: this.hp.opponent,
       max: this.maxHp,
     };
   }

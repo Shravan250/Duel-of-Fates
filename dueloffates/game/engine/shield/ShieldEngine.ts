@@ -1,55 +1,71 @@
 import { GameEngine } from "../base/GameEngine";
 
+type Side = "player" | "opponent";
+
 export class ShieldEngine extends GameEngine {
-  private playerShield: number;
-  private opponentShield: number;
+  private shield: Record<Side, number>;
   private maxShield: number;
 
-  // initialize shield engine
   constructor(shield: number) {
     super();
-    this.playerShield = shield;
-    this.opponentShield = shield;
+    this.shield = {
+      player: shield,
+      opponent: shield,
+    };
     this.maxShield = shield;
   }
 
-  // ? reduce shield based on damage taken
-  absorbShield(amount: number, target: "player" | "opponent") {
-    let absorbed = 0;
-    if (target === "player") {
-      absorbed = Math.min(this.playerShield, amount);
-      this.playerShield = this.playerShield - absorbed;
-    } else {
-      absorbed = Math.min(this.opponentShield, amount);
-      this.opponentShield = this.opponentShield - absorbed;
-    }
+  // reduce shield based on damage taken
+  absorbShield(amount: number, target: Side) {
+    const absorbed = Math.min(this.shield[target], amount);
+
+    this.shield = {
+      ...this.shield,
+      [target]: this.shield[target] - absorbed,
+    };
+
     this.notify();
     return amount - absorbed;
   }
 
-  // ? regen shield based on amount
-  gainShield(amount: number, target: "player" | "opponent") {
-    if (target === "player")
-      this.playerShield = Math.min(this.playerShield + amount, this.maxShield);
-    else
-      this.opponentShield = Math.min(
-        this.opponentShield + amount,
+  // regen shield based on amount
+  gainShield(amount: number, target: Side) {
+    this.shield = {
+      ...this.shield,
+      [target]: Math.min(
+        this.shield[target] + amount,
         this.maxShield
-      );
+      ),
+    };
+
     this.notify();
   }
 
   reset(shield: number) {
-    this.playerShield = shield;
-    this.opponentShield = shield;
+    this.shield = {
+      player: shield,
+      opponent: shield,
+    };
     this.maxShield = shield;
     this.notify();
   }
 
+  swapShield() {
+    const { player, opponent } = this.shield;
+
+    this.shield = {
+      player: opponent,
+      opponent: player,
+    };
+
+    this.notify();
+  }
+
+  // 🔒 SAME CONTRACT AS BEFORE
   getShield() {
     return {
-      player: this.playerShield,
-      opponent: this.opponentShield,
+      player: this.shield.player,
+      opponent: this.shield.opponent,
       max: this.maxShield,
     };
   }
