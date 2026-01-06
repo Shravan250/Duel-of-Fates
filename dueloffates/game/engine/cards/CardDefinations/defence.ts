@@ -54,6 +54,7 @@ export const defenceCards: CardDefination[] = [
         condition: {
           self: { fatigueBelow: 1 },
         },
+        skipElse: true,
       },
       {
         shield: 6,

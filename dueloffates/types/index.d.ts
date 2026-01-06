@@ -65,6 +65,9 @@ export type Effect = {
   utility?: {
     type: "swap" | "reversal" | "custom";
   };
+
+  // skip condition false effects when condition true effects are met
+  skipElse?:boolean;
 };
 
 export type Condition = {

@@ -24,6 +24,7 @@ export const healCards: CardDefination[] = [
         condition: {
           self: { hpBelow: 50 },
         },
+        skipElse: true,
       },
       {
         heal: 15,

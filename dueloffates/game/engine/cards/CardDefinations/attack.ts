@@ -24,6 +24,7 @@ export const attackCards: CardDefination[] = [
         condition: {
           opponent: { hasShield: false },
         },
+        skipElse: true,
       },
       {
         damage: 10,
@@ -57,6 +58,7 @@ export const attackCards: CardDefination[] = [
         condition: {
           opponent: { hasShield: true },
         },
+        skipElse: true,
       },
       {
         damage: 12,
@@ -99,6 +101,7 @@ export const attackCards: CardDefination[] = [
         condition: {
           opponent: { hasFatigue: true },
         },
+        skipElse: true,
       },
       {
         damage: 11,

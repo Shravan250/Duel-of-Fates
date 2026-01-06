@@ -149,6 +149,10 @@ export class CardEngine extends GameEngine {
       }
 
       this.applyEffects(role, effect);
+
+      if (effect.skipElse) {
+        break;
+      }
     }
 
     // Applying cooldown after all effects
