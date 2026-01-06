@@ -58,7 +58,6 @@ export function createCardInstances(deck: CardDefination[], owner: string) {
         id: `${owner}-${i}`,
         definitionId: card.definitionId,
         cooldown: 0,
-        multiplier: card.multiplier,
         owner: owner as CardInstance["owner"],
       };
     }
@@ -106,3 +105,7 @@ function shuffleArray(array: CardDefination[]) {
 // function random(limit: number) {
 //   return Math.floor(Math.random() * limit);
 // }
+
+// --------------------------------
+// Match Condition
+// --------------------------------

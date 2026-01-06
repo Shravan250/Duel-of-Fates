@@ -15,6 +15,7 @@ export const utilityCards: CardDefination[] = [
           fatigue: 0,
         },
         target: "opponent",
+        utility: { type: "reversal" },
       },
     ],
   },
@@ -29,6 +30,7 @@ export const utilityCards: CardDefination[] = [
       {
         modifiers: {},
         target: "self",
+        utility: { type: "swap" },
       },
     ],
   },
