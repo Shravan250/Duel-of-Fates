@@ -6,59 +6,124 @@ export interface Modifiers {
   halveShield?: boolean;
 }
 
+// export interface CardDefination {
+//   definitionId: string;
+//   name: string;
+//   type:
+//     | "attack"
+//     | "defense"
+//     | "buff"
+//     | "debuff"
+//     | "status damage"
+//     | "utility"
+//     | "heal";
+//   cooldown: number;
+//   priority: number;
+//   multiplier?: string;
+//   additional_effect?: string;
+//   desc?: string;
+//   effect?: {
+//     poison?: number;
+//     fatigue?: number;
+//     random?: {
+//       poison?: number[];
+//       fatigue?: number[];
+//     };
+//   };
+//   modifiers?: Modifiers;
+//   damage?: number;
+//   shield_gain?: number;
+//   health_gain?: number;
+//   condition?: {
+//     self?: {
+//       hpBelow?: number;
+//       fatigueAbove?: number;
+//       fatigueBelow?: number;
+//       hasShield?: boolean;
+//     };
+//     target?: {
+//       hasShield?: boolean;
+//       hasFatigue?: boolean;
+//     };
+//   };
+//   sideEffects?: {
+//     self?: {
+//       fatigue?: number;
+//       poison?: number;
+//       hp?: number;
+//     };
+//     target?: {
+//       fatigue?: number;
+//       poison?: number;
+//       hp?: number;
+//     };
+//   };
+// }
 export interface CardDefination {
   definitionId: string;
   name: string;
-  type:
-    | "attack"
-    | "defense"
-    | "buff"
-    | "debuff"
-    | "status damage"
-    | "utility"
-    | "heal";
+  type: CardType;
+
+  desc?: string; // UI only
+
+  cost?: number;
   cooldown: number;
   priority: number;
-  multiplier?: string;
-  additional_effect?: string;
-  desc?: string;
-  effect?: {
+
+  // Can this card be played at all?
+  playCondition?: Condition;
+
+  // What happens when it resolves
+  effects: Effect[];
+}
+
+export type Effect = {
+  condition?: Condition; // optional per-effect condition
+
+  // Primary effects
+  damage?: number;
+  heal?: number;
+  shield?: number;
+
+  // Status changes
+  status?: {
     poison?: number;
     fatigue?: number;
-    random?: {
-      poison?: number[];
-      fatigue?: number[];
-    };
+    random?: { poison?: number[]; fatigue?: number[] };
+    shieldBreak?: boolean;
   };
-  modifiers?: Modifiers;
-  damage?: number;
-  shield_gain?: number;
-  health_gain?: number;
-  condition?: {
-    self?: {
-      hpBelow?: number;
-      fatigueAbove?: number;
-      fatigueBelow?: number;
-      hasShield?: boolean;
-    };
-    target?: {
-      hasShield?: boolean;
-      hasFatigue?: boolean;
-    };
+
+  // Modifiers (buffs / debuffs)
+  modifiers?: {
+    nextAttackMultiplier?: number;
+    nextShieldMultiplier?: number;
+    incomingAttackMultiplier?: number;
+    cooldownReduction?: number;
+    halveShield?: boolean;
   };
-  sideEffects?: {
-    self?: {
-      fatigue?: number;
-      poison?: number;
-      hp?: number;
-    };
-    target?: {
-      fatigue?: number;
-      poison?: number;
-      hp?: number;
-    };
+
+  // Targeting
+  target?: "self" | "opponent";
+};
+
+export type Condition = {
+  self?: {
+    hpBelow?: number;
+    hpAbove?: number;
+    fatigueAbove?: number;
+    fatigueBelow?: number;
+    hasShield?: boolean;
   };
-}
+  opponent?: {
+    hasShield?: boolean;
+    hasFatigue?: boolean;
+    hpBelow?: number;
+  };
+};
+
+// --------------------------------
+// CardInstances and Props
+//--------------------------------
 
 export interface CardInstance {
   id: string;

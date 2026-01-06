@@ -6,68 +6,71 @@ export const defenceCards: CardDefination[] = [
     name: "Guard",
     type: "defense",
     desc: "Gain 8 Shield.",
-    shield_gain: 8,
-    priority: 2,
     cooldown: 1,
+    priority: 2,
+    effects: [{ shield: 8, target: "self" }],
   },
   {
     definitionId: "defense_reinforced_guard",
     name: "Reinforced Guard",
     type: "defense",
     desc: "Gain 12 Shield.",
-    shield_gain: 12,
-    priority: 1,
     cooldown: 2,
+    priority: 1,
+    effects: [{ shield: 12, target: "self" }],
   },
   {
     definitionId: "defense_brace",
     name: "Brace",
     type: "defense",
     desc: "Gain 10 Shield and reduce Fatigue by 1.",
-    shield_gain: 10,
-    priority: 2,
     cooldown: 2,
-    sideEffects: {
-      self: {
-        fatigue: -1,
-      },
-    },
+    priority: 2,
+    effects: [
+      { shield: 10, target: "self" },
+      { status: { fatigue: -1 }, target: "self" },
+    ],
   },
   {
     definitionId: "defense_fortify",
     name: "Fortify",
     type: "defense",
     desc: "Gain 15 Shield.",
-    shield_gain: 15,
-    priority: 0,
     cooldown: 3,
+    priority: 0,
+    effects: [{ shield: 15, target: "self" }],
   },
   {
     definitionId: "defense_reactive_barrier",
     name: "Reactive Barrier",
     type: "defense",
     desc: "Gain 6 Shield. Shield gain increases based on the user's Fatigue.",
-    shield_gain: 6,
-    priority: 2,
     cooldown: 2,
-    condition: {
-      self: {
-        fatigueAbove: 0,
+    priority: 2,
+    effects: [
+      {
+        shield: 6,
+        target: "self",
+        condition: {
+          self: { fatigueBelow: 1 },
+        },
       },
-    },
+      {
+        shield: 6,
+        target: "self",
+      },
+    ],
   },
   {
     definitionId: "defense_iron_stance",
     name: "Iron Stance",
     type: "defense",
     desc: "Gain 10 Shield. User gains Fatigue +1.",
-    shield_gain: 10,
-    priority: 2,
     cooldown: 3,
-    sideEffects: {
-      self: {
-        fatigue: 1,
-      },
-    },
+    priority: 2,
+    effects: [
+      { shield: 10, target: "self" },
+      { status: { fatigue: 1 }, target: "self" },
+    ],
   },
 ];
