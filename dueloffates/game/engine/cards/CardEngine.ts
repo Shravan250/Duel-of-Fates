@@ -12,8 +12,16 @@ import { HealthEngine } from "../health/HealthEngine";
 import { ShieldEngine } from "../shield/ShieldEngine";
 import { DeckEngine } from "../deck/DeckEngine";
 import { StatusEngine } from "../status/StatusEngine";
+import { useDebugStore } from "@/store/useDebugStore";
 
 type Side = "player" | "opponent";
+
+// Debug delays (in milliseconds)
+const DEBUG_DELAYS = {
+  CARD_EFFECT: 1000, // Delay between card effects (damage, heal, shield)
+  STATUS_TICK: 2000, // Delay for poison/fatigue ticks
+  EFFECT_GROUP: 1500, // Small delay between effect types within same card
+};
 
 type cardType =
   | "attack"
@@ -50,6 +58,34 @@ export class CardEngine extends GameEngine {
     this.deckEngine = deckEngine;
     this.statusEngine = statusEngine;
   }
+
+  /**
+   * Helper: Add intentional delay for debugging/visualization
+   */
+  private delay(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  /**
+   * Helper: Emit debug event to store
+   */
+  private emitDebugEvent(
+    side: Side,
+    type:
+      | "damage"
+      | "heal"
+      | "shield"
+      | "poison"
+      | "fatigue"
+      | "buff"
+      | "debuff"
+      | "utility",
+    message: string,
+    value?: number
+  ) {
+    useDebugStore.getState().addEvent({ side, type, message, value });
+  }
+
   public async resolve(
     playerCardInstanceId: string,
     opponentCardInstanceId: string
@@ -97,13 +133,15 @@ export class CardEngine extends GameEngine {
     NEW: Apply all effects from a card in order
     Replaces the if lelse  statements  
   */
-  private applyCardEffects(
+  private async applyCardEffects(
     role: Side,
     card: CardDefination,
     instanceId: string
   ) {
     // execute effect in order
     for (const effect of card.effects) {
+      // T && F ,
+
       if (effect.condition) {
         if (!this.matchCondition(effect.condition, role)) {
           continue; // skipping effect if condition not met
@@ -121,37 +159,37 @@ export class CardEngine extends GameEngine {
    NEW: Apply a single effect 
    Handlesall effect types(damage, heal, shield, status, modifiers)
    */
-  private applyEffects(role: "player" | "opponent", effect: Effect) {
+  private async applyEffects(role: "player" | "opponent", effect: Effect) {
     const target = this.resolveTarget(effect, role);
 
     // DAMAGE
     if (effect.damage && effect.damage > 0) {
-      this.applyDamage(role, target, effect.damage);
+      await this.applyDamage(role, target, effect.damage);
     }
 
     // Shield
     if (effect.shield && effect.shield > 0) {
-      this.applyShield(target, effect.shield);
+      await this.applyShield(target, effect.shield);
     }
 
     // HEAL
     if (effect.heal && effect.heal > 0) {
-      this.applyHeal(target, effect.heal);
+      await this.applyHeal(target, effect.heal);
     }
 
     //  STATUS (poison,, shieldBreak)
     if (effect.status) {
-      this.applyStatusEffect(target, effect.status);
+      await this.applyStatusEffect(target, effect.status);
     }
 
     // MODIFIERS
     if (effect.modifiers) {
-      this.applyModifiers(target, effect.modifiers);
+      await this.applyModifiers(target, effect.modifiers);
     }
 
     // UTILITY EFFECTS
     if (effect.utility) {
-      this.applyUtility(role, target, effect.utility.type);
+      await this.applyUtility(role, target, effect.utility.type);
     }
   }
 
@@ -166,12 +204,19 @@ export class CardEngine extends GameEngine {
     REFACtORING: Damage with multipliers
    */
 
-  private applyDamage(attacker: Side, defender: Side, baseDamage: number) {
+  private async applyDamage(
+    attacker: Side,
+    defender: Side,
+    baseDamage: number
+  ) {
     const damageMultiplier = this.statusEngine.getDamageMultiplier(
       attacker,
       defender
     );
     const totalDamage = Math.floor(baseDamage * damageMultiplier);
+
+    // Emit debug event
+    this.emitDebugEvent(defender, "damage", "Took damage", totalDamage);
 
     // Consume attackRelated modifiers
     this.statusEngine.consumeAttackModifier(attacker);
@@ -182,34 +227,42 @@ export class CardEngine extends GameEngine {
     if (remDamage > 0) {
       this.healthEngine.damage(remDamage, defender);
     }
+    await this.delay(DEBUG_DELAYS.CARD_EFFECT);
   }
 
   /*
     REFACTORED: Shield gain with multipliers
    */
-  private applyShield(target: Side, baseShield: number) {
+  private async applyShield(target: Side, baseShield: number) {
     const shieldMuliplier = this.statusEngine.getShieldMultiplier(target);
 
     const totalShield = Math.floor(baseShield * shieldMuliplier);
+
+    // Emit debug event
+    this.emitDebugEvent(target, "shield", "Gained shield", totalShield);
 
     // consume modifiers
     this.statusEngine.consumeShieldModifier(target);
     this.statusEngine.consumeReducedShieldModifier(target);
 
     this.shieldEngine.gainShield(totalShield, target);
+
+    await this.delay(DEBUG_DELAYS.CARD_EFFECT);
   }
 
   /*
     REFACTORED: Shield gain with multipliers
    */
-  private applyHeal(target: Side, healAmount: number) {
+  private async applyHeal(target: Side, healAmount: number) {
+    this.emitDebugEvent(target, "heal", "Healed", healAmount);
     this.healthEngine.heal(healAmount, target);
+    await this.delay(DEBUG_DELAYS.CARD_EFFECT);
   }
 
   /*
     REFACTORED &NEW: Apply status effects (poison, fatigue, random)
    */
-  private applyStatusEffect(
+  private async applyStatusEffect(
     target: Side,
     status: NonNullable<Effect["status"]> // learned to use NonNullable
   ) {
@@ -223,44 +276,109 @@ export class CardEngine extends GameEngine {
       const values = status.random[chosenKey]!;
       const effectValue = values[Math.floor(Math.random() * values.length)];
       stack[chosenKey] = effectValue;
+
+      this.emitDebugEvent(
+        target,
+        chosenKey,
+        `Applied ${chosenKey}`,
+        effectValue
+      );
     } else {
       // Direct application
       stack = {
         poison: status.poison ?? 0,
         fatigue: status.fatigue ?? 0,
       };
+
+      if (stack.poison > 0) {
+        this.emitDebugEvent(target, "poison", "Applied poison", stack.poison);
+      }
+      if (stack.fatigue > 0) {
+        this.emitDebugEvent(
+          target,
+          "fatigue",
+          "Applied fatigue",
+          stack.fatigue
+        );
+      }
     }
 
     this.statusEngine.applyStatus(target, stack);
+
+    await this.delay(DEBUG_DELAYS.CARD_EFFECT);
   }
 
   /*
     NEW: Apply MOdifiers
   */
-  private applyModifiers(
+  private async applyModifiers(
     target: Side,
     modifiers: NonNullable<Effect["modifiers"]>
   ) {
+    // Build debug message
+    const modNames = [];
+    if (
+      modifiers.nextAttackMultiplier &&
+      modifiers.nextAttackMultiplier !== 1
+    ) {
+      modNames.push(`Atk x${modifiers.nextAttackMultiplier}`);
+    }
+    if (
+      modifiers.nextShieldMultiplier &&
+      modifiers.nextShieldMultiplier !== 1
+    ) {
+      modNames.push(`Shield x${modifiers.nextShieldMultiplier}`);
+    }
+    if (
+      modifiers.incomingAttackMultiplier &&
+      modifiers.incomingAttackMultiplier !== 1
+    ) {
+      modNames.push(`Incoming x${modifiers.incomingAttackMultiplier}`);
+    }
+    if (modifiers.cooldownReduction && modifiers.cooldownReduction > 0) {
+      modNames.push(`CD -${modifiers.cooldownReduction}`);
+    }
+    if (modifiers.halveShield) {
+      modNames.push("Shield halved");
+    }
+
+    const eventType =
+      (modifiers.nextAttackMultiplier && modifiers.nextAttackMultiplier > 1) ||
+      (modifiers.nextShieldMultiplier && modifiers.nextShieldMultiplier > 1) ||
+      (modifiers.cooldownReduction && modifiers.cooldownReduction > 0)
+        ? "buff"
+        : "debuff";
+
+    this.emitDebugEvent(target, eventType, modNames.join(", "));
+
     this.statusEngine.applyModifiers(target, modifiers);
+
+    await this.delay(DEBUG_DELAYS.CARD_EFFECT);
   }
 
   /*
    NEW: Apply utility effects
    */
-  private applyUtility(role: Side, target: Side, utilityType: string) {
+  private async applyUtility(role: Side, target: Side, utilityType: string) {
     switch (utilityType) {
       case "swap":
+        this.emitDebugEvent("player", "utility", "🔄 HP/Shield swapped");
+        this.emitDebugEvent("opponent", "utility", "🔄 HP/Shield swapped");
         this.healthEngine.swapHealth();
         this.shieldEngine.swapShield();
         break;
 
       case "reversal":
+        this.emitDebugEvent(role, "utility", "🔄 Status cleared");
+        this.emitDebugEvent(target, "utility", "⚠️ Status received");
         this.statusEngine.transferStatus(role, target);
         break;
 
       default:
         console.log(`Unknown utility type: ${utilityType}`);
     }
+
+    await this.delay(DEBUG_DELAYS.CARD_EFFECT);
   }
 
   /*

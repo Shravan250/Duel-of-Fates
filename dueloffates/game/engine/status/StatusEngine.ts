@@ -1,3 +1,4 @@
+import { useDebugStore } from "@/store/useDebugStore";
 import { GameEngine } from "../base/GameEngine";
 import { HealthEngine } from "../health/HealthEngine";
 import { ShieldEngine } from "../shield/ShieldEngine";
@@ -17,6 +18,9 @@ interface Modifiers {
   cooldownReduction: number;
   halveShield: boolean;
 }
+
+// Debug delay for status ticks
+const STATUS_TICK_DELAY = 800;
 
 export class StatusEngine extends GameEngine {
   private state: Record<Side, StatusState> = {
@@ -49,6 +53,19 @@ export class StatusEngine extends GameEngine {
     private shieldEngine: ShieldEngine
   ) {
     super();
+  }
+
+  private delay(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  private emitDebugEvent(
+    side: Side,
+    type: "poison" | "fatigue",
+    message: string,
+    value?: number
+  ) {
+    useDebugStore.getState().addEvent({ side, type, message, value });
   }
 
   getDamageMultiplier(attacker: Side, defender: Side) {
@@ -104,14 +121,20 @@ export class StatusEngine extends GameEngine {
   }
 
   // resolve turn
-  public resolveTurn() {
-    (["player", "opponent"] as Side[]).forEach((side) => {
+  public async resolveTurn() {
+    (["player", "opponent"] as Side[]).forEach(async (side) => {
       const poisonDamage = this.calculatePoisonDamage(side);
       const isHalveShield = this.state[side].modifiers.halveShield;
 
       if (poisonDamage > 0) {
+        // Emit debug event for poison tick
+        this.emitDebugEvent(side, "poison", "☠️ Poison tick", poisonDamage);
+
         const remDamage = this.shieldEngine.absorbShield(poisonDamage, side);
         remDamage > 0 && this.healthEngine.damage(remDamage, side);
+
+        // Add delay to see poison damage
+        await this.delay(STATUS_TICK_DELAY);
       }
 
       if (isHalveShield) {

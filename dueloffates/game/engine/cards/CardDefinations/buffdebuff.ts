@@ -53,7 +53,7 @@ export const buffDebuffCards: CardDefination[] = [
     effects: [
       {
         modifiers: { incomingAttackMultiplier: 0.6 },
-        target: "opponent",
+        target: "self",
       },
     ],
   },
@@ -67,7 +67,7 @@ export const buffDebuffCards: CardDefination[] = [
     effects: [
       {
         modifiers: { incomingAttackMultiplier: 0.4 },
-        target: "opponent",
+        target: "self",
       },
     ],
   },
@@ -75,7 +75,7 @@ export const buffDebuffCards: CardDefination[] = [
     definitionId: "debuff_guard_break_prep",
     name: "Guard Break Prep",
     type: "debuff",
-    desc: "Opponent's shield gain is halved",
+    desc: "Opponent's shield is halved",
     cooldown: 4,
     priority: 3,
     effects: [
