@@ -16,7 +16,7 @@ const styles = {
   debuff: "card-buff",
   heal: "card-heal",
   utility: "card-neutral",
-  "status damage": "card-poison",
+  status: "card-poison",
 };
 
 const Cards = ({ card, side, battleArea = false }: Cards2Props) => {
@@ -52,6 +52,11 @@ const Cards = ({ card, side, battleArea = false }: Cards2Props) => {
       >
         <h2>{header}</h2>
         <Icon icon={icon} width={50} height={50} className="shrink-0" />
+        {!canPlay &&(
+          <div className="absolute flex items-center justify-center text-5xl font-extrabold text-white rounded-full w-12 h-12 animate-pulse">
+          {cooldownRemaning<20?cooldownRemaning:"USED"}
+        </div>
+        )}
       </div>
 
       {/* Hover Tooltip */}
@@ -86,7 +91,7 @@ const Cards = ({ card, side, battleArea = false }: Cards2Props) => {
           <div>
             <span className="text-gray-400">Status:</span>
             <span className={!canPlay ? "text-red-400" : "text-green-400"}>
-              {!canPlay ? `On Cooldown: ${cooldownRemaning}` : "Ready"}
+              {!canPlay ? `On Cooldown` : "Ready"}
             </span>
           </div>
         </div>

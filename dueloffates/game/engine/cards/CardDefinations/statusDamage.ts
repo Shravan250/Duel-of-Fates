@@ -32,7 +32,7 @@ export const statusDamage: CardDefination[] = [
   {
     definitionId: "status_frenzy",
     name: "Frenzy",
-    type: "status damage",
+    type: "status",
     desc: "Apply random (-3 to +3) Poison or Fatigue",
     cooldown: 5,
     priority: 3,
