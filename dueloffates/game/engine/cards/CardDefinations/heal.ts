@@ -39,8 +39,8 @@ export const healCards: CardDefination[] = [
     cooldown: 4,
     priority: 3,
     effects: [
-      { heal: 10, target: "self" },
       { status: { fatigue: -1 }, target: "self" },
+      { heal: 10, target: "self" },
     ],
   },
   {
@@ -51,8 +51,8 @@ export const healCards: CardDefination[] = [
     cooldown: 4,
     priority: 3,
     effects: [
-      { heal: 20, target: "self" },
       { status: { fatigue: 1 }, target: "self" },
+      { heal: 20, target: "self" },
     ],
   },
 ];
