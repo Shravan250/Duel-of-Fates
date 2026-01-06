@@ -1,6 +1,6 @@
 import { CardDefination } from "@/types";
 
-export const attackCards: CardDefination[] =[
+export const attackCards: CardDefination[] = [
   {
     definitionId: "attack_quick_attack",
     name: "Quick Attack",
@@ -9,7 +9,6 @@ export const attackCards: CardDefination[] =[
     damage: 8,
     priority: 2,
     cooldown: 1,
-    multiplier: "1x(default)",
   },
   {
     definitionId: "attack_precise_strike",
@@ -19,7 +18,11 @@ export const attackCards: CardDefination[] =[
     damage: 10,
     priority: 1,
     cooldown: 1,
-    multiplier: "2x if target has no Shield",
+    condition: {
+      target: {
+        hasShield: false,
+      },
+    },
   },
   {
     definitionId: "attack_heavy_blow",
@@ -29,9 +32,11 @@ export const attackCards: CardDefination[] =[
     damage: 16,
     priority: 0,
     cooldown: 3,
-    multiplier: "1x (default)",
-    additional_effect: "User Gains Fatigue + 1",
-    sideEffects: "Fatigue +1",
+    sideEffects: {
+      self: {
+        fatigue: 1,
+      },
+    },
   },
   {
     definitionId: "attack_crushing_strike",
@@ -41,7 +46,11 @@ export const attackCards: CardDefination[] =[
     damage: 12,
     priority: 1,
     cooldown: 2,
-    multiplier: "1.3x if target has Shield",
+    condition: {
+      target: {
+        hasShield: true,
+      },
+    },
   },
   {
     definitionId: "attack_relentless_slash",
@@ -51,7 +60,6 @@ export const attackCards: CardDefination[] =[
     damage: 9,
     priority: 2,
     cooldown: 2,
-    multiplier: "1x (default)",
   },
   {
     definitionId: "attack_exhausting_strike",
@@ -61,9 +69,11 @@ export const attackCards: CardDefination[] =[
     damage: 7,
     priority: 1,
     cooldown: 2,
-    multiplier: "1x (default)",
-    additional_effect: "Applies fatigue + 1",
-    sideEffects: "Fatigue +1",
+    sideEffects: {
+      target: {
+        fatigue: 1,
+      },
+    },
   },
   {
     definitionId: "attack_opportunist_hit",
@@ -73,7 +83,11 @@ export const attackCards: CardDefination[] =[
     damage: 11,
     priority: 2,
     cooldown: 2,
-    multiplier: "1.4x if target has Fatigue",
+    condition: {
+      target: {
+        hasFatigue: true,
+      },
+    },
   },
   {
     definitionId: "attack_all_in_strike",
@@ -83,8 +97,10 @@ export const attackCards: CardDefination[] =[
     damage: 20,
     priority: 0,
     cooldown: 4,
-    multiplier: "1x (default)",
-    additional_effect: "User Gains Fatigue + 2",
-    sideEffects: "Fatigue +2",
+    sideEffects: {
+      self: {
+        fatigue: 2,
+      },
+    },
   },
 ];

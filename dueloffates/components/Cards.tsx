@@ -20,7 +20,7 @@ const styles = {
 };
 
 const Cards = ({ card, side, battleArea = false }: Cards2Props) => {
-  const { header, icon, desc, type, userCards } = card;
+  const { header, icon, desc, type, userCards, cooldown } = card;
   const { selectCard, deckController } = useGameStore();
 
   const canPlay =
@@ -75,6 +75,13 @@ const Cards = ({ card, side, battleArea = false }: Cards2Props) => {
           <div>
             <span className="text-gray-400">Effect:</span> <span>{desc}</span>
           </div>
+
+          {canPlay && (
+            <div>
+              <span className="text-gray-400">Cooldown Needed: </span>
+              <span>{cooldown}</span>
+            </div>
+          )}
 
           <div>
             <span className="text-gray-400">Status:</span>

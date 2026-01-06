@@ -88,7 +88,8 @@ export function formattedDeckGenerator(
       icon: "mdi:sword",
       // effect: getEffect(definition),
       desc: definition.desc,
-      onCooldown: instance.cooldown > 0,
+      cooldown: definition.cooldown,
+      // onCooldown: instance.cooldown > 0,
       userCards: instance.owner === "PLAYER",
     };
   });

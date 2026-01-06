@@ -9,7 +9,6 @@ export const defenceCards: CardDefination[] = [
     shield_gain: 8,
     priority: 2,
     cooldown: 1,
-    multiplier: "1x",
   },
   {
     definitionId: "defense_reinforced_guard",
@@ -19,7 +18,6 @@ export const defenceCards: CardDefination[] = [
     shield_gain: 12,
     priority: 1,
     cooldown: 2,
-    multiplier: "1x",
   },
   {
     definitionId: "defense_brace",
@@ -29,9 +27,11 @@ export const defenceCards: CardDefination[] = [
     shield_gain: 10,
     priority: 2,
     cooldown: 2,
-    multiplier: "1x",
-    additional_effect: "Reduces Fatigue - 1",
-    sideEffects: "Fatigue -1",
+    sideEffects: {
+      self: {
+        fatigue: -1,
+      },
+    },
   },
   {
     definitionId: "defense_fortify",
@@ -41,7 +41,6 @@ export const defenceCards: CardDefination[] = [
     shield_gain: 15,
     priority: 0,
     cooldown: 3,
-    multiplier: "1x",
   },
   {
     definitionId: "defense_reactive_barrier",
@@ -51,7 +50,11 @@ export const defenceCards: CardDefination[] = [
     shield_gain: 6,
     priority: 2,
     cooldown: 2,
-    multiplier: "1x + 0.2x per Fatigue on self",
+    condition: {
+      self: {
+        fatigueAbove: 0,
+      },
+    },
   },
   {
     definitionId: "defense_iron_stance",
@@ -61,8 +64,10 @@ export const defenceCards: CardDefination[] = [
     shield_gain: 10,
     priority: 2,
     cooldown: 3,
-    multiplier: "1x",
-    additional_effect: "User Fatigue + 1",
-    sideEffects: "Fatigue +1",
+    sideEffects: {
+      self: {
+        fatigue: 1,
+      },
+    },
   },
 ];

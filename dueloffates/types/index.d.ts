@@ -34,8 +34,30 @@ export interface CardDefination {
   damage?: number;
   shield_gain?: number;
   health_gain?: number;
-  sideEffects?: string;
-  condition?: string;
+  condition?: {
+    self?: {
+      hpBelow?: number;
+      fatigueAbove?: number;
+      fatigueBelow?: number;
+      hasShield?: boolean;
+    };
+    target?: {
+      hasShield?: boolean;
+      hasFatigue?: boolean;
+    };
+  };
+  sideEffects?: {
+    self?: {
+      fatigue?: number;
+      poison?: number;
+      hp?: number;
+    };
+    target?: {
+      fatigue?: number;
+      poison?: number;
+      hp?: number;
+    };
+  };
 }
 
 export interface CardInstance {
@@ -61,6 +83,6 @@ export interface CardProps {
     | "status damage"
     | "utility"
     | "heal";
-  // onCooldown: boolean;
+  cooldown?: number;
   userCards: boolean;
 }
