@@ -1,3 +1,4 @@
+import { useDebugStore } from "@/store/useDebugStore";
 import { GameEngine } from "../base/GameEngine";
 import { HealthEngine } from "../health/HealthEngine";
 import { ShieldEngine } from "../shield/ShieldEngine";
@@ -17,6 +18,9 @@ interface Modifiers {
   cooldownReduction: number;
   halveShield: boolean;
 }
+
+// Debug delay for status ticks
+const STATUS_TICK_DELAY = 800;
 
 export class StatusEngine extends GameEngine {
   private state: Record<Side, StatusState> = {
@@ -51,15 +55,29 @@ export class StatusEngine extends GameEngine {
     super();
   }
 
-  getDamageMultiplier(side: Side, target: Side) {
-    const fatigueMult = 1 + this.state[side].fatigue * 0.2;
-    const attackMult = this.state[side].modifiers.nextAttackMultiplier;
-    const incomingMult = this.state[target].modifiers.incomingAttackMultiplier;
+  private delay(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  private emitDebugEvent(
+    side: Side,
+    type: "poison" | "fatigue",
+    message: string,
+    value?: number
+  ) {
+    useDebugStore.getState().addEvent({ side, type, message, value });
+  }
+
+  getDamageMultiplier(attacker: Side, defender: Side) {
+    const fatigueMult = 1 + this.state[attacker].fatigue * 0.2;
+    const attackMult = this.state[attacker].modifiers.nextAttackMultiplier;
+    const incomingMult =
+      this.state[defender].modifiers.incomingAttackMultiplier;
 
     console.log("🧮 DAMAGE MULTIPLIER BREAKDOWN");
     console.log({
-      attacker: side,
-      defender: target,
+      attacker: attacker,
+      defender: defender,
       fatigueMult,
       attackBuffMultiplier: attackMult,
       defenderIncomingMultiplier: incomingMult,
@@ -103,21 +121,25 @@ export class StatusEngine extends GameEngine {
   }
 
   // resolve turn
-  public resolveTurn() {
-    (["player", "opponent"] as Side[]).forEach((side) => {
+  public async resolveTurn() {
+    (["player", "opponent"] as Side[]).forEach(async (side) => {
       const poisonDamage = this.calculatePoisonDamage(side);
-
-      console.log(
-        `[POISON] ${side}`,
-        "stacks:",
-        this.state[side].poison,
-        "damage:",
-        poisonDamage
-      );
+      const isHalveShield = this.state[side].modifiers.halveShield;
 
       if (poisonDamage > 0) {
+        // Emit debug event for poison tick
+        this.emitDebugEvent(side, "poison", "☠️ Poison tick", poisonDamage);
+
         const remDamage = this.shieldEngine.absorbShield(poisonDamage, side);
         remDamage > 0 && this.healthEngine.damage(remDamage, side);
+
+        // Add delay to see poison damage
+        await this.delay(STATUS_TICK_DELAY);
+      }
+
+      if (isHalveShield) {
+        this.shieldEngine.absorbShield(25, side);
+        this.consumeReducedShieldModifier(side);
       }
 
       // // emitting new objects
@@ -142,26 +164,32 @@ export class StatusEngine extends GameEngine {
 
   //----------------BUFF/DEBUFF LAYER-----------------------
 
-  public applyBuff(side: Side, partialModifiers: Partial<Modifiers>) {
-    this.state[side].modifiers = {
-      ...this.state[side].modifiers,
-      ...partialModifiers,
-    };
-    console.log("-------------------------------");
-    console.log("BUFF", this.state);
-    console.log("-------------------------------");
-    this.notify();
-  }
+  // public applyBuff(side: Side, partialModifiers: Partial<Modifiers>) {
+  //   this.state[side].modifiers = {
+  //     ...this.state[side].modifiers,
+  //     ...partialModifiers,
+  //   };
+  //   console.log("-------------------------------");
+  //   console.log("BUFF", this.state);
+  //   console.log("-------------------------------");
+  //   this.notify();
+  // }
 
-  public applyDebuff(side: Side, partialModifiers: Partial<Modifiers>) {
+  // public applyDebuff(side: Side, partialModifiers: Partial<Modifiers>) {
+  //   this.state[side].modifiers = {
+  //     ...this.state[side].modifiers,
+  //     ...partialModifiers,
+  //   };
+  //   console.log("-------------------------------");
+  //   console.log("Debuff", this.state);
+  //   console.log("-------------------------------");
+  //   this.notify();
+  // }
+  public applyModifiers(side: Side, modifiers: Partial<Modifiers>) {
     this.state[side].modifiers = {
       ...this.state[side].modifiers,
-      ...partialModifiers,
+      ...modifiers,
     };
-    console.log("-------------------------------");
-    console.log("Debuff", this.state);
-    console.log("-------------------------------");
-    this.notify();
   }
 
   public consumeAttackModifier(side: Side) {

@@ -16,6 +16,7 @@ export class MatchEngine extends GameEngine {
   private isMatchOver: boolean = false;
   private timer: number = 15;
   private timerInterval: NodeJS.Timeout | null = null;
+
   private delay(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
@@ -133,7 +134,7 @@ export class MatchEngine extends GameEngine {
 
     this.beginBatch();
 
-    await this.delay(5000);
+    await this.delay(10000);
 
     console.log("resolveTurn", this.currentPhase);
     await this.cardResolver.resolve(
@@ -141,7 +142,7 @@ export class MatchEngine extends GameEngine {
       this.selectedOpponentCard
     );
 
-    this.statusEngine.resolveTurn();
+    await this.statusEngine.resolveTurn();
 
     this.deckEngine.tickCooldown();
 
