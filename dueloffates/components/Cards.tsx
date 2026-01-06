@@ -16,7 +16,7 @@ const styles = {
   debuff: "card-buff",
   heal: "card-heal",
   utility: "card-neutral",
-  "status damage": "card-poison",
+  status: "card-poison",
 };
 
 const Cards = ({ card, side, battleArea = false }: Cards2Props) => {

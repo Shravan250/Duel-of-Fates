@@ -145,7 +145,7 @@ export interface CardProps {
     | "defense"
     | "buff"
     | "debuff"
-    | "status damage"
+    | "status"
     | "utility"
     | "heal";
   cooldown?: number;
