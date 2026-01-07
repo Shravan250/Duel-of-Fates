@@ -20,17 +20,17 @@ export function deckRandomizer() {
   let restCardsCopy: CardDefination[] = shuffleArray([
     ...[...buffDebuffCards],
     ...[...statusDamage],
-    ...[...utilityCards],
+    ...[utilityCards[Math.floor(Math.random() * utilityCards.length)]],
   ]);
 
   //3 attack
   deck.push(...attackCardsCopy.splice(0, 3));
 
-  //2 defence
-  deck.push(...defenceCardsCopy.splice(0, 2));
+  //3 defence
+  deck.push(...defenceCardsCopy.splice(0, 3));
 
-  //1 heal
-  deck.push(...healCardsCopy.splice(0, 1));
+  //2 heal
+  deck.push(...healCardsCopy.splice(0, 2));
 
   //rest
   deck.push(...restCardsCopy.splice(0, 4));

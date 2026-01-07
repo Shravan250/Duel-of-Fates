@@ -69,7 +69,7 @@ export class StatusEngine extends GameEngine {
   }
 
   getDamageMultiplier(attacker: Side, defender: Side) {
-    const fatigueMult = 1 + this.state[attacker].fatigue * 0.2;
+    const fatigueMult = 1 + this.state[defender].fatigue * 0.2;
     const attackMult = this.state[attacker].modifiers.nextAttackMultiplier;
     const incomingMult =
       this.state[defender].modifiers.incomingAttackMultiplier;
@@ -130,8 +130,7 @@ export class StatusEngine extends GameEngine {
         // Emit debug event for poison tick
         this.emitDebugEvent(side, "poison", "☠️ Poison tick", poisonDamage);
 
-        const remDamage = this.shieldEngine.absorbShield(poisonDamage, side);
-        remDamage > 0 && this.healthEngine.damage(remDamage, side);
+        this.healthEngine.damage(poisonDamage, side);
 
         // Add delay to see poison damage
         await this.delay(STATUS_TICK_DELAY);

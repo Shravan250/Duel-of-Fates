@@ -134,7 +134,7 @@ export class MatchEngine extends GameEngine {
 
     this.beginBatch();
 
-    await this.delay(10000);
+    await this.delay(1000);
 
     console.log("resolveTurn", this.currentPhase);
     await this.cardResolver.resolve(
@@ -142,11 +142,12 @@ export class MatchEngine extends GameEngine {
       this.selectedOpponentCard
     );
 
-    await this.statusEngine.resolveTurn();
-
     this.deckEngine.tickCooldown();
 
     this.endBatch();
+
+    await this.delay(2000);
+    await this.statusEngine.resolveTurn();
     this.cleanupTurn();
   }
 
