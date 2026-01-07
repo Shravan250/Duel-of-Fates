@@ -27,8 +27,8 @@ export const defenceCards: CardDefination[] = [
     cooldown: 2,
     priority: 2,
     effects: [
-      { shield: 10, target: "self" },
       { status: { fatigue: -1 }, target: "self" },
+      { shield: 10, target: "self" },
     ],
   },
   {
@@ -54,6 +54,7 @@ export const defenceCards: CardDefination[] = [
         condition: {
           self: { fatigueBelow: 1 },
         },
+        skipElse: true,
       },
       {
         shield: 6,
@@ -69,8 +70,8 @@ export const defenceCards: CardDefination[] = [
     cooldown: 3,
     priority: 2,
     effects: [
-      { shield: 10, target: "self" },
       { status: { fatigue: 1 }, target: "self" },
+      { shield: 10, target: "self" },
     ],
   },
 ];

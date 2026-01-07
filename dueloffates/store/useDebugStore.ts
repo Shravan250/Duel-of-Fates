@@ -48,7 +48,7 @@ export const useDebugStore = create<DebugStoreState>((set, get) => ({
       set((state) => ({
         events: state.events.filter((e) => e.id !== newEvent.id),
       }));
-    }, 3000);
+    }, 10000);
   },
 
   clearEvents: () => set({ events: [] }),

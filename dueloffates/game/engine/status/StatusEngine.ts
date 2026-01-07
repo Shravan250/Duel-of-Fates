@@ -277,6 +277,11 @@ export class StatusEngine extends GameEngine {
         poison: 0,
       },
     };
+
+    // console.log("User",side);
+    // console.log("Target",target);
+    // console.log("Transfer Status", this.state);
+    this.notify();
   }
 
   private clamp(num: number) {

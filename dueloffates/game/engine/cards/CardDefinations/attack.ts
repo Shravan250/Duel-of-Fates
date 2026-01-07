@@ -24,6 +24,7 @@ export const attackCards: CardDefination[] = [
         condition: {
           opponent: { hasShield: false },
         },
+        skipElse: true,
       },
       {
         damage: 10,
@@ -39,8 +40,8 @@ export const attackCards: CardDefination[] = [
     cooldown: 3,
     priority: 0,
     effects: [
-      { damage: 16, target: "opponent" },
       { status: { fatigue: 1 }, target: "self" },
+      { damage: 16, target: "opponent" },
     ],
   },
   {
@@ -57,6 +58,7 @@ export const attackCards: CardDefination[] = [
         condition: {
           opponent: { hasShield: true },
         },
+        skipElse: true,
       },
       {
         damage: 12,
@@ -81,8 +83,8 @@ export const attackCards: CardDefination[] = [
     cooldown: 2,
     priority: 1,
     effects: [
-      { damage: 7, target: "opponent" },
       { status: { fatigue: 1 }, target: "opponent" },
+      { damage: 7, target: "opponent" },
     ],
   },
   {
@@ -99,6 +101,7 @@ export const attackCards: CardDefination[] = [
         condition: {
           opponent: { hasFatigue: true },
         },
+        skipElse: true,
       },
       {
         damage: 11,
@@ -114,8 +117,8 @@ export const attackCards: CardDefination[] = [
     cooldown: 4,
     priority: 0,
     effects: [
-      { damage: 20, target: "opponent" },
       { status: { fatigue: 2 }, target: "self" },
+      { damage: 20, target: "opponent" },
     ],
   },
 ];
