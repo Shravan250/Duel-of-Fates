@@ -138,6 +138,8 @@ export class CardEngine extends GameEngine {
     card: CardDefination,
     instanceId: string
   ) {
+    const modifiers = this.statusEngine.getState()[role].modifiers;
+    const reduction = modifiers.cooldownReduction || 0;
     // execute effect in order
     for (const effect of card.effects) {
       // T && F ,
@@ -156,7 +158,7 @@ export class CardEngine extends GameEngine {
     }
 
     // Applying cooldown after all effects
-    this.applyCooldownWithModifiers(instanceId, card.cooldown, role);
+    this.applyCooldownWithModifiers(instanceId, card.cooldown, reduction, role);
   }
 
   /*
@@ -458,11 +460,9 @@ export class CardEngine extends GameEngine {
   private applyCooldownWithModifiers(
     instanceId: string,
     baseCooldown: number,
+    reduction: number,
     role: Side
   ) {
-    const modifiers = this.statusEngine.getState()[role].modifiers;
-    const reduction = modifiers.cooldownReduction;
-
     const finalCooldown =
       reduction > 0 ? Math.max(0, baseCooldown - reduction) : baseCooldown;
 
