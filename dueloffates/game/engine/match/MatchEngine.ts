@@ -122,7 +122,6 @@ export class MatchEngine extends GameEngine {
       this.selectedOpponentCard = this.deckEngine.autoSelectCard("OPPONENT");
     }
 
-    console.log("transitionToResolveState-2", this.currentPhase);
     this.notify();
 
     this.resolveTurn();
@@ -136,7 +135,6 @@ export class MatchEngine extends GameEngine {
 
     await this.delay(1000);
 
-    console.log("resolveTurn", this.currentPhase);
     await this.cardResolver.resolve(
       this.selectedPlayerCard,
       this.selectedOpponentCard
@@ -156,7 +154,7 @@ export class MatchEngine extends GameEngine {
     this.selectedOpponentCard = null;
     this.currentTurn += 1;
     this.checkWinCondition();
-    console.log(`[TURN END] Turn ${this.currentTurn}`);
+
     if (!this.isMatchOver) {
       this.transitionToPlayState();
     }

@@ -74,17 +74,6 @@ export class StatusEngine extends GameEngine {
     const incomingMult =
       this.state[defender].modifiers.incomingAttackMultiplier;
 
-    console.log("🧮 DAMAGE MULTIPLIER BREAKDOWN");
-    console.log({
-      attacker: attacker,
-      defender: defender,
-      fatigueMult,
-      attackBuffMultiplier: attackMult,
-      defenderIncomingMultiplier: incomingMult,
-      finalMultiplier: fatigueMult * attackMult * incomingMult,
-    });
-    console.log("────────────────────────────");
-
     return fatigueMult * attackMult * incomingMult;
   }
 
@@ -92,20 +81,11 @@ export class StatusEngine extends GameEngine {
     const buffMult = this.state[side].modifiers.nextShieldMultiplier;
     const debuffMult = this.state[side].modifiers.halveShield ? 0.5 : 1;
 
-    console.log("🧮 SHIELD MULTIPLIER BREAKDOWN");
-    console.log({
-      shieldRegainer: side,
-      shieldGainMultiplier: buffMult,
-      halveShield: debuffMult,
-      finalMultiplier: buffMult * debuffMult,
-    });
-    console.log("────────────────────────────");
-
     return buffMult * debuffMult;
   }
 
   public calculatePoisonDamage(side: Side) {
-    return this.state[side].poison * 5;
+    return Math.floor(this.state[side].poison * 2.5);
   }
 
   public applyStatus(side: Side, stack: { fatigue: number; poison: number }) {
@@ -161,29 +141,7 @@ export class StatusEngine extends GameEngine {
     this.notify();
   }
 
-  //----------------BUFF/DEBUFF LAYER-----------------------
-
-  // public applyBuff(side: Side, partialModifiers: Partial<Modifiers>) {
-  //   this.state[side].modifiers = {
-  //     ...this.state[side].modifiers,
-  //     ...partialModifiers,
-  //   };
-  //   console.log("-------------------------------");
-  //   console.log("BUFF", this.state);
-  //   console.log("-------------------------------");
-  //   this.notify();
-  // }
-
-  // public applyDebuff(side: Side, partialModifiers: Partial<Modifiers>) {
-  //   this.state[side].modifiers = {
-  //     ...this.state[side].modifiers,
-  //     ...partialModifiers,
-  //   };
-  //   console.log("-------------------------------");
-  //   console.log("Debuff", this.state);
-  //   console.log("-------------------------------");
-  //   this.notify();
-  // }
+  // applying buffs and debuffs
   public applyModifiers(side: Side, modifiers: Partial<Modifiers>) {
     this.state[side].modifiers = {
       ...this.state[side].modifiers,
@@ -277,9 +235,6 @@ export class StatusEngine extends GameEngine {
       },
     };
 
-    // console.log("User",side);
-    // console.log("Target",target);
-    // console.log("Transfer Status", this.state);
     this.notify();
   }
 
