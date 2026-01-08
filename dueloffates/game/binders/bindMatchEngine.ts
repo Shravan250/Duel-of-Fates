@@ -4,6 +4,8 @@ import { matchEngine } from "../index";
 export interface matchEngineController {
   unsubscribe: () => void;
   startMatch: () => void;
+  pauseMatch: () => void
+  resumeMatch: () => void
 }
 
 export function bindMatchEngine(): matchEngineController {
@@ -17,6 +19,7 @@ export function bindMatchEngine(): matchEngineController {
       isMatchOver: state.isMatchOver,
       winner: state.winner,
       canSelectCard: state.canSelectCard,
+      isPaused: state.isPaused,
     });
   });
 
@@ -29,6 +32,16 @@ export function bindMatchEngine(): matchEngineController {
     unsubscribe: () => {
       console.log("Controller: Unsubscribing from engine");
       unsubscribe();
+    },
+
+    pauseMatch: () => {
+      console.log("Pausing Match....");
+      matchEngine.pause();
+    },
+
+    resumeMatch: () => {
+      console.log("Resuming Match....");
+      matchEngine.resume();
     },
   };
 }

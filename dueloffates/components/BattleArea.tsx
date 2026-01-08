@@ -4,7 +4,7 @@ import { useGameStore } from "@/store/useGameStore";
 import { useMatchStore } from "@/store/useMatchStore";
 
 export default function BattleArea() {
-  const { phase, timer } = useMatchStore();
+  const { phase, timer, isPaused, matchController } = useMatchStore();
   const { selectedOpponentCard, selectedPlayerCard } = useGameStore();
   // const [timer, setTimer] = useState(15);
 
@@ -54,7 +54,20 @@ export default function BattleArea() {
         )}
       </div>
 
-      <div className="mx-auto text-black">V/S</div>
+      {/* <div className="mx-auto text-black">V/S</div> */}
+      {isPaused ? (
+        <Icon
+          icon={"gridicons:play"}
+          className="mx-auto w-10 h-10 cursor-pointer text-white"
+          onClick={matchController?.resumeMatch}
+        />
+      ) : (
+        <Icon
+          icon={"gridicons:pause"}
+          className="mx-auto w-10 h-10 cursor-pointer text-white"
+          onClick={matchController?.pauseMatch}
+        />
+      )}
 
       {/* Player 2 Selected Card */}
       <div className=" aspect-2/3 min-h-80 text-sm text-gray-600">

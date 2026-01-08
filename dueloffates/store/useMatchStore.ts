@@ -10,6 +10,7 @@ interface MatchStoreState {
   isMatchOver: boolean;
   winner: "PLAYER" | "OPPONENT" | null;
   timer: number;
+  isPaused:boolean;
 
   // // selection
   // selectedPlayerCard: CardProps | null;
@@ -38,6 +39,7 @@ export const useMatchStore = create<MatchStoreState>((set, get) => ({
   canSelectCard: false,
   matchController: null,
   timer: 15,
+  isPaused:false,
 
   // bind Controller
   bindMatchController: (controller) => {
