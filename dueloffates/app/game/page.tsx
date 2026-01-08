@@ -70,12 +70,6 @@ export default function Game() {
 
         <HeadUpDisplay player="Player 1" flip={true} />
       </div>
-
-      {startGame && (
-        <div className="start-screen">
-          <button className="bg-green-500 rounded m-auto">Start Game</button>
-        </div>
-      )}
     </div>
   );
 }
