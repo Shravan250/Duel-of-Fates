@@ -58,13 +58,13 @@ export default function BattleArea() {
       {isPaused ? (
         <Icon
           icon={"gridicons:play"}
-          className="w-10 h-10 cursor-pointer text-white"
+          className="mx-auto w-10 h-10 cursor-pointer text-white"
           onClick={matchController?.resumeMatch}
         />
       ) : (
         <Icon
           icon={"gridicons:pause"}
-          className="w-10 h-10 cursor-pointer text-white"
+          className="mx-auto w-10 h-10 cursor-pointer text-white"
           onClick={matchController?.pauseMatch}
         />
       )}
