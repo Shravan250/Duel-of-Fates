@@ -16,6 +16,7 @@ export class MatchEngine extends GameEngine {
   private isMatchOver: boolean = false;
   private timer: number = 15;
   private timerInterval: NodeJS.Timeout | null = null;
+  private isPaused: boolean = false;
 
   private delay(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
@@ -79,6 +80,8 @@ export class MatchEngine extends GameEngine {
     }
 
     this.timerInterval = setInterval(() => {
+      if (this.isPaused) return;
+
       this.timer -= 1;
       this.notify();
 
@@ -181,6 +184,18 @@ export class MatchEngine extends GameEngine {
     }
   }
 
+  public pause() {
+    if (this.currentPhase !== "PLAY") return;
+    this.isPaused = true;
+    this.notify();
+  }
+
+  public resume() {
+    if (this.currentPhase !== "PLAY") return;
+    this.isPaused = false;
+    this.notify();
+  }
+
   getState() {
     return {
       timer: this.timer,
@@ -191,6 +206,7 @@ export class MatchEngine extends GameEngine {
       selectedPlayerCard: this.selectedPlayerCard,
       selectedOpponentCard: this.selectedOpponentCard,
       canSelectCard: this.currentPhase === "PLAY",
+      isPaused: this.isPaused,
     };
   }
 }
