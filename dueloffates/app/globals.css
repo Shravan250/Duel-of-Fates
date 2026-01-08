@@ -69,11 +69,41 @@
       "Helvetica Neue", Arial, sans-serif;
     line-height: 1.6;
   }
+
+  .font-cinzel{
+    font-family: var(--font-cinzel);
+  }
+
+  .font-inter{
+    font-family: var(--font-inter);
+  }
+
+  .font-geist-mono{
+    font-family: var(--font-geist-mono);
+  }
+
+  .font-geist-sans{
+    font-family: var(--font-geist-sans);
+  }
+
+  .font-cormorant{
+    font-family: var(--font-cormorant);
+  }
+
+  .font-baskerville{
+    font-family: var(--font-baskerville);
+  }
+
+  .font-fell{
+    font-family: var(--font-fell);
+  }
+
 }
 
 @layer components {
   .start-screen {
-    @apply w-full h-screen bg-transparent cursor-not-allowed absolute left-0 top-0 flex items-center justify-center;
+    @apply w-full min-h-screen bg-no-repeat bg-center bg-cover;
+    background-image: url("../images/background-1.jpg")
   }
 
   .game-background {
