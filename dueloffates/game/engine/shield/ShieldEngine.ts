@@ -32,10 +32,7 @@ export class ShieldEngine extends GameEngine {
   gainShield(amount: number, target: Side) {
     this.shield = {
       ...this.shield,
-      [target]: Math.min(
-        this.shield[target] + amount,
-        this.maxShield
-      ),
+      [target]: Math.min(this.shield[target] + amount, this.maxShield),
     };
 
     this.notify();

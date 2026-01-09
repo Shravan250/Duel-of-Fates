@@ -38,19 +38,6 @@ export function deckRandomizer() {
   return deck;
 }
 
-// function getEffect(card: CardDefination): string {
-//   switch (card.type.toLocaleLowerCase()) {
-//     case "attack":
-//       return `${card.damage ?? 0} Damage`;
-
-//     case "defense":
-//       return `${card.shield_gain ?? 0} Shield Gain`;
-
-//     default:
-//       return card.effect ?? "";
-//   }
-// }
-
 export function createCardInstances(deck: CardDefination[], owner: string) {
   const cardInstances: CardInstance[] = deck.map(
     (card: CardDefination, i: number) => {
@@ -101,11 +88,3 @@ function shuffleArray(array: CardDefination[]) {
   }
   return array;
 }
-
-// function random(limit: number) {
-//   return Math.floor(Math.random() * limit);
-// }
-
-// --------------------------------
-// Match Condition
-// --------------------------------

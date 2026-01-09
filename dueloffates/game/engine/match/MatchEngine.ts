@@ -4,6 +4,7 @@ import { HealthEngine } from "../health/HealthEngine";
 import { ShieldEngine } from "../shield/ShieldEngine";
 import { CardEngine } from "../cards/CardEngine";
 import { StatusEngine } from "../status/StatusEngine";
+import { useLogStore } from "@/store/useLogStore";
 
 type MatchPhase = "SETUP" | "PLAY" | "RESOLVE" | "END";
 
@@ -52,6 +53,7 @@ export class MatchEngine extends GameEngine {
     this.deckEngine.InitilizeDeck();
     this.healthEngine.reset(100);
     this.shieldEngine.reset(50);
+    useLogStore.getState().clearLogs();
 
     this.notify();
 
@@ -149,6 +151,10 @@ export class MatchEngine extends GameEngine {
 
     await this.delay(2000);
     await this.statusEngine.resolveTurn();
+
+    // turn logs AFTER all actions complete
+    useLogStore.getState().finalizeTurn();
+
     this.cleanupTurn();
   }
 

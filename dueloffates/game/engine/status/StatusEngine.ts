@@ -2,6 +2,7 @@ import { useDebugStore } from "@/store/useDebugStore";
 import { GameEngine } from "../base/GameEngine";
 import { HealthEngine } from "../health/HealthEngine";
 import { ShieldEngine } from "../shield/ShieldEngine";
+import { useLogStore } from "@/store/useLogStore";
 
 type Side = "player" | "opponent";
 
@@ -20,7 +21,7 @@ interface Modifiers {
 }
 
 // Debug delay for status ticks
-const STATUS_TICK_DELAY = 800;
+// const STATUS_TICK_DELAY = 800;
 
 export class StatusEngine extends GameEngine {
   private state: Record<Side, StatusState> = {
@@ -59,14 +60,14 @@ export class StatusEngine extends GameEngine {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
-  private emitDebugEvent(
-    side: Side,
-    type: "poison" | "fatigue",
-    message: string,
-    value?: number
-  ) {
-    useDebugStore.getState().addEvent({ side, type, message, value });
-  }
+  // private emitDebugEvent(
+  //   side: Side,
+  //   type: "poison" | "fatigue",
+  //   message: string,
+  //   value?: number
+  // ) {
+  //   useDebugStore.getState().addEvent({ side, type, message, value });
+  // }
 
   getDamageMultiplier(attacker: Side, defender: Side) {
     const fatigueMult = 1 + this.state[defender].fatigue * 0.2;
@@ -108,17 +109,37 @@ export class StatusEngine extends GameEngine {
 
       if (poisonDamage > 0) {
         // Emit debug event for poison tick
-        this.emitDebugEvent(side, "poison", "☠️ Poison tick", poisonDamage);
+        // this.emitDebugEvent(side, "poison", "☠️ Poison tick", poisonDamage);
 
         this.healthEngine.damage(poisonDamage, side);
 
+        // Emit status triggered event
+        useLogStore.getState().addEvent({
+          type: "status_triggered",
+          side: side,
+          status: "poison",
+          damage: poisonDamage,
+          timestamp: Date.now(),
+        });
+
         // Add delay to see poison damage
-        await this.delay(STATUS_TICK_DELAY);
+        // await this.delay(STATUS_TICK_DELAY);
       }
 
       if (isHalveShield) {
-        this.shieldEngine.absorbShield(25, side);
+        const currentShield = this.shieldEngine.getShield()[side];
+        const halvedAmount = Math.floor(currentShield / 2);
+
+        this.shieldEngine.absorbShield(halvedAmount, side);
         this.consumeReducedShieldModifier(side);
+
+        // Emit shield halved event
+        useLogStore.getState().addEvent({
+          type: "shield_halved",
+          side: side,
+          amount: halvedAmount,
+          timestamp: Date.now(),
+        });
       }
 
       // // emitting new objects
