@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 export default function Home() {
   const router = useRouter();
   return (
-    <div className="font-baskerville start-screen flex flex-col items-center justify-center ">
+    <div className="font-fell start-screen flex flex-col items-center justify-center ">
       <h1 className="text-7xl tracking-[0.22em] uppercase text-black drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)]">
         Duel of
       </h1>

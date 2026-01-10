@@ -42,7 +42,7 @@ const Cards = ({ card, side, battleArea = false }: Cards2Props) => {
           battleArea ? "card-selected" : "rounded",
           styles[type],
           {
-            "on-cooldown": !canPlay,
+            "on-cooldown": !canPlay && !battleArea,
           }
         )}
         onClick={() => {
@@ -52,10 +52,10 @@ const Cards = ({ card, side, battleArea = false }: Cards2Props) => {
       >
         <h2>{header}</h2>
         <Icon icon={icon} width={50} height={50} className="shrink-0" />
-        {!canPlay &&(
+        {!canPlay && !battleArea && (
           <div className="absolute flex items-center justify-center text-5xl font-extrabold text-white rounded-full w-12 h-12 animate-pulse">
-          {cooldownRemaning<20?cooldownRemaning:"USED"}
-        </div>
+            {cooldownRemaning < 20 ? cooldownRemaning : "USED"}
+          </div>
         )}
       </div>
 
