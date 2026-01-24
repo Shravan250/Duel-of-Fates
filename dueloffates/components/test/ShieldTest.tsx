@@ -1,14 +1,14 @@
-import { shieldEngine } from "@/game";
-import { useShieldEngineStore } from "@/store/useShieldStore";
+// import { shieldEngine } from "@/game";
+// import { useShieldEngineStore } from "@/store/useShieldStore";
 
-export function ShieldTest() {
-  const shield = useShieldEngineStore((state) => state.shield);
+// export function ShieldTest() {
+//   const shield = useShieldEngineStore((state) => state.shield);
 
-  return (
-    <div>
-      <div>shield: {shield}</div>
-      <button onClick={() => shieldEngine.loseShield(10)}>Take Damage</button>
-      <button onClick={() => shieldEngine.gainShield(5)}>gain</button>
-    </div>
-  );
-}
+//   return (
+//     <div>
+//       <div>shield: {shield}</div>
+//       <button onClick={() => shieldEngine.loseShield(10)}>Take Damage</button>
+//       <button onClick={() => shieldEngine.gainShield(5)}>gain</button>
+//     </div>
+//   );
+// }
