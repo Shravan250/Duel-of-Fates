@@ -103,12 +103,12 @@
 @layer components {
   .start-screen {
     @apply w-full min-h-screen bg-no-repeat bg-center bg-cover;
-    background-image: url("../images/background-1.jpg");
+    background-image: url("/images/background-1.jpg");
   }
 
   .game-background {
     @apply bg-no-repeat bg-center bg-cover w-full min-h-screen;
-    background-image: url("../images/background.png");
+    background-image: url("/images/background.png");
   }
 
   /* === CARD BASE STYLES === */
@@ -126,7 +126,7 @@
   /* === ATTACK CARDS === */
   .card-attack {
     @apply text-red-600;
-    background-image: url("../images/attackCard.jpg");
+    background-image: url("/images/attackCard.jpg");
     border-color: var(--color-attack-border);
   }
 
@@ -145,7 +145,7 @@
 
   /* === DEFENSE CARDS === */
   .card-defense {
-    background-image: url("../images/defenseCard.jpg");
+    background-image: url("/images/defenseCard.jpg");
     background-color: var(--color-defense-base);
     border-color: var(--color-defense-border);
   }
@@ -165,7 +165,7 @@
 
   /* === POISON/FATIGUE CARDS === */
   .card-poison {
-    background-image: url("../images/fatigueCard.jpg");
+    background-image: url("/images/fatigueCard.jpg");
     border-color: var(--color-poison-border);
   }
 
@@ -185,7 +185,7 @@
   /* === BUFF CARDS === */
   .card-buff {
     @apply font-bold;
-    background-image: url("../images/buffCard.jpg");
+    background-image: url("/images/buffCard.jpg");
     border-color: var(--color-buff-border);
   }
 
@@ -204,7 +204,7 @@
 
   /* === NEUTRAL CARDS === */
   .card-neutral {
-    background-image: url("../images/utilityCard.jpg");
+    background-image: url("/images/utilityCard.jpg");
     border-color: var(--color-neutral-border);
   }
 
@@ -217,7 +217,7 @@
   }
 
   .card-heal {
-    background-image: url("../images/healCard.jpg");
+    background-image: url("/images/healCard.jpg");
     border-color: var(--color-heal-border);
   }
 
