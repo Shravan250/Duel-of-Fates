@@ -16,12 +16,12 @@ export class MatchRoom {
     [playerId: string]: string;
   };
 
-  healthEngine: HealthEngine;
-  shieldEngine: ShieldEngine;
-  deckEngine: DeckEngine;
-  statusEngine: StatusEngine;
-  cardEngine: CardEngine;
-  matchEngine: MatchEngine;
+  private healthEngine: HealthEngine;
+  private shieldEngine: ShieldEngine;
+  private deckEngine: DeckEngine;
+  private statusEngine: StatusEngine;
+  private cardEngine: CardEngine;
+  private matchEngine: MatchEngine;
 
   isStarted: boolean;
   isFinished: boolean;
