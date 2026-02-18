@@ -4,7 +4,6 @@ import { HealthEngine } from "../health/HealthEngine";
 import { ShieldEngine } from "../shield/ShieldEngine";
 import { CardEngine } from "../cards/CardEngine";
 import { StatusEngine } from "../status/StatusEngine";
-import { useLogStore } from "@/store/useLogStore";
 
 type MatchPhase = "SETUP" | "PLAY" | "RESOLVE" | "END";
 
@@ -17,11 +16,6 @@ export class MatchEngine extends GameEngine {
   private isMatchOver: boolean = false;
   private timer: number = 15;
   private timerInterval: NodeJS.Timeout | null = null;
-  private isPaused: boolean = false;
-
-  private delay(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
 
   constructor(
     private deckEngine: DeckEngine,
@@ -37,7 +31,6 @@ export class MatchEngine extends GameEngine {
   // public functions
 
   public startMatch() {
-    console.log("Starting Match...");
 
     this.currentPhase = "SETUP";
     this.currentTurn = 1;
@@ -53,28 +46,11 @@ export class MatchEngine extends GameEngine {
     this.deckEngine.InitilizeDeck();
     this.healthEngine.reset(100);
     this.shieldEngine.reset(50);
-    useLogStore.getState().clearLogs();
 
     this.notify();
-
-    this.transitionToPlayState();
   }
 
   // private functions
-  private transitionToPlayState() {
-    this.currentPhase = "PLAY";
-
-    // Clear selections from previous turn
-    this.deckEngine.clearSelections();
-    this.selectedPlayerCard = null;
-    this.selectedOpponentCard = null;
-
-    this.resetTimer();
-
-    this.notify();
-
-    this.startTimer();
-  }
 
   private startTimer() {
     if (this.timerInterval) {
@@ -82,7 +58,6 @@ export class MatchEngine extends GameEngine {
     }
 
     this.timerInterval = setInterval(() => {
-      if (this.isPaused) return;
 
       this.timer -= 1;
       this.notify();
@@ -91,7 +66,6 @@ export class MatchEngine extends GameEngine {
         if (this.timerInterval) {
           clearInterval(this.timerInterval);
         }
-        this.transitionToResolveState();
       }
     }, 1000);
   }
@@ -105,7 +79,7 @@ export class MatchEngine extends GameEngine {
     this.notify();
   }
 
-  private transitionToResolveState() {
+  public async selectCard( cardInstanceId: string,side: "PLAYER" | "OPPONENT") {
     this.currentPhase = "RESOLVE";
 
     //stop timer
@@ -114,31 +88,28 @@ export class MatchEngine extends GameEngine {
       this.timerInterval = null;
     }
 
-    this.notify();
+    await this.deckEngine.selectCard(cardInstanceId, side);
 
     this.selectedPlayerCard = this.deckEngine.getState().selectedPlayerCard;
     this.selectedOpponentCard = this.deckEngine.getState().selectedOpponentCard;
 
-    if (!this.selectedPlayerCard) {
-      this.selectedPlayerCard = this.deckEngine.autoSelectCard("PLAYER");
+    // if (!this.selectedPlayerCard) {
+    //   this.selectedPlayerCard = this.deckEngine.autoSelectCard("PLAYER");
+    // }
+
+    // if (!this.selectedOpponentCard) {
+    //   this.selectedOpponentCard = this.deckEngine.autoSelectCard("OPPONENT");
+    // }
+    if(!this.selectedPlayerCard || !this.selectedOpponentCard) {
+      return false;
     }
-
-    if (!this.selectedOpponentCard) {
-      this.selectedOpponentCard = this.deckEngine.autoSelectCard("OPPONENT");
-    }
-
-    this.notify();
-
-    this.resolveTurn();
+    await this.resolveTurn();
+    return true;
   }
 
   // player actions
   private async resolveTurn() {
     if (!this.selectedPlayerCard || !this.selectedOpponentCard) return;
-
-    this.beginBatch();
-
-    await this.delay(1000);
 
     await this.cardResolver.resolve(
       this.selectedPlayerCard,
@@ -147,13 +118,7 @@ export class MatchEngine extends GameEngine {
 
     this.deckEngine.tickCooldown();
 
-    this.endBatch();
-
-    await this.delay(2000);
     await this.statusEngine.resolveTurn();
-
-    // turn logs AFTER all actions complete
-    useLogStore.getState().finalizeTurn();
 
     this.cleanupTurn();
   }
@@ -163,10 +128,6 @@ export class MatchEngine extends GameEngine {
     this.selectedOpponentCard = null;
     this.currentTurn += 1;
     this.checkWinCondition();
-
-    if (!this.isMatchOver) {
-      this.transitionToPlayState();
-    }
   }
 
   private checkWinCondition() {
@@ -190,18 +151,6 @@ export class MatchEngine extends GameEngine {
     }
   }
 
-  public pause() {
-    if (this.currentPhase !== "PLAY") return;
-    this.isPaused = true;
-    this.notify();
-  }
-
-  public resume() {
-    if (this.currentPhase !== "PLAY") return;
-    this.isPaused = false;
-    this.notify();
-  }
-
   getState() {
     return {
       timer: this.timer,
@@ -212,7 +161,6 @@ export class MatchEngine extends GameEngine {
       selectedPlayerCard: this.selectedPlayerCard,
       selectedOpponentCard: this.selectedOpponentCard,
       canSelectCard: this.currentPhase === "PLAY",
-      isPaused: this.isPaused,
     };
   }
 }
