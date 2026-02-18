@@ -5,11 +5,11 @@ import { BattleLogButton } from "@/components/BattleLogButton";
 import DebugWindow from "@/components/DebugWindow";
 import HeadUpDisplay from "@/components/HeadUpDisplay";
 import RenderCards from "@/components/RenderCards";
-import { bindDeckEngine } from "@/game/binders/bindDeckEngine";
-import { bindHealthEngine } from "@/game/binders/bindHealthEngine";
-import { bindMatchEngine } from "@/game/binders/bindMatchEngine";
-import { bindShieldEngine } from "@/game/binders/bindShieldEngine";
-import { bindStatusEngine } from "@/game/binders/bindStatusEngine";
+// import { bindDeckEngine } from "@/game/binders/bindDeckEngine";
+// import { bindHealthEngine } from "@/game/binders/bindHealthEngine";
+// import { bindMatchEngine } from "@/game/binders/bindMatchEngine";
+// import { bindShieldEngine } from "@/game/binders/bindShieldEngine";
+// import { bindStatusEngine } from "@/game/binders/bindStatusEngine";
 import { useDebugStore } from "@/store/useDebugStore";
 import { useGameStore } from "@/store/useGameStore";
 import { useMatchStore } from "@/store/useMatchStore";
@@ -19,23 +19,23 @@ export default function Game() {
   const [startGame, setStartGame] = useState<boolean>(false);
   const { isDebugEnabled, toggleDebug } = useDebugStore();
 
-  useEffect(() => {
-    const deckController = bindDeckEngine();
-    const statusController = bindStatusEngine();
-    const shieldController = bindShieldEngine();
-    const healthController = bindHealthEngine();
-    const matchController = bindMatchEngine();
+  // useEffect(() => {
+  //   const deckController = bindDeckEngine();
+  //   const statusController = bindStatusEngine();
+  //   const shieldController = bindShieldEngine();
+  //   const healthController = bindHealthEngine();
+  //   const matchController = bindMatchEngine();
 
-    useMatchStore.getState().bindMatchController(matchController);
-    useGameStore.getState().bindDeckController(deckController);
+  //   useMatchStore.getState().bindMatchController(matchController);
+  //   useGameStore.getState().bindDeckController(deckController);
 
-    useMatchStore.getState().startMatch();
+  //   useMatchStore.getState().startMatch();
 
-    return () => {
-      deckController.unsubscribe();
-      matchController.unsubscribe();
-    };
-  }, []);
+  //   return () => {
+  //     deckController.unsubscribe();
+  //     matchController.unsubscribe();
+  //   };
+  // }, []);
 
   return (
     <div className="relative min-h-screen bg-gray-100 p-4 md:p-6 lg:p-8 game-background">

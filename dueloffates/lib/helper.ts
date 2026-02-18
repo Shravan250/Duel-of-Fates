@@ -6,7 +6,7 @@ import {
   buffDebuffCards,
   statusDamage,
   utilityCards,
-} from "../game/engine/cards/CardDefinations";
+} from "../../server/game/engine/cards/CardDefinations";
 
 /*  ---------------------------------------------------
     1. Total 10 cards
@@ -47,7 +47,7 @@ export function createCardInstances(deck: CardDefination[], owner: string) {
         cooldown: 0,
         owner: owner as CardInstance["owner"],
       };
-    }
+    },
   );
 
   return cardInstances;
@@ -55,11 +55,11 @@ export function createCardInstances(deck: CardDefination[], owner: string) {
 
 export function formattedDeckGenerator(
   instances: CardInstance[],
-  definitions: CardDefination[]
+  definitions: CardDefination[],
 ): CardProps[] {
   return instances.map((instance) => {
     const definition = definitions.find(
-      (d) => d.definitionId === instance.definitionId
+      (d) => d.definitionId === instance.definitionId,
     );
 
     if (!definition) {
