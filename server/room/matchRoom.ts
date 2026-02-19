@@ -1,19 +1,18 @@
+import type { Server, Socket } from "socket.io";
 import { CardEngine } from "../game/engine/cards/CardEngine";
 import { DeckEngine } from "../game/engine/deck/DeckEngine";
 import { HealthEngine } from "../game/engine/health/HealthEngine";
 import { MatchEngine } from "../game/engine/match/MatchEngine";
 import { ShieldEngine } from "../game/engine/shield/ShieldEngine";
 import { StatusEngine } from "../game/engine/status/StatusEngine";
-
+import type { Player } from "../matchmaking/queue";
 
 export class MatchRoom {
   private matchId: string;
+  private io: Server;
   players: {
-    player1: string;
-    player2: string;
-  };
-  playerSockets: {
-    [playerId: string]: string;
+    player1: { id: string; socket: Socket } | null;
+    player2: { id: string; socket: Socket } | null;
   };
 
   private healthEngine: HealthEngine;
@@ -26,14 +25,10 @@ export class MatchRoom {
   isStarted: boolean;
   isFinished: boolean;
 
-
-  constructor(matchId: string) {
+  constructor(matchId: string, io: Server) {
     this.matchId = matchId;
-    this.players = {
-      player1: "",
-      player2: "",
-    };
-    this.playerSockets = {};
+    this.io = io;
+    this.players = { player1: null, player2: null };
     this.healthEngine = new HealthEngine(100);
     this.shieldEngine = new ShieldEngine(50);
     this.deckEngine = new DeckEngine();
@@ -53,36 +48,42 @@ export class MatchRoom {
       this.statusEngine,
     );
 
-    this.isStarted = true;
+    this.isStarted = false;
     this.isFinished = false;
   }
 
-  public join(playerId: string, socketId: string) {
+  public join(player:Player) {
+    if (!this.players.player1) {
+      this.players.player1 = player;
+      this.players.player1.socket.join(this.matchId);
+    } else if (!this.players.player2) {
+      this.players.player2 = player;
+      this.players.player2.socket.join(this.matchId);
+    } else {
+      throw new Error("Room full");
+    }
 
-  if (!this.players.player1) {
-    this.players.player1 = playerId;
-    this.playerSockets[playerId] = socketId;
+    player.socket.emit("matchJoined",{
+      matchId: this.matchId,
+      role: this.getPlayerRole(player.id)
+    })
 
-  } else if (!this.players.player2) {
-    this.players.player2 = playerId;
-    this.playerSockets[playerId] = socketId;
-
-  } else {
-    throw new Error("Room full");
+    if (this.isReady() && !this.isStarted) {
+      this.matchEngine.startMatch();
+      this.isStarted = true;
+      this.emitState();
+    }
   }
-
-  if (this.isReady() && !this.isStarted) {
-    this.matchEngine.startMatch();
-    this.isStarted = true;
-  }
-}
 
   public async playCard(playerId: string, cardInstanceId: string) {
-    const resolved=await this.matchEngine.selectCard(cardInstanceId, playerId === this.players.player1 ? "PLAYER" : "OPPONENT");
+    const resolved = await this.matchEngine.selectCard(
+      cardInstanceId,
+      this.getPlayerRole(playerId),
+    );
 
-    if(resolved)return this.getState();
-
-    return null;
+    if (resolved){
+      this.emitState();
+    }
   }
 
   public getState() {
@@ -93,11 +94,16 @@ export class MatchRoom {
       health: this.healthEngine.getHp(),
       shield: this.shieldEngine.getShield(),
       deck: this.deckEngine.getState(),
-    }
+    };
+  }
+
+  private emitState(){
+    const state=this.getState();
+    this.io.to(this.matchId).emit("gameState", state);
   }
 
   public getPlayerRole(playerId: string) {
-    return playerId === this.players.player1 ? "PLAYER" : "OPPONENT";
+    return playerId === this.players.player1!.id ? "PLAYER" : "OPPONENT";
   }
 
   private isReady() {
