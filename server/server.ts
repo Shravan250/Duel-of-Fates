@@ -5,6 +5,7 @@ import cors from "cors";
 
 import { addPlayerToQueue, removePlayerFromQueue } from "./matchmaking/queue";
 import { roomManager } from "./room/roomManager";
+import { socketHandler } from "./socket/socketHandler";
 
 const app = express();
 app.use(cors());
@@ -23,32 +24,7 @@ roomManager.initialize(io);
 /*
  * Connection Handling
  */
-io.on("connection", (socket: Socket) => {
-  console.log(`Player connected: ${socket.id}`);
-
-  // Send confirmation back to client
-  socket.emit("connected", {
-    id: socket.id,
-  });
-
-  // Player joins matchmaking queue
-
-  socket.on("joinQueue", () => {
-    console.log(`joinQueue received from ${socket.id}`);
-
-    addPlayerToQueue({
-      id: socket.id,
-      socket,
-    });
-  });
-
-  //Handle player disconnect
-  socket.on("disconnect", () => {
-    console.log(`Player disconnected: ${socket.id}`);
-
-    removePlayerFromQueue(socket.id);
-  });
-});
+socketHandler(io);
 
 const PORT = 3001;
 
