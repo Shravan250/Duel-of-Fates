@@ -1,6 +1,6 @@
 import { createCardInstances, deckRandomizer } from "@/lib/helper";
 import { GameEngine } from "../base/GameEngine";
-import { CardDefination, CardInstance, CardProps } from "@/types";
+import type { CardDefination, CardInstance, CardProps } from "../../../types";
 
 export class DeckEngine extends GameEngine {
   private playerDeck: CardDefination[] = [];
@@ -96,6 +96,8 @@ export class DeckEngine extends GameEngine {
 
     const selectedCard =
       remainingInstances[Math.floor(Math.random() * remainingInstances.length)];
+
+    if(!selectedCard) return
 
     if (side === "PLAYER") {
       this.selectedPlayerCard = selectedCard.id;
