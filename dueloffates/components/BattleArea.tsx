@@ -28,17 +28,14 @@ export default function BattleArea() {
   return (
     <div className="grid grid-cols-[auto_1fr_1fr_1fr_auto] gap-4 items-center py-4">
       {/* Timer */}
-      <div className="flex flex-col items-center gap-1 mr-20">
-        <Icon
-          icon="lets-icons:clock-light"
-          className="w-12 h-12 text-gray-700"
-        />
-        <div className="text-sm font-medium">{timer} sec</div>
-        {phase === "RESOLVE" && (
-          <div className="text-xs text-blue-600 font-semibold mt-1">
-            RESOLVING...
-          </div>
-        )}
+      <div
+        className={`text-center gap-1 mr-20 px-4 py- rounded-xl  backdrop-blur-md bg-black/30  border-2 border-white/20 shadow-lg transition-all duration-300
+  ${timer <= 5 && timer > 0 ? "animate-pulse bg-red-500/50 border-red-500/60" : ""}`}
+      >
+        <div className="text-lg font-bold text-white drop-shadow-lg">
+          00:{timer < 10 && "0"}
+          {timer}
+        </div>
       </div>
 
       {/* Player 1 Selected Card */}

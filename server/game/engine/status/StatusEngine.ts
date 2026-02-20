@@ -1,8 +1,7 @@
-import { useDebugStore } from "@/store/useDebugStore";
 import { GameEngine } from "../base/GameEngine";
 import { HealthEngine } from "../health/HealthEngine";
 import { ShieldEngine } from "../shield/ShieldEngine";
-import { useLogStore } from "@/store/useLogStore";
+// import { useLogStore } from "@/store/useLogStore";
 
 type Side = "player" | "opponent";
 
@@ -114,13 +113,13 @@ export class StatusEngine extends GameEngine {
         this.healthEngine.damage(poisonDamage, side);
 
         // Emit status triggered event
-        useLogStore.getState().addEvent({
-          type: "status_triggered",
-          side: side,
-          status: "poison",
-          damage: poisonDamage,
-          timestamp: Date.now(),
-        });
+        // useLogStore.getState().addEvent({
+        //   type: "status_triggered",
+        //   side: side,
+        //   status: "poison",
+        //   damage: poisonDamage,
+        //   timestamp: Date.now(),
+        // });
 
         // Add delay to see poison damage
         // await this.delay(STATUS_TICK_DELAY);
@@ -134,12 +133,12 @@ export class StatusEngine extends GameEngine {
         this.consumeReducedShieldModifier(side);
 
         // Emit shield halved event
-        useLogStore.getState().addEvent({
-          type: "shield_halved",
-          side: side,
-          amount: halvedAmount,
-          timestamp: Date.now(),
-        });
+        // useLogStore.getState().addEvent({
+        //   type: "shield_halved",
+        //   side: side,
+        //   amount: halvedAmount,
+        //   timestamp: Date.now(),
+        // });
       }
 
       // // emitting new objects

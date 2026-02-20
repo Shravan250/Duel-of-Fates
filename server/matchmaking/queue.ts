@@ -1,5 +1,5 @@
 import { Socket } from "socket.io";
-import { createMatch } from "./matchRoom";
+import { roomManager } from "../room/roomManager";
 
 /*
  * Represents a player waiting in the queue
@@ -51,20 +51,6 @@ export function removePlayerFromQueue(playerId: string) {
  */
 function startMatchFromQueue() {
   const playersForMatch = waitingQueue.splice(0, 2);
-
-  const matchId = `match-${Date.now()}`;
-
-  console.log("Creating match:", matchId);
-
-  // Create match using game engine
-  createMatch(matchId, playersForMatch);
-
-  // Join both players to the same socket room
-  playersForMatch.forEach((player) => {
-    player.socket.join(matchId);
-
-    player.socket.emit("matchFound", {
-      matchId,
-    });
-  });
+  if(!playersForMatch[0]||!playersForMatch[1])return
+  roomManager.createRoom(playersForMatch[0],playersForMatch[1]);
 }
