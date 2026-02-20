@@ -1,4 +1,4 @@
-import { RawLogEvent, EVENT_PRIORITY, Side } from "../types";
+import type { RawLogEvent, EVENT_PRIORITY, Side } from "../types";
 // Helpers
 
 function getSideLabel(side: Side): string {

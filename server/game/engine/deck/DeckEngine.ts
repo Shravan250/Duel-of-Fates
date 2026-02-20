@@ -1,7 +1,10 @@
-import { createCardInstances, deckRandomizer } from "@/lib/helper";
 import { GameEngine } from "../base/GameEngine";
 import type { CardDefination, CardInstance, CardProps } from "../../../types";
-import { formattedDeckGenerator } from "../../../lib/helper";
+import {
+  formattedDeckGenerator,
+  createCardInstances,
+  deckRandomizer,
+} from "../../../lib/helper";
 
 export class DeckEngine extends GameEngine {
   private playerDeck: CardDefination[] = [];
