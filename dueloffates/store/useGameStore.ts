@@ -1,4 +1,3 @@
-import { DeckController } from "@/game/binders/bindDeckEngine";
 import { formattedDeckGenerator } from "@/lib/helper";
 import { CardDefination, CardInstance, CardProps } from "@/types";
 import { create } from "zustand";

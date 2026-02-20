@@ -5,6 +5,7 @@ import { HealthEngine } from "../game/engine/health/HealthEngine";
 import { MatchEngine } from "../game/engine/match/MatchEngine";
 import { ShieldEngine } from "../game/engine/shield/ShieldEngine";
 import { StatusEngine } from "../game/engine/status/StatusEngine";
+import { LogEngine } from "../game/engine/log/logEngine";
 import type { Player } from "../matchmaking/queue";
 
 export class MatchRoom {
@@ -21,6 +22,7 @@ export class MatchRoom {
   private statusEngine: StatusEngine;
   private cardEngine: CardEngine;
   private matchEngine: MatchEngine;
+  private logEngine: LogEngine;
 
   isStarted: boolean;
   isFinished: boolean;
@@ -32,12 +34,18 @@ export class MatchRoom {
     this.healthEngine = new HealthEngine(100);
     this.shieldEngine = new ShieldEngine(50);
     this.deckEngine = new DeckEngine();
-    this.statusEngine = new StatusEngine(this.healthEngine, this.shieldEngine);
+    this.logEngine = new LogEngine();
+    this.statusEngine = new StatusEngine(
+      this.healthEngine,
+      this.shieldEngine,
+      this.logEngine,
+    );
     this.cardEngine = new CardEngine(
       this.healthEngine,
       this.shieldEngine,
       this.deckEngine,
       this.statusEngine,
+      this.logEngine,
     );
 
     this.matchEngine = new MatchEngine(
@@ -52,7 +60,7 @@ export class MatchRoom {
     this.isFinished = false;
   }
 
-  public join(player:Player) {
+  public join(player: Player) {
     if (!this.players.player1) {
       this.players.player1 = player;
       this.players.player1.socket.join(this.matchId);
@@ -63,10 +71,10 @@ export class MatchRoom {
       throw new Error("Room full");
     }
 
-    player.socket.emit("matchJoined",{
+    player.socket.emit("matchJoined", {
       matchId: this.matchId,
-      role: this.getPlayerRole(player.id)
-    })
+      role: this.getPlayerRole(player.id),
+    });
 
     if (this.isReady() && !this.isStarted) {
       this.matchEngine.startMatch();
@@ -81,7 +89,7 @@ export class MatchRoom {
       this.getPlayerRole(playerId),
     );
 
-    if (resolved){
+    if (resolved) {
       this.emitState();
     }
   }
@@ -94,11 +102,12 @@ export class MatchRoom {
       health: this.healthEngine.getHp(),
       shield: this.shieldEngine.getShield(),
       deck: this.deckEngine.getState(),
+      logs: this.logEngine.getState(),
     };
   }
 
-  private emitState(){
-    const state=this.getState();
+  private emitState() {
+    const state = this.getState();
     this.io.to(this.matchId).emit("gameState", state);
   }
 

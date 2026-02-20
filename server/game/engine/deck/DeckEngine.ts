@@ -1,6 +1,7 @@
 import { createCardInstances, deckRandomizer } from "@/lib/helper";
 import { GameEngine } from "../base/GameEngine";
 import type { CardDefination, CardInstance, CardProps } from "../../../types";
+import { formattedDeckGenerator } from "../../../lib/helper";
 
 export class DeckEngine extends GameEngine {
   private playerDeck: CardDefination[] = [];
@@ -52,7 +53,7 @@ export class DeckEngine extends GameEngine {
 
   public getInstanceById(
     instanceId: string,
-    side: "PLAYER" | "OPPONENT"
+    side: "PLAYER" | "OPPONENT",
   ): CardInstance | null {
     const list =
       side === "PLAYER" ? this.playerInstances : this.opponentInstances;
@@ -97,7 +98,7 @@ export class DeckEngine extends GameEngine {
     const selectedCard =
       remainingInstances[Math.floor(Math.random() * remainingInstances.length)];
 
-    if(!selectedCard) return
+    if (!selectedCard) return;
 
     if (side === "PLAYER") {
       this.selectedPlayerCard = selectedCard.id;
@@ -126,7 +127,7 @@ export class DeckEngine extends GameEngine {
   //check if player can play the card
   public canPlayCard(
     cardInstanceId: string,
-    side: "PLAYER" | "OPPONENT"
+    side: "PLAYER" | "OPPONENT",
   ): boolean {
     const card = this.getInstanceById(cardInstanceId, side);
     return card ? card.cooldown === 0 : false;
@@ -140,6 +141,11 @@ export class DeckEngine extends GameEngine {
   // getState form zustand (current)
   public getState() {
     return {
+      player: formattedDeckGenerator(this.playerInstances, this.playerDeck),
+      opponent: formattedDeckGenerator(
+        this.opponentInstances,
+        this.opponentDeck,
+      ),
       playerDeck: this.playerDeck,
       opponentDeck: this.opponentDeck,
       playerInstances: this.playerInstances,

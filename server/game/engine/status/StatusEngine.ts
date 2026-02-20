@@ -1,5 +1,6 @@
 import { GameEngine } from "../base/GameEngine";
 import { HealthEngine } from "../health/HealthEngine";
+import { LogEngine } from "../log/logEngine";
 import { ShieldEngine } from "../shield/ShieldEngine";
 // import { useLogStore } from "@/store/useLogStore";
 
@@ -50,7 +51,8 @@ export class StatusEngine extends GameEngine {
 
   constructor(
     private healthEngine: HealthEngine,
-    private shieldEngine: ShieldEngine
+    private shieldEngine: ShieldEngine,
+    private logEngine: LogEngine,
   ) {
     super();
   }
@@ -90,11 +92,11 @@ export class StatusEngine extends GameEngine {
 
   public applyStatus(side: Side, stack: { fatigue: number; poison: number }) {
     this.state[side].fatigue = this.clamp(
-      this.state[side].fatigue + stack.fatigue
+      this.state[side].fatigue + stack.fatigue,
     );
 
     this.state[side].poison = this.clamp(
-      this.state[side].poison + stack.poison
+      this.state[side].poison + stack.poison,
     );
 
     this.notify();
@@ -113,13 +115,13 @@ export class StatusEngine extends GameEngine {
         this.healthEngine.damage(poisonDamage, side);
 
         // Emit status triggered event
-        // useLogStore.getState().addEvent({
-        //   type: "status_triggered",
-        //   side: side,
-        //   status: "poison",
-        //   damage: poisonDamage,
-        //   timestamp: Date.now(),
-        // });
+        this.logEngine.addEvent({
+          type: "status_triggered",
+          side: side,
+          status: "poison",
+          damage: poisonDamage,
+          timestamp: Date.now(),
+        });
 
         // Add delay to see poison damage
         // await this.delay(STATUS_TICK_DELAY);
@@ -133,12 +135,12 @@ export class StatusEngine extends GameEngine {
         this.consumeReducedShieldModifier(side);
 
         // Emit shield halved event
-        // useLogStore.getState().addEvent({
-        //   type: "shield_halved",
-        //   side: side,
-        //   amount: halvedAmount,
-        //   timestamp: Date.now(),
-        // });
+        this.logEngine.addEvent({
+          type: "shield_halved",
+          side: side,
+          amount: halvedAmount,
+          timestamp: Date.now(),
+        });
       }
 
       // // emitting new objects
