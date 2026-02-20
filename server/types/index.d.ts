@@ -105,6 +105,8 @@ export interface CardProps {
   desc?: string;
   type: CardType;
   cooldown?: number;
+  cooldownRemaining: number;
+  isPlayable: boolean;
   userCards: boolean;
 }
 

@@ -1,4 +1,4 @@
-import { useGameStore } from "@/store/useGameStore";
+import { socket } from "@/network/socket";
 import { CardProps } from "@/types";
 import { Icon } from "@iconify/react";
 import clsx from "clsx";
@@ -20,18 +20,26 @@ const styles = {
 };
 
 const Cards = ({ card, side, battleArea = false }: Cards2Props) => {
-  const { header, icon, desc, type, userCards, cooldown } = card;
-  const { selectCard, deckController } = useGameStore();
+  const {
+    header,
+    icon,
+    desc,
+    type,
+    userCards,
+    cooldown,
+    cooldownRemaining,
+    isPlayable,
+  } = card;
 
-  const canPlay =
-    side && deckController
-      ? deckController.canPlayCard(card.instanceId, side)
-      : false;
+  // const canPlay =
+  //   side && deckController
+  //     ? deckController.canPlayCard(card.instanceId, side)
+  //     : false;
 
-  const cooldownRemaning =
-    side && deckController
-      ? deckController.cooldownRemaning(card.instanceId, side)
-      : 0;
+  // const cooldownRemaning =
+  //   side && deckController
+  //     ? deckController.cooldownRemaning(card.instanceId, side)
+  //     : 0;
 
   return (
     <div className="relative group">
@@ -42,19 +50,22 @@ const Cards = ({ card, side, battleArea = false }: Cards2Props) => {
           battleArea ? "card-selected" : "rounded",
           styles[type],
           {
-            "on-cooldown": !canPlay && !battleArea,
-          }
+            "on-cooldown": !isPlayable && !battleArea,
+          },
         )}
         onClick={() => {
-          if (!canPlay) return;
-          side && selectCard(card, side);
+          if (!isPlayable || !side) return;
+
+          socket.emit("playCard", {
+            cardInstanceId: card.instanceId,
+          });
         }}
       >
         <h2>{header}</h2>
         <Icon icon={icon} width={50} height={50} className="shrink-0" />
-        {!canPlay && !battleArea && (
+        {!isPlayable && !battleArea && (
           <div className="absolute flex items-center justify-center text-5xl font-extrabold text-white rounded-full w-12 h-12 animate-pulse">
-            {cooldownRemaning < 20 ? cooldownRemaning : "USED"}
+            {cooldownRemaining}
           </div>
         )}
       </div>
@@ -81,7 +92,7 @@ const Cards = ({ card, side, battleArea = false }: Cards2Props) => {
             <span className="text-gray-400">Effect:</span> <span>{desc}</span>
           </div>
 
-          {canPlay && (
+          {isPlayable && (
             <div>
               <span className="text-gray-400">Cooldown Needed: </span>
               <span>{cooldown}</span>
@@ -90,8 +101,8 @@ const Cards = ({ card, side, battleArea = false }: Cards2Props) => {
 
           <div>
             <span className="text-gray-400">Status:</span>
-            <span className={!canPlay ? "text-red-400" : "text-green-400"}>
-              {!canPlay ? `On Cooldown` : "Ready"}
+            <span className={!isPlayable ? "text-red-400" : "text-green-400"}>
+              {!isPlayable ? `On Cooldown` : "Ready"}
             </span>
           </div>
         </div>

@@ -135,11 +135,22 @@ export const useGameStore = create<GameStoreState>((set) => ({
   selectedOpponentCard: null,
 
   setGameState: (state) =>
-    set({
-      playerCards: state.player,
-      opponentCards: state.opponent,
-      selectedPlayerCard: state.selectedPlayerCard,
-      selectedOpponentCard: state.selectedOpponentCard,
+    set(() => {
+      const selectedPlayer =
+        state.player.find((c) => c.instanceId === state.selectedPlayerCard) ||
+        null;
+
+      const selectedOpponent =
+        state.opponent.find(
+          (c) => c.instanceId === state.selectedOpponentCard,
+        ) || null;
+
+      return {
+        playerCards: state.player,
+        opponentCards: state.opponent,
+        selectedPlayerCard: selectedPlayer,
+        selectedOpponentCard: selectedOpponent,
+      };
     }),
 
   reset: () =>

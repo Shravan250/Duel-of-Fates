@@ -16,4 +16,8 @@ export function initializeSocketListeners() {
     useGameStore.getState().setGameState(state.deck);
     useLogStore.getState().setLogs(state.logs);
   });
+
+  socket.on("matchEnded", () => {
+    useMatchStore.getState().reset();
+  });
 }

@@ -11,7 +11,7 @@ export default function Home() {
     socket.connect();
     initializeSocketListeners();
 
-    socket.on("matchFound", () => {
+    socket.on("matchJoined", () => {
       router.push("/game");
     });
 
@@ -22,7 +22,7 @@ export default function Home() {
 
   const handleStartGame = () => {
     console.log("Joining matchmaking...");
-    socket.emit("joinMatchmaking");
+    socket.emit("joinQueue");
   };
 
   return (
