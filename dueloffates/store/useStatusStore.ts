@@ -1,10 +1,20 @@
-import { StatusState } from "@/game/engine/status/StatusEngine";
+import { Modifiers } from "@/types";
 import { create } from "zustand";
+
+interface StatusState {
+  poison: number;
+  fatigue: number;
+  modifiers: Modifiers;
+}
 
 interface StatusEffectState {
   player: StatusState;
   opponent: StatusState;
-  setState: (state: Record<"player" | "opponent", StatusState>) => void;
+
+  setStatusState: (state: {
+    player: StatusState;
+    opponent: StatusState;
+  }) => void;
 }
 
 export const useStatusStore = create<StatusEffectState>((set, get) => ({
@@ -31,7 +41,7 @@ export const useStatusStore = create<StatusEffectState>((set, get) => ({
     },
   },
 
-  setState: (state) =>
+  setStatusState: (state) =>
     set({
       player: state.player,
       opponent: state.opponent,

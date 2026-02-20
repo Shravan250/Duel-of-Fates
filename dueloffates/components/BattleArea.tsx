@@ -4,7 +4,7 @@ import { useGameStore } from "@/store/useGameStore";
 import { useMatchStore } from "@/store/useMatchStore";
 
 export default function BattleArea() {
-  const { phase, timer, isPaused, matchController } = useMatchStore();
+  const { phase, timer, isPaused } = useMatchStore();
   const { selectedOpponentCard, selectedPlayerCard } = useGameStore();
   // const [timer, setTimer] = useState(15);
 
