@@ -1,4 +1,4 @@
-import { CardDefination, CardInstance, CardProps } from "@/types";
+import { CardDefination, CardInstance, CardProps } from "../types";
 import {
   attackCards,
   defenceCards,
@@ -75,7 +75,11 @@ export function formattedDeckGenerator(
       // effect: getEffect(definition),
       desc: definition.desc,
       cooldown: definition.cooldown,
-      // onCooldown: instance.cooldown > 0,
+
+      // runtime state
+      cooldownRemaining: instance.cooldown,
+      isPlayable: instance.cooldown === 0,
+
       userCards: instance.owner === "PLAYER",
     };
   });

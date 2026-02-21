@@ -12,6 +12,7 @@ import { HealthEngine } from "../health/HealthEngine";
 import { ShieldEngine } from "../shield/ShieldEngine";
 import { DeckEngine } from "../deck/DeckEngine";
 import { StatusEngine } from "../status/StatusEngine";
+import { LogEngine } from "../log/logEngine";
 // import { useDebugStore } from "@/store/useDebugStore";
 // import { useLogStore } from "@/store/useLogStore";
 
@@ -47,17 +48,20 @@ export class CardEngine extends GameEngine {
   private shieldEngine: ShieldEngine;
   private deckEngine: DeckEngine;
   private statusEngine: StatusEngine;
+  private logEngine: LogEngine;
   constructor(
     healthEngine: HealthEngine,
     shieldEngine: ShieldEngine,
     deckEngine: DeckEngine,
-    statusEngine: StatusEngine
+    statusEngine: StatusEngine,
+    logEngine: LogEngine,
   ) {
     super();
     this.healthEngine = healthEngine;
     this.shieldEngine = shieldEngine;
     this.deckEngine = deckEngine;
     this.statusEngine = statusEngine;
+    this.logEngine = logEngine;
   }
 
   /**
@@ -89,15 +93,15 @@ export class CardEngine extends GameEngine {
 
   public async resolve(
     playerCardInstanceId: string,
-    opponentCardInstanceId: string
+    opponentCardInstanceId: string,
   ) {
     const playerCardInstance = this.deckEngine.getInstanceById(
       playerCardInstanceId,
-      "PLAYER"
+      "PLAYER",
     );
     const opponentCardInstance = this.deckEngine.getInstanceById(
       opponentCardInstanceId,
-      "OPPONENT"
+      "OPPONENT",
     );
 
     if (!playerCardInstance || !opponentCardInstance) return;
@@ -105,16 +109,16 @@ export class CardEngine extends GameEngine {
     const playerCardType = this.getCardType(playerCardInstance.definitionId);
 
     const opponentCardType = this.getCardType(
-      opponentCardInstance.definitionId
+      opponentCardInstance.definitionId,
     );
 
     const opponentCard = this.getCard(
       opponentCardInstance.definitionId,
-      opponentCardType
+      opponentCardType,
     );
     const playerCard = this.getCard(
       playerCardInstance.definitionId,
-      playerCardType
+      playerCardType,
     );
 
     if (!playerCard || !opponentCard) {
@@ -137,18 +141,18 @@ export class CardEngine extends GameEngine {
   private async applyCardEffects(
     role: Side,
     card: CardDefination,
-    instanceId: string
+    instanceId: string,
   ) {
     const modifiers = this.statusEngine.getState()[role].modifiers;
     const reduction = modifiers.cooldownReduction || 0;
 
     // emit selected card
-    // useLogStore.getState().addEvent({
-    //   type: "card_played",
-    //   side: role,
-    //   cardName: card.name,
-    //   timestamp: Date.now(),
-    // });
+    this.logEngine.addEvent({
+      type: "card_played",
+      side: role,
+      cardName: card.name,
+      timestamp: Date.now(),
+    });
 
     // execute effect in order
     for (const effect of card.effects) {
@@ -221,11 +225,11 @@ export class CardEngine extends GameEngine {
   private async applyDamage(
     attacker: Side,
     defender: Side,
-    baseDamage: number
+    baseDamage: number,
   ) {
     const damageMultiplier = this.statusEngine.getDamageMultiplier(
       attacker,
-      defender
+      defender,
     );
     const totalDamage = Math.floor(baseDamage * damageMultiplier);
 
@@ -241,12 +245,12 @@ export class CardEngine extends GameEngine {
 
     // After shield absorption
     if (totalDamage > remDamage) {
-      // useLogStore.getState().addEvent({
-      //   type: "shield_absorbed",
-      //   side: defender,
-      //   amount: totalDamage - remDamage,
-      //   timestamp: Date.now(),
-      // });
+      this.logEngine.addEvent({
+        type: "shield_absorbed",
+        side: defender,
+        amount: totalDamage - remDamage,
+        timestamp: Date.now(),
+      });
     }
 
     if (remDamage > 0) {
@@ -257,24 +261,24 @@ export class CardEngine extends GameEngine {
     if (remDamage > 0) {
       const defenderStatus = this.statusEngine.getState()[defender];
       if (damageMultiplier > 1) {
-        // useLogStore.getState().addEvent({
-        //   type: "damage",
-        //   side: defender,
-        //   amount: remDamage,
-        //   modifier: {
-        //     type: "fatigue",
-        //     multiplier: damageMultiplier,
-        //     stacks: defenderStatus.fatigue,
-        //   },
-        //   timestamp: Date.now(),
-        // });
+        this.logEngine.addEvent({
+          type: "damage",
+          side: defender,
+          amount: remDamage,
+          modifier: {
+            type: "fatigue",
+            multiplier: damageMultiplier,
+            stacks: defenderStatus.fatigue,
+          },
+          timestamp: Date.now(),
+        });
       } else {
-        // useLogStore.getState().addEvent({
-        //   type: "damage",
-        //   side: defender,
-        //   amount: remDamage,
-        //   timestamp: Date.now(),
-        // });
+        this.logEngine.addEvent({
+          type: "damage",
+          side: defender,
+          amount: remDamage,
+          timestamp: Date.now(),
+        });
       }
     }
     // await this.delay(DEBUG_DELAYS.CARD_EFFECT);
@@ -298,12 +302,12 @@ export class CardEngine extends GameEngine {
     this.shieldEngine.gainShield(totalShield, target);
 
     // Emit shield Gain
-    // useLogStore.getState().addEvent({
-    //   type: "shield_gained",
-    //   side: target,
-    //   amount: totalShield,
-    //   timestamp: Date.now(),
-    // });
+    this.logEngine.addEvent({
+      type: "shield_gained",
+      side: target,
+      amount: totalShield,
+      timestamp: Date.now(),
+    });
 
     // await this.delay(DEBUG_DELAYS.CARD_EFFECT);
   }
@@ -316,12 +320,12 @@ export class CardEngine extends GameEngine {
     this.healthEngine.heal(healAmount, target);
 
     // Emit Heal
-    // useLogStore.getState().addEvent({
-    //   type: "heal",
-    //   side: target,
-    //   amount: healAmount,
-    //   timestamp: Date.now(),
-    // });
+    this.logEngine.addEvent({
+      type: "heal",
+      side: target,
+      amount: healAmount,
+      timestamp: Date.now(),
+    });
 
     // await this.delay(DEBUG_DELAYS.CARD_EFFECT);
   }
@@ -331,7 +335,7 @@ export class CardEngine extends GameEngine {
    */
   private async applyStatusEffect(
     target: Side,
-    status: NonNullable<Effect["status"]> // learned to use NonNullable
+    status: NonNullable<Effect["status"]>, // learned to use NonNullable
   ) {
     let stack = { fatigue: 0, poison: 0 };
 
@@ -340,7 +344,7 @@ export class CardEngine extends GameEngine {
       const effectKeys = Object.keys(status.random) as ("poison" | "fatigue")[];
       const chosenKey =
         effectKeys[Math.floor(Math.random() * effectKeys.length)];
-      if(!chosenKey) return
+      if (!chosenKey) return;
       const values = status.random[chosenKey]!;
       const effectValue = values[Math.floor(Math.random() * values.length)];
       stack[chosenKey] = effectValue;
@@ -373,24 +377,24 @@ export class CardEngine extends GameEngine {
 
     // Emitting after applying poison
     if (stack.poison > 0) {
-      // useLogStore.getState().addEvent({
-      //   type: "status_applied",
-      //   side: target,
-      //   status: "poison",
-      //   stacks: stack.poison,
-      //   timestamp: Date.now(),
-      // });
+      this.logEngine.addEvent({
+        type: "status_applied",
+        side: target,
+        status: "poison",
+        stacks: stack.poison,
+        timestamp: Date.now(),
+      });
     }
 
     // EmittingAfter applying fatigue
     if (stack.fatigue > 0) {
-      // useLogStore.getState().addEvent({
-      //   type: "status_applied",
-      //   side: target,
-      //   status: "fatigue",
-      //   stacks: stack.fatigue,
-      //   timestamp: Date.now(),
-      // });
+      this.logEngine.addEvent({
+        type: "status_applied",
+        side: target,
+        status: "fatigue",
+        stacks: stack.fatigue,
+        timestamp: Date.now(),
+      });
     }
 
     this.statusEngine.applyStatus(target, stack);
@@ -403,7 +407,7 @@ export class CardEngine extends GameEngine {
   */
   private async applyModifiers(
     target: Side,
-    modifiers: NonNullable<Effect["modifiers"]>
+    modifiers: NonNullable<Effect["modifiers"]>,
   ) {
     // Build debug message
     const modNames = [];
@@ -444,13 +448,13 @@ export class CardEngine extends GameEngine {
 
     // Emitting Mods Logs
     if (modNames.length > 0) {
-      // useLogStore.getState().addEvent({
-      //   type: "modifier_applied",
-      //   side: target,
-      //   modifierType: eventType,
-      //   description: modNames.join(", "),
-      //   timestamp: Date.now(),
-      // });
+      this.logEngine.addEvent({
+        type: "modifier_applied",
+        side: target,
+        modifierType: eventType,
+        description: modNames.join(", "),
+        timestamp: Date.now(),
+      });
     }
 
     this.statusEngine.applyModifiers(target, modifiers);
@@ -470,13 +474,13 @@ export class CardEngine extends GameEngine {
         this.shieldEngine.swapShield();
 
         // Emitting Swap Case
-        // useLogStore.getState().addEvent({
-        //   type: "utility",
-        //   side: role,
-        //   utilityType: "swap",
-        //   description: "HP and Shield swapped",
-        //   timestamp: Date.now(),
-        // });
+        this.logEngine.addEvent({
+          type: "utility",
+          side: role,
+          utilityType: "swap",
+          description: "HP and Shield swapped",
+          timestamp: Date.now(),
+        });
 
         break;
 
@@ -487,14 +491,14 @@ export class CardEngine extends GameEngine {
 
         // Emitting reversal case
         const roleStatus = this.statusEngine.getState()[role];
-        // useLogStore.getState().addEvent({
-        //   type: "status_transferred",
-        //   side: role,
-        //   targetSide: target,
-        //   poison: roleStatus.poison,
-        //   fatigue: roleStatus.fatigue,
-        //   timestamp: Date.now(),
-        // });
+        this.logEngine.addEvent({
+          type: "status_transferred",
+          side: role,
+          targetSide: target,
+          poison: roleStatus.poison,
+          fatigue: roleStatus.fatigue,
+          timestamp: Date.now(),
+        });
 
         break;
 
@@ -579,7 +583,7 @@ export class CardEngine extends GameEngine {
     instanceId: string,
     baseCooldown: number,
     reduction: number,
-    role: Side
+    role: Side,
   ) {
     const finalCooldown =
       reduction > 0 ? Math.max(0, baseCooldown - reduction) : baseCooldown;
@@ -587,7 +591,7 @@ export class CardEngine extends GameEngine {
     this.deckEngine.applyCooldown(
       instanceId,
       finalCooldown,
-      role.toUpperCase()
+      role.toUpperCase(),
     );
 
     if (reduction > 0) {

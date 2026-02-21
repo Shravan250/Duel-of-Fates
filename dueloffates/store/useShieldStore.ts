@@ -6,14 +6,20 @@ interface PlayerShieldState {
   playerShield: number;
   opponentShield: number;
   maxShield: number;
-  setShield: (res: getterResponse) => void;
+
+  setShieldState: (res: {
+    player: number;
+    opponent: number;
+    max: number;
+  }) => void;
 }
 
 export const useShieldStore = create<PlayerShieldState>((set) => ({
   playerShield: 50,
   opponentShield: 50,
   maxShield: 50,
-  setShield: (res) =>
+
+  setShieldState: (res) =>
     set({
       playerShield: res.player,
       opponentShield: res.opponent,

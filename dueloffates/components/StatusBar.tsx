@@ -1,6 +1,12 @@
-import { StatusState } from "@/game/engine/status/StatusEngine";
+import { Modifiers } from "@/types";
 import { Icon } from "@iconify/react";
 import clsx from "clsx";
+
+interface StatusState {
+  poison: number;
+  fatigue: number;
+  modifiers: Modifiers;
+}
 
 interface StatusBarProps {
   status: StatusState;
@@ -85,7 +91,7 @@ export default function StatusBar({ status }: StatusBarProps) {
           key={effect.key}
           className={clsx(
             "flex items-center gap-1 py-1 text-sm font-semibold ",
-            effect.className
+            effect.className,
           )}
         >
           <Icon icon={effect.icon} className="w-6 h-6" />

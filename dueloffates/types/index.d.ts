@@ -67,7 +67,7 @@ export type Effect = {
   };
 
   // skip condition false effects when condition true effects are met
-  skipElse?:boolean;
+  skipElse?: boolean;
 };
 
 export type Condition = {
@@ -105,5 +105,7 @@ export interface CardProps {
   desc?: string;
   type: CardType;
   cooldown?: number;
+  cooldownRemaining: number;
+  isPlayable: boolean;
   userCards: boolean;
 }

@@ -51,6 +51,6 @@ export function removePlayerFromQueue(playerId: string) {
  */
 function startMatchFromQueue() {
   const playersForMatch = waitingQueue.splice(0, 2);
-  if(!playersForMatch[0]||!playersForMatch[1])return
-  roomManager.createRoom(playersForMatch[0],playersForMatch[1]);
+  if (!playersForMatch[0] || !playersForMatch[1]) return;
+  roomManager.createRoom(playersForMatch[0], playersForMatch[1]);
 }

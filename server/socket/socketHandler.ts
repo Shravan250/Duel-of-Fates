@@ -15,16 +15,21 @@ export function socketHandler(io: Server) {
       });
     });
 
+    socket.on("playCard", async ({ cardInstanceId }) => {
+      const playerId = socket.id;
 
-    socket.on("playCard",async ({ playerId, cardInstanceId }) => {
       const roomId = roomManager.getRoomByPlayer(playerId);
-      
+
       if (roomId) {
         const room = roomManager.getRoom(roomId);
         if (room) {
           await room.playCard(playerId, cardInstanceId);
         }
       }
+    });
+
+    socket.on("playCard", async (payload) => {
+      console.log("Received playCard from", socket.id, payload);
     });
 
     socket.on("disconnect", () => {

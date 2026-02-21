@@ -2,9 +2,10 @@ import { Icon } from "@iconify/react";
 import Cards from "./Cards";
 import { useGameStore } from "@/store/useGameStore";
 import { useMatchStore } from "@/store/useMatchStore";
+import { socket } from "@/network/socket";
 
 export default function BattleArea() {
-  const { phase, timer, isPaused, matchController } = useMatchStore();
+  const { timer, isPaused } = useMatchStore();
   const { selectedOpponentCard, selectedPlayerCard } = useGameStore();
   // const [timer, setTimer] = useState(15);
 
@@ -56,13 +57,13 @@ export default function BattleArea() {
         <Icon
           icon={"gridicons:play"}
           className="mx-auto w-10 h-10 cursor-pointer text-white"
-          onClick={matchController?.resumeMatch}
+          onClick={() => socket.emit("resumeMatch")}
         />
       ) : (
         <Icon
           icon={"gridicons:pause"}
           className="mx-auto w-10 h-10 cursor-pointer text-white"
-          onClick={matchController?.pauseMatch}
+          onClick={() => socket.emit("pauseMatch")}
         />
       )}
 

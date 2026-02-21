@@ -1,9 +1,7 @@
 import express from "express";
 import { createServer } from "http";
-import { Server, Socket } from "socket.io";
+import { Server } from "socket.io";
 import cors from "cors";
-
-import { addPlayerToQueue, removePlayerFromQueue } from "./matchmaking/queue";
 import { roomManager } from "./room/roomManager";
 import { socketHandler } from "./socket/socketHandler";
 

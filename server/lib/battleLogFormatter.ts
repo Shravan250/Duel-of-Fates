@@ -1,5 +1,4 @@
-import { RawLogEvent, EVENT_PRIORITY, Side } from "@/types/battleLogs";
-
+import type { RawLogEvent, EVENT_PRIORITY, Side } from "../types";
 // Helpers
 
 function getSideLabel(side: Side): string {
@@ -53,7 +52,7 @@ function formatEvent(event: RawLogEvent): string {
         return `${subject} took ${
           event.amount
         } damage due to ${type}${stackText} (${multiplier.toFixed(
-          1
+          1,
         )}x modifier)`;
       }
 
@@ -193,7 +192,7 @@ function GroupEvents(events: RawLogEvent[]): EventGroup[] {
 
 export function formatTurnLogs(
   events: RawLogEvent[],
-  turnNumber: number
+  turnNumber: number,
 ): string[] {
   // Nothing happened
   if (events.length === 0) {
