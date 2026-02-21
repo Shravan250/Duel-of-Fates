@@ -138,12 +138,14 @@ export class MatchRoom {
       health: {
         player: baseState.health.opponent,
         opponent: baseState.health.player,
+        max: baseState.health.max,
       },
 
       // swap shield
       shield: {
         player: baseState.shield.opponent,
         opponent: baseState.shield.player,
+        max: baseState.shield.max,
       },
 
       // swap status

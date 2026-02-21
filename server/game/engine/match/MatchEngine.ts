@@ -120,12 +120,13 @@ export class MatchEngine extends GameEngine {
 
     await this.statusEngine.resolveTurn();
 
-    this.cleanupTurn();
+    await this.cleanupTurn();
   }
 
-  private cleanupTurn() {
+  private async cleanupTurn() {
     this.selectedPlayerCard = null;
     this.selectedOpponentCard = null;
+    this.deckEngine.clearSelections();
     this.currentTurn += 1;
     this.checkWinCondition();
   }
