@@ -15,9 +15,7 @@ export default function Home() {
       router.push("/game");
     });
 
-    return () => {
-      socket.disconnect();
-    };
+    return () => {};
   }, []);
 
   const handleStartGame = () => {
