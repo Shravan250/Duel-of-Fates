@@ -107,8 +107,53 @@ export class MatchRoom {
   }
 
   private emitState() {
-    const state = this.getState();
-    this.io.to(this.matchId).emit("gameState", state);
+    if (!this.players.player1 || !this.players.player2) return;
+
+    const baseState = this.getState();
+
+    // Player1 sees normal orientation
+    this.players.player1.socket.emit("gameState", baseState);
+
+    // Player2 sees swapped orientation
+    const swappedState = {
+      ...baseState,
+
+      // swap match selected cards
+      match: {
+        ...baseState.match,
+        selectedPlayerCard: baseState.match.selectedOpponentCard,
+        selectedOpponentCard: baseState.match.selectedPlayerCard,
+      },
+
+      // swap deck
+      deck: {
+        ...baseState.deck,
+        player: baseState.deck.opponent,
+        opponent: baseState.deck.player,
+        selectedPlayerCard: baseState.deck.selectedOpponentCard,
+        selectedOpponentCard: baseState.deck.selectedPlayerCard,
+      },
+
+      // swap health
+      health: {
+        player: baseState.health.opponent,
+        opponent: baseState.health.player,
+      },
+
+      // swap shield
+      shield: {
+        player: baseState.shield.opponent,
+        opponent: baseState.shield.player,
+      },
+
+      // swap status
+      status: {
+        player: baseState.status.opponent,
+        opponent: baseState.status.player,
+      },
+    };
+
+    this.players.player2.socket.emit("gameState", swappedState);
   }
 
   public getPlayerRole(playerId: string) {

@@ -22,7 +22,7 @@ export class MatchEngine extends GameEngine {
     private healthEngine: HealthEngine,
     private shieldEngine: ShieldEngine,
     private cardResolver: CardEngine,
-    private statusEngine: StatusEngine
+    private statusEngine: StatusEngine,
   ) {
     super();
     this.healthEngine.subscribe(() => this.checkWinCondition());
@@ -31,8 +31,7 @@ export class MatchEngine extends GameEngine {
   // public functions
 
   public startMatch() {
-
-    this.currentPhase = "SETUP";
+    this.currentPhase = "PLAY";
     this.currentTurn = 1;
     this.winner = null;
     this.isMatchOver = false;
@@ -47,6 +46,8 @@ export class MatchEngine extends GameEngine {
     this.healthEngine.reset(100);
     this.shieldEngine.reset(50);
 
+    this.startTimer();
+
     this.notify();
   }
 
@@ -58,7 +59,6 @@ export class MatchEngine extends GameEngine {
     }
 
     this.timerInterval = setInterval(() => {
-
       this.timer -= 1;
       this.notify();
 
@@ -79,7 +79,7 @@ export class MatchEngine extends GameEngine {
     this.notify();
   }
 
-  public async selectCard( cardInstanceId: string,side: "PLAYER" | "OPPONENT") {
+  public async selectCard(cardInstanceId: string, side: "PLAYER" | "OPPONENT") {
     this.currentPhase = "RESOLVE";
 
     //stop timer
@@ -100,7 +100,7 @@ export class MatchEngine extends GameEngine {
     // if (!this.selectedOpponentCard) {
     //   this.selectedOpponentCard = this.deckEngine.autoSelectCard("OPPONENT");
     // }
-    if(!this.selectedPlayerCard || !this.selectedOpponentCard) {
+    if (!this.selectedPlayerCard || !this.selectedOpponentCard) {
       return false;
     }
     await this.resolveTurn();
@@ -113,7 +113,7 @@ export class MatchEngine extends GameEngine {
 
     await this.cardResolver.resolve(
       this.selectedPlayerCard,
-      this.selectedOpponentCard
+      this.selectedOpponentCard,
     );
 
     this.deckEngine.tickCooldown();
