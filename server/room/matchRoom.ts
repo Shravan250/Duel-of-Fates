@@ -91,6 +91,7 @@ export class MatchRoom {
 
     if (resolved) {
       this.emitState();
+      await this.deckEngine.clearSelections();
     }
   }
 

@@ -3,10 +3,28 @@ import Cards from "./Cards";
 import { useGameStore } from "@/store/useGameStore";
 import { useMatchStore } from "@/store/useMatchStore";
 import { socket } from "@/network/socket";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function BattleArea() {
-  const { timer, isPaused } = useMatchStore();
+  const { timer, isPaused,winner } = useMatchStore();
+  const router=useRouter();
   const { selectedOpponentCard, selectedPlayerCard } = useGameStore();
+
+  useEffect(() => {
+    console.log(useGameStore.getState());
+    console.log(useMatchStore.getState());
+   if(winner){
+    // setTimeout(() => {
+
+      router.push("/result");
+    // }, 2000);
+   }
+   return () => {
+     
+   }
+  }, [winner]);
+
   // const [timer, setTimer] = useState(15);
 
   // useEffect(() => {
@@ -52,8 +70,8 @@ export default function BattleArea() {
         )}
       </div>
 
-      {/* <div className="mx-auto text-black">V/S</div> */}
-      {isPaused ? (
+      <div className="mx-auto text-black">V/S</div>
+      {/* {isPaused ? (
         <Icon
           icon={"gridicons:play"}
           className="mx-auto w-10 h-10 cursor-pointer text-white"
@@ -65,7 +83,7 @@ export default function BattleArea() {
           className="mx-auto w-10 h-10 cursor-pointer text-white"
           onClick={() => socket.emit("pauseMatch")}
         />
-      )}
+      )} */}
 
       {/* Player 2 Selected Card */}
       <div className=" aspect-2/3 min-h-80 text-sm text-gray-600">

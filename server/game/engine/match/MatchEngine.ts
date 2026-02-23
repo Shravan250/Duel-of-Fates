@@ -126,7 +126,7 @@ export class MatchEngine extends GameEngine {
   private async cleanupTurn() {
     this.selectedPlayerCard = null;
     this.selectedOpponentCard = null;
-    this.deckEngine.clearSelections();
+    // this.deckEngine.clearSelections();
     this.currentTurn += 1;
     this.checkWinCondition();
   }

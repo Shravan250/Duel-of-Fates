@@ -8,6 +8,12 @@ import { useMatchStore } from "@/store/useMatchStore";
 import { useLogStore } from "@/store/useLogStore";
 
 export function initializeSocketListeners() {
+
+  socket.on("matchJoined", (state) => {
+    useGameStore.getState().setRole(state.role);
+    console.log(state.role);
+  });
+
   socket.on("gameState", (state) => {
     useMatchStore.getState().setMatchState(state.match);
     useHealthStore.getState().setHealthState(state.health);
