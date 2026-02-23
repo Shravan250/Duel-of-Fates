@@ -123,6 +123,10 @@ interface GameStoreState {
     selectedPlayerCard: string | null;
     selectedOpponentCard: string | null;
   }) => void;
+  setRole: (role: "PLAYER" | "OPPONENT") => void;
+
+  // player role
+  role: "PLAYER" | "OPPONENT" | null;
 
   //reste
   reset: () => void;
@@ -133,6 +137,7 @@ export const useGameStore = create<GameStoreState>((set) => ({
   opponentCards: [],
   selectedPlayerCard: null,
   selectedOpponentCard: null,
+  role:null,
 
   setGameState: (state) =>
     set(() => {
@@ -152,6 +157,8 @@ export const useGameStore = create<GameStoreState>((set) => ({
         selectedOpponentCard: selectedOpponent,
       };
     }),
+
+  setRole: (role) => set({ role }),
 
   reset: () =>
     set({
