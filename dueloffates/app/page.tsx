@@ -13,7 +13,7 @@ export default function Home() {
     initializeSocketListeners();
 
     socket.on("matchJoined", () => {
-      setIsSearching(false);
+      // setIsSearching(false);
       router.push("/game");
     });
 
