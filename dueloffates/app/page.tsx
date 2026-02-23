@@ -1,4 +1,5 @@
 "use client";
+import MatchmakingScreen from "@/components/MatchmakingScreen";
 import { socket } from "@/network/socket";
 import { initializeSocketListeners } from "@/network/socketListner";
 import { useRouter } from "next/navigation";
@@ -13,7 +14,7 @@ export default function Home() {
     initializeSocketListeners();
 
     socket.on("matchJoined", () => {
-      // setIsSearching(false);
+      setIsSearching(false);
       router.push("/game");
     });
 
@@ -30,11 +31,7 @@ export default function Home() {
     <div className="font-fell start-screen flex flex-col items-center justify-center ">
       {isSearching ? (
         <>
-          <h1 className="text-4xl tracking-widest uppercase animate-pulse">
-            Searching for Opponent...
-          </h1>
-
-          <div className="mt-8 w-16 h-16 border-4 border-amber-400 border-t-transparent rounded-full animate-spin"></div>
+          <MatchmakingScreen onCancel={() => setIsSearching(false)} />
         </>
       ) : (
         <>
