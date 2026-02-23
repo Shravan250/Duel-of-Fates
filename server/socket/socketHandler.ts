@@ -15,6 +15,11 @@ export function socketHandler(io: Server) {
       });
     });
 
+    socket.on("leaveQueue", () => {
+      console.log(`leaveQueue received from ${socket.id}`);
+      removePlayerFromQueue(socket.id);
+    });
+
     socket.on("playCard", async ({ cardInstanceId }) => {
       const playerId = socket.id;
 
