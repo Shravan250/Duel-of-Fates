@@ -25,7 +25,13 @@ export default function Home() {
     };
   }, [router]);
 
+  function initializeSockets() {
+    socket.connect();
+    initializeSocketListeners();
+  }
+
   const handleStartGame = () => {
+    initializeSockets();
     console.log("Joining matchmaking...");
     setIsSearching(true);
     socket.emit("joinQueue");
@@ -53,7 +59,7 @@ export default function Home() {
             Fates
           </h1>
           <button
-            className="mt-18 font-inter uppercase tracking-[0.35em] px-14 py-4 text-amber-200 bg-black/70 border-2 border-amber-400 rounded-full shadow-[0_0_30px_rgba(0,0,0,0.7)] transition-all duration-300 hover:bg-black/85 hover:text-white hover:shadow-[0_0_40px_rgba(251,191,36,0.6)] active:scale-95"
+            className="mt-18 font-inter uppercase tracking-[0.35em] px-14 py-4 text-amber-200 bg-black/70 border-2 hover:cursor-pointer border-amber-400 rounded-full shadow-[0_0_30px_rgba(0,0,0,0.7)] transition-all duration-300 hover:bg-black/85 hover:text-white hover:shadow-[0_0_40px_rgba(251,191,36,0.6)] active:scale-95"
             onClick={handleStartGame}
           >
             Start Game

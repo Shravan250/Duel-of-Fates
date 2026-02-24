@@ -8,7 +8,6 @@ import { useMatchStore } from "@/store/useMatchStore";
 import { useLogStore } from "@/store/useLogStore";
 
 export function initializeSocketListeners() {
-
   socket.on("matchJoined", (state) => {
     useGameStore.getState().setRole(state.role);
     console.log(state.role);
@@ -21,6 +20,10 @@ export function initializeSocketListeners() {
     useStatusStore.getState().setStatusState(state.status);
     useGameStore.getState().setGameState(state.deck);
     useLogStore.getState().setLogs(state.logs);
+  });
+
+  socket.on("matchLeft", (state) => {
+    useMatchStore.getState().setWinner(state.winner);
   });
 
   socket.on("matchEnded", () => {
