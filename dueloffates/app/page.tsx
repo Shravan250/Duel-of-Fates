@@ -10,14 +10,20 @@ export default function Home() {
   const [isSearching, setIsSearching] = useState<boolean>(false);
 
   useEffect(() => {
-    socket.on("matchJoined", () => {
+    socket.connect();
+    initializeSocketListeners();
+
+    const handleMatch = () => {
+      setIsSearching(false);
       router.push("/game");
-    });
+    };
+
+    socket.on("matchJoined", handleMatch);
 
     return () => {
-      setIsSearching(false);
+      socket.off("matchJoined", handleMatch);
     };
-  }, []);
+  }, [router]);
 
   function initializeSockets() {
     socket.connect();
@@ -31,16 +37,18 @@ export default function Home() {
     socket.emit("joinQueue");
   };
 
-  const handleCancelGame = () => {
-    socket.emit("leaveQueue");
+  const handleLeaveQueue = () => {
+    console.log("Leaving matchmaking...");
     setIsSearching(false);
+    socket.emit("leaveQueue");
+    router.push("/");
   };
 
   return (
     <div className="font-fell start-screen flex flex-col items-center justify-center ">
       {isSearching ? (
         <>
-          <MatchmakingScreen onCancel={() => handleCancelGame()} />
+          <MatchmakingScreen handleLeaveQueue={handleLeaveQueue} />
         </>
       ) : (
         <>
