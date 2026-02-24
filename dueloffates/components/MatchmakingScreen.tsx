@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { socket } from "@/network/socket";
 
 interface MatchmakingScreenProps {
   onCancel: () => void;
@@ -65,11 +64,9 @@ export default function MatchmakingScreen({
       {/* Cancel Button */}
       <button
         onClick={() => {
-          socket.emit("leaveQueue");
           onCancel();
         }}
-        className="mt-10 px-8 py-2 text-xl border border-amber-400 rounded-full 
-                   hover:bg-amber-400 hover:text-black transition-all"
+        className="mt-10 px-8 py-2 text-xl border border-amber-400 hover:cursor-pointer  rounded-full  hover:bg-amber-400 hover:text-black transition-all z-50"
       >
         Cancel
       </button>
