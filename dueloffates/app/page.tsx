@@ -10,9 +10,6 @@ export default function Home() {
   const [isSearching, setIsSearching] = useState<boolean>(false);
 
   useEffect(() => {
-    socket.connect();
-    initializeSocketListeners();
-
     socket.on("matchJoined", () => {
       setIsSearching(false);
       router.push("/game");
@@ -21,7 +18,13 @@ export default function Home() {
     return () => {};
   }, []);
 
+  function initializeSockets () {
+    socket.connect();
+    initializeSocketListeners();
+  };
+
   const handleStartGame = () => {
+    initializeSockets()
     console.log("Joining matchmaking...");
     setIsSearching(true);
     socket.emit("joinQueue");

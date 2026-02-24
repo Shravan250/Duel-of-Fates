@@ -90,9 +90,13 @@ export class MatchRoom {
     );
 
     if (resolved) {
+      this.isFinished= this.matchEngine.getState().isMatchOver;
+      console.log(this.isFinished);
+      
       this.emitState();
       await this.deckEngine.clearSelections();
     }
+
   }
 
   public getState() {

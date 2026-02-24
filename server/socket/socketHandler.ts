@@ -45,10 +45,21 @@ export function socketHandler(io: Server) {
       const roomId = roomManager.getRoomByPlayer(socket.id);
 
       if (roomId) {
+        const room = roomManager.getRoom(roomId);
+
+        const role =
+          room?.getPlayerRole(socket.id) === "PLAYER" ? "OPPONENT" : "PLAYER";
+
+        if (room?.isFinished) {
+          roomManager.removeRoom(roomId);
+          io.to(roomId).emit("matchEnded", { reason: "Match Finished" });
+          return;
+        }
         roomManager.removeRoom(roomId);
 
-        io.to(roomId).emit("matchEnded", {
+        io.to(roomId).emit("matchLeft", {
           reason: "Player Disconnected",
+          winner: role,
         });
       }
     });

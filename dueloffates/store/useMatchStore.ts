@@ -82,6 +82,8 @@ interface MatchStoreState {
     canSelectCard: boolean;
   }) => void;
 
+  setWinner: (winner: "PLAYER" | "OPPONENT" | null) => void;
+
   reset: () => void;
 }
 
@@ -95,6 +97,8 @@ export const useMatchStore = create<MatchStoreState>((set) => ({
   canSelectCard: false,
 
   setMatchState: (state) => set(state),
+
+  setWinner: (winner) => set({ winner }),
 
   reset: () =>
     set({
