@@ -13,13 +13,17 @@ export default function Home() {
     socket.connect();
     initializeSocketListeners();
 
-    socket.on("matchJoined", () => {
+    const handleMatch = () => {
       setIsSearching(false);
       router.push("/game");
-    });
+    };
 
-    return () => {};
-  }, []);
+    socket.on("matchJoined", handleMatch);
+
+    return () => {
+      socket.off("matchJoined", handleMatch);
+    };
+  }, [router]);
 
   const handleStartGame = () => {
     console.log("Joining matchmaking...");
@@ -27,11 +31,18 @@ export default function Home() {
     socket.emit("joinQueue");
   };
 
+  const handleLeaveQueue = () => {
+    console.log("Leaving matchmaking...");
+    setIsSearching(false);
+    socket.emit("leaveQueue");
+    router.push("/");
+  };
+
   return (
     <div className="font-fell start-screen flex flex-col items-center justify-center ">
       {isSearching ? (
         <>
-          <MatchmakingScreen onCancel={() => setIsSearching(false)} />
+          <MatchmakingScreen handleLeaveQueue={handleLeaveQueue} />
         </>
       ) : (
         <>

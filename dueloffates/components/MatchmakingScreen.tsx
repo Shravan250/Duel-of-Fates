@@ -1,14 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { socket } from "@/network/socket";
 
 interface MatchmakingScreenProps {
-  onCancel: () => void;
+  handleLeaveQueue: () => void;
 }
 
 export default function MatchmakingScreen({
-  onCancel,
+  handleLeaveQueue,
 }: MatchmakingScreenProps) {
   return (
     <div className="fixed inset-0 flex flex-col items-center justify-center bg-black text-amber-200 overflow-hidden">
@@ -64,12 +63,9 @@ export default function MatchmakingScreen({
 
       {/* Cancel Button */}
       <button
-        onClick={() => {
-          socket.emit("leaveQueue");
-          onCancel();
-        }}
+        onClick={handleLeaveQueue}
         className="mt-10 px-8 py-2 text-xl border border-amber-400 rounded-full 
-                   hover:bg-amber-400 hover:text-black transition-all"
+                   hover:bg-amber-400 hover:text-black transition-all z-10"
       >
         Cancel
       </button>
