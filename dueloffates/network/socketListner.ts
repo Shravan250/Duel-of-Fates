@@ -10,7 +10,7 @@ import { useLogStore } from "@/store/useLogStore";
 export function initializeSocketListeners() {
   socket.on("matchJoined", (state) => {
     useGameStore.getState().setRole(state.role);
-    console.log(state.role);
+    // console.log(state.role);
   });
 
   socket.on("gameState", (state) => {
@@ -27,6 +27,6 @@ export function initializeSocketListeners() {
   });
 
   socket.on("matchEnded", () => {
-    useMatchStore.getState().reset();
+    // useMatchStore.getState().reset();
   });
 }

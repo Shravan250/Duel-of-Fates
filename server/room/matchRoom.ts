@@ -93,8 +93,6 @@ export class MatchRoom {
     );
 
     if (resolved) {
-      this.isFinished= this.matchEngine.getState().isMatchOver;
-      console.log(this.isFinished);
       
       this.emitState();
       await this.deckEngine.clearSelections();
@@ -117,8 +115,11 @@ export class MatchRoom {
   private emitState() {
     if (!this.players.player1 || !this.players.player2) return;
 
+
+
     const baseState = this.getState();
 
+    this.isFinished= baseState.match.isMatchOver;
     // Player1 sees normal orientation
     this.players.player1.socket.emit("gameState", baseState);
 

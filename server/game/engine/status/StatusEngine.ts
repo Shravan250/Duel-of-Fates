@@ -99,7 +99,7 @@ export class StatusEngine extends GameEngine {
       this.state[side].poison + stack.poison,
     );
 
-    this.notify();
+    // this.notify();
   }
 
   // resolve turn
@@ -160,7 +160,7 @@ export class StatusEngine extends GameEngine {
       //   },
       // };
     });
-    this.notify();
+    // this.notify();
   }
 
   // applying buffs and debuffs
@@ -182,7 +182,7 @@ export class StatusEngine extends GameEngine {
         },
       },
     };
-    this.notify();
+    // this.notify();
   }
 
   public consumeReduceIncommingAttackModifier(side: Side) {
@@ -196,7 +196,7 @@ export class StatusEngine extends GameEngine {
         },
       },
     };
-    this.notify();
+    // this.notify();
   }
 
   public consumeShieldModifier(side: Side) {
@@ -210,7 +210,7 @@ export class StatusEngine extends GameEngine {
         },
       },
     };
-    this.notify();
+    // this.notify();
   }
 
   public consumeReducedShieldModifier(side: Side) {
@@ -224,7 +224,7 @@ export class StatusEngine extends GameEngine {
         },
       },
     };
-    this.notify();
+    // this.notify();
   }
 
   public consumeCooldownModifier(side: Side) {
@@ -239,7 +239,7 @@ export class StatusEngine extends GameEngine {
       },
     };
 
-    this.notify();
+    // this.notify();
   }
 
   public transferStatus(side: Side, target: Side) {
@@ -257,7 +257,7 @@ export class StatusEngine extends GameEngine {
       },
     };
 
-    this.notify();
+    // this.notify();
   }
 
   private clamp(num: number) {

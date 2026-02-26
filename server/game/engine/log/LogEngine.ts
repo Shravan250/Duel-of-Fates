@@ -12,8 +12,8 @@ export class LogEngine extends GameEngine {
       ...event,
       timestamp: Date.now(),
     });
-    console.log(`Event added to turn ${this.currentTurn}:`, event);
-    this.notify();
+    // console.log(`Event added to turn ${this.currentTurn}:`, event);
+    // this.notify();
   }
 
   public finalizeTurn() {
@@ -32,10 +32,10 @@ export class LogEngine extends GameEngine {
 
     this.currentTurn++;
     this.currentTurnEvents = [];
-    console.log(
-      `Turn ${turnLog.turnNumber} finalized with ${turnLog.rawEvents.length} events.`,
-    );
-    this.notify();
+    // console.log(
+    //   `Turn ${turnLog.turnNumber} finalized with ${turnLog.rawEvents.length} events.`,
+    // );
+    // this.notify();
   }
 
   public clearLogs() {
