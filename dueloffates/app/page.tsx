@@ -14,7 +14,6 @@ export default function Home() {
     initializeSocketListeners();
 
     const handleMatch = () => {
-      setIsSearching(false);
       router.push("/game");
     };
 
