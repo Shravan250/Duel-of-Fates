@@ -180,6 +180,7 @@ export class MatchEngine extends GameEngine {
       this.isMatchOver = true;
       this.currentPhase = "END";
     }
+    this.notify();
   }
 
   public cleanup() {
