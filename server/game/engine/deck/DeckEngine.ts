@@ -24,7 +24,7 @@ export class DeckEngine extends GameEngine {
     this.playerInstances = createCardInstances(this.playerDeck, "PLAYER");
     this.opponentInstances = createCardInstances(this.opponentDeck, "OPPONENT");
 
-    this.notify();
+    // // this.notify();
   }
 
   public resetCards() {
@@ -34,7 +34,7 @@ export class DeckEngine extends GameEngine {
   public clearSelections() {
     this.selectedPlayerCard = null;
     this.selectedOpponentCard = null;
-    this.notify();
+    // // this.notify();
   }
 
   //getters
@@ -74,7 +74,7 @@ export class DeckEngine extends GameEngine {
 
     cardToUpdate.cooldown = cooldown + 1;
 
-    this.notify();
+    // this.notify();
   }
 
   //reduce cooldown
@@ -87,7 +87,7 @@ export class DeckEngine extends GameEngine {
       }
     }
 
-    this.notify();
+    // this.notify();
   }
 
   public autoSelectCard(side: "PLAYER" | "OPPONENT") {
@@ -109,7 +109,7 @@ export class DeckEngine extends GameEngine {
       this.selectedOpponentCard = selectedCard.id;
     }
 
-    this.notify();
+    // this.notify();
     return selectedCard.id;
   }
 
@@ -124,7 +124,7 @@ export class DeckEngine extends GameEngine {
       this.selectedOpponentCard = instanceId;
     }
 
-    this.notify();
+    // // this.notify();
   }
 
   //check if player can play the card

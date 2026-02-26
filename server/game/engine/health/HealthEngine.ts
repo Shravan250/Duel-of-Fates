@@ -21,7 +21,7 @@ export class HealthEngine extends GameEngine {
       ...this.hp,
       [target]: Math.max(0, this.hp[target] - amount),
     };
-    this.notify();
+    // this.notify();
   }
 
   // heal health
@@ -30,7 +30,7 @@ export class HealthEngine extends GameEngine {
       ...this.hp,
       [target]: Math.min(this.hp[target] + amount, this.maxHp),
     };
-    this.notify();
+    // this.notify();
   }
 
   reset(hp: number) {
@@ -39,7 +39,7 @@ export class HealthEngine extends GameEngine {
       opponent: hp,
     };
     this.maxHp = hp;
-    this.notify();
+    // this.notify();
   }
 
   swapHealth() {
@@ -49,7 +49,7 @@ export class HealthEngine extends GameEngine {
       player: opponent,
       opponent: player,
     };
-    this.notify();
+    // this.notify();
   }
 
   // 🔒 SAME LOGIC AS BEFORE — NOT CHANGED

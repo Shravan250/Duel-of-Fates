@@ -24,7 +24,7 @@ export class ShieldEngine extends GameEngine {
       [target]: this.shield[target] - absorbed,
     };
 
-    this.notify();
+    // this.notify();
     return amount - absorbed;
   }
 
@@ -35,7 +35,7 @@ export class ShieldEngine extends GameEngine {
       [target]: Math.min(this.shield[target] + amount, this.maxShield),
     };
 
-    this.notify();
+    // this.notify();
   }
 
   reset(shield: number) {
@@ -44,7 +44,7 @@ export class ShieldEngine extends GameEngine {
       opponent: shield,
     };
     this.maxShield = shield;
-    this.notify();
+    // this.notify();
   }
 
   swapShield() {
@@ -55,7 +55,7 @@ export class ShieldEngine extends GameEngine {
       opponent: player,
     };
 
-    this.notify();
+    // this.notify();
   }
 
   // 🔒 SAME CONTRACT AS BEFORE
