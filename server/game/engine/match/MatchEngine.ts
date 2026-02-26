@@ -4,6 +4,7 @@ import { HealthEngine } from "../health/HealthEngine";
 import { ShieldEngine } from "../shield/ShieldEngine";
 import { CardEngine } from "../cards/CardEngine";
 import { StatusEngine } from "../status/StatusEngine";
+import type { LogEngine } from "../log/logEngine";
 
 type MatchPhase = "SETUP" | "PLAY" | "RESOLVE" | "END";
 
@@ -23,13 +24,19 @@ export class MatchEngine extends GameEngine {
     private shieldEngine: ShieldEngine,
     private cardResolver: CardEngine,
     private statusEngine: StatusEngine,
+    private logEngine: LogEngine,
   ) {
     super();
-    this.healthEngine.subscribe(() => this.checkWinCondition());
+    // this.healthEngine.subscribe(() => this.checkWinCondition());
+    this.deckEngine.subscribe(() => this.notify());
+    this.statusEngine.subscribe(() => this.notify());
+    this.healthEngine.subscribe(() => this.notify());
+    this.shieldEngine.subscribe(() => this.notify());
+    this.cardResolver.subscribe(() => this.notify());
+    this.logEngine.subscribe(() => this.notify());
   }
 
   // public functions
-
   public startMatch() {
     this.currentPhase = "PLAY";
     this.currentTurn = 1;
@@ -52,57 +59,82 @@ export class MatchEngine extends GameEngine {
   }
 
   // private functions
-
   private startTimer() {
-    if (this.timerInterval) {
-      clearInterval(this.timerInterval);
-    }
+    this.stopTimer();
 
-    this.timerInterval = setInterval(() => {
+    this.timer = 15;
+
+    this.timerInterval = setInterval(async () => {
+      if (this.currentPhase !== "PLAY") {
+        this.stopTimer();
+        return;
+      }
+
       this.timer -= 1;
       this.notify();
 
       if (this.timer <= 0) {
-        if (this.timerInterval) {
-          clearInterval(this.timerInterval);
-        }
+        this.stopTimer();
+        await this.autoSelectCards();
       }
     }, 1000);
   }
 
-  private resetTimer() {
-    this.timer = 15;
+  private stopTimer() {
     if (this.timerInterval) {
       clearInterval(this.timerInterval);
       this.timerInterval = null;
     }
+  }
+
+  private startTurn() {
+    this.currentPhase = "PLAY";
+    this.startTimer();
     this.notify();
   }
 
-  public async selectCard(cardInstanceId: string, side: "PLAYER" | "OPPONENT") {
+  public async autoSelectCards() {
+    if (this.currentPhase !== "PLAY") return false;
+
+    if (!this.selectedPlayerCard) {
+      this.selectedPlayerCard =
+        this.deckEngine.autoSelectCard("PLAYER") ?? null;
+    }
+
+    if (!this.selectedOpponentCard) {
+      this.selectedOpponentCard =
+        this.deckEngine.autoSelectCard("OPPONENT") ?? null;
+    }
+
+    if (!this.selectedPlayerCard || !this.selectedOpponentCard) {
+      return false;
+    }
+
     this.currentPhase = "RESOLVE";
 
-    //stop timer
-    if (this.timerInterval) {
-      clearInterval(this.timerInterval);
-      this.timerInterval = null;
-    }
+    this.stopTimer();
+    this.notify();
+
+    await this.resolveTurn();
+    return true;
+  }
+
+  public async selectCard(cardInstanceId: string, side: "PLAYER" | "OPPONENT") {
+    if (this.currentPhase !== "PLAY") return false;
 
     await this.deckEngine.selectCard(cardInstanceId, side);
 
     this.selectedPlayerCard = this.deckEngine.getState().selectedPlayerCard;
     this.selectedOpponentCard = this.deckEngine.getState().selectedOpponentCard;
 
-    // if (!this.selectedPlayerCard) {
-    //   this.selectedPlayerCard = this.deckEngine.autoSelectCard("PLAYER");
-    // }
-
-    // if (!this.selectedOpponentCard) {
-    //   this.selectedOpponentCard = this.deckEngine.autoSelectCard("OPPONENT");
-    // }
     if (!this.selectedPlayerCard || !this.selectedOpponentCard) {
       return false;
     }
+
+    this.currentPhase = "RESOLVE";
+    this.stopTimer();
+    this.notify();
+
     await this.resolveTurn();
     return true;
   }
@@ -128,7 +160,12 @@ export class MatchEngine extends GameEngine {
     this.selectedOpponentCard = null;
     // this.deckEngine.clearSelections();
     this.currentTurn += 1;
+    this.logEngine.finalizeTurn();
     this.checkWinCondition();
+
+    if (!this.isMatchOver) {
+      this.startTurn();
+    }
   }
 
   private checkWinCondition() {
@@ -146,10 +183,7 @@ export class MatchEngine extends GameEngine {
   }
 
   public cleanup() {
-    if (this.timerInterval) {
-      clearInterval(this.timerInterval);
-      this.timerInterval = null;
-    }
+    this.stopTimer();
   }
 
   getState() {

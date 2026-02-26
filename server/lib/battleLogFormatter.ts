@@ -1,13 +1,9 @@
-import type { RawLogEvent, EVENT_PRIORITY, Side } from "../types";
+import { type RawLogEvent, EVENT_PRIORITY, type Side } from "./logtypes";
 // Helpers
 
 function getSideLabel(side: Side): string {
   return side === "player" ? "Player" : "Opponent";
 }
-
-// function getTargetLabel(side: Side): string {
-//   return side === "player" ? "Opponent" : "Player";
-// }
 
 // Order events by priority, then by timestamp
 function orderEvents(events: RawLogEvent[]): RawLogEvent[] {
@@ -215,6 +211,7 @@ export function formatTurnLogs(
   for (let i = 0; i < eventGroups.length; i++) {
     const group = eventGroups[i];
 
+    if (!group) continue; // skip empty groups
     // Adding section header if present
     if (group.header) {
       if (i > 0) {
@@ -229,7 +226,7 @@ export function formatTurnLogs(
     }
 
     // Adding spacing between groups (not after last group tough)
-    if (i < eventGroups.length - 1 && !eventGroups[i + 1].header) {
+    if (i < eventGroups.length - 1 && !eventGroups[i + 1]!.header) {
       formattedOutput.push("");
     }
   }

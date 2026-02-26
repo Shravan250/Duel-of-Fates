@@ -54,10 +54,13 @@ export class MatchRoom {
       this.shieldEngine,
       this.cardEngine,
       this.statusEngine,
+      this.logEngine,
     );
 
     this.isStarted = false;
     this.isFinished = false;
+
+    this.matchEngine.subscribe(() => this.emitState());
   }
 
   public join(player: Player) {
