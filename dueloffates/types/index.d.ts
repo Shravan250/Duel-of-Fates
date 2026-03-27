@@ -114,11 +114,8 @@ export interface CardProps {
 
 export type Side = "PLAYER" | "OPPONENT";
 
-export type AnimationEffect =
-  | { id: number; type: "ATTACK"; side: Side }
-  | { id: number; type: "SHIELD"; side: Side }
-  | { id: number; type: "HEAL"; side: Side }
-  | { id: number; type: "POISON"; side: Side }
-  | { id: number; type: "BUFF"; side: Side }
-  | { id: number; type: "DEBUFF"; side: Side }
-  | { id: number; type: "SWAP" };
+export type AnimationEffect = {
+  id: number;
+  type: "ATTACK" | "SHIELD" | "HEAL" | "POISON" | "BUFF" | "DEBUFF" | "SWAP";
+  side?: Side;
+};
