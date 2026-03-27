@@ -26,7 +26,7 @@ export function SwordSlash({ from }: { from: Side }) {
     >
       <Icon
         icon="game-icons:broadsword"
-        className={`w-28 h-28 text-white drop-shadow-[0_0_25px_rgba(255,255,255,0.9)] ${!isPlayer && "-scale-100"}`}
+        className={`w-28 h-28 text-red-500 drop-shadow-[0_0_25px_rgba(255,0,0,0.9)] ${!isPlayer && "-scale-100"}`}
       />
     </motion.div>
   );

@@ -6,6 +6,18 @@ import { ZoneIcon } from "./effects/ZoneIcon";
 import { PotionThrow } from "./effects/PotionThrow";
 
 export function EffectRenderer({ effect }: { effect: Effect }) {
+  if (!effect.side)
+    return (
+      <motion.div
+        initial={{ rotate: 0, opacity: 0 }}
+        animate={{ rotate: 360, opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.8 }}
+        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+      >
+        <Icon icon="mdi:swap-vertical" className="w-28 h-28 text-amber-400" />
+      </motion.div>
+    );
   switch (effect.type) {
     case "ATTACK":
       return <SwordSlash from={effect.side} />;
@@ -23,7 +35,7 @@ export function EffectRenderer({ effect }: { effect: Effect }) {
     case "HEAL":
       return (
         <ZoneIcon
-          icon="mdi:plus-circle"
+          icon="map:health"
           color="text-green-400"
           side={effect.side}
           glow="rgba(34,197,94,0.9)"
@@ -54,19 +66,6 @@ export function EffectRenderer({ effect }: { effect: Effect }) {
           glow="rgba(239,68,68,0.9)"
           pulse
         />
-      );
-
-    case "SWAP":
-      return (
-        <motion.div
-          initial={{ rotate: 0, opacity: 0 }}
-          animate={{ rotate: 360, opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.8 }}
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-        >
-          <Icon icon="mdi:swap-vertical" className="w-28 h-28 text-amber-400" />
-        </motion.div>
       );
 
     default:

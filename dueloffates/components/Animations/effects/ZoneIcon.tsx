@@ -1,6 +1,9 @@
+"use client";
+
 import { Side } from "@/types";
 import { motion } from "framer-motion";
 import { Icon } from "@iconify/react";
+import { useMemo } from "react";
 
 export function ZoneIcon({
   icon,
@@ -17,24 +20,88 @@ export function ZoneIcon({
 }) {
   const isPlayer = side === "PLAYER";
 
+  // random positions
+  const particles = useMemo(
+    () =>
+      [20, 40, 60, 80].map((x) => ({
+        x,
+        y: Math.random() * 80 + 20,
+        drift: Math.random() *  120 + 120,
+        rotate: Math.random() * 40 - 20,
+      })),
+    [],
+  );
+
   return (
-    <motion.div
-      initial={{ scale: 0.7, opacity: 0 }}
-      animate={{
-        scale: pulse ? [1, 1.3, 1] : 1.2,
-        opacity: 1,
-      }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.6 }}
-      className={`absolute left-1/2 -translate-x-1/2 ${
-        isPlayer ? "bottom-1/4" : "top-1/4"
-      } pointer-events-none`}
-    >
-      <Icon
-        icon={icon}
-        className={`w-32 h-32 ${color}`}
-        style={{ filter: `drop-shadow(0 0 30px ${glow})` }}
-      />
-    </motion.div>
+    <>
+      <motion.div
+        className="absolute left-0 w-screen h-[40vh] overflow-hidden pointer-events-none"
+        style={{
+          background: `linear-gradient(to top, ${glow}, transparent)`,
+          filter: "blur(50px)",
+        }}
+        initial={{
+          y: isPlayer ? "100%" : "-100%",
+          opacity: 0,
+          scaleY: 0.8,
+        }}
+        animate={{
+          y: "0%",
+          opacity: [0, 1, 0],
+          scaleY: [0.8, 1.3, 1],
+        }}
+        transition={{
+          duration: 0.9,
+          ease: "easeOut",
+        }}
+      ></motion.div>
+      
+      {/* ICON PARTICLES */}
+      {particles.map((p, i) => (
+        <motion.div
+          key={i}
+          initial={{
+            opacity: 0,
+            y: 0,
+            scale: 0.8,
+          }}
+          animate={{
+            y: isPlayer ? -p.drift : p.drift,
+            opacity: [0, 1, 0],
+            scale: pulse ? [0.8, 1.3, 1] : [0.8, 1.1, 1],
+            rotate: [0, p.rotate],
+          }}
+          transition={{
+            duration: 0.9,
+            delay: i * 0.1,
+            ease: "easeOut",
+          }}
+          className="absolute"
+          style={{
+            left: `${p.x}%`,
+            bottom: isPlayer ? `${p.y}px` : undefined,
+            top: !isPlayer ? `${p.y}px` : undefined,
+            transform: "translateX(-50%)", // center icon itself
+          }}
+        >
+          {/* Glow */}
+          <div
+            className="absolute w-12 h-12 rounded-full blur-xl"
+            style={{
+              background: `radial-gradient(circle, ${glow}88, transparent 70%)`,
+            }}
+          />
+
+          {/* Icon */}
+          <Icon
+            icon={icon}
+            className={`w-24 h-24  ${color} relative z-10`}
+            style={{
+              filter: `drop-shadow(0 0 10px ${glow})`,
+            }}
+          />
+        </motion.div>
+      ))}
+    </>
   );
 }
