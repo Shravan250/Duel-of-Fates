@@ -7,23 +7,20 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export default function BattleArea() {
-  const { timer, isPaused,winner } = useMatchStore();
-  const router=useRouter();
+  const { timer, isPaused, winner } = useMatchStore();
+  const router = useRouter();
   const { selectedOpponentCard, selectedPlayerCard } = useGameStore();
 
-  useEffect(() => {
-    console.log(useGameStore.getState());
-    console.log(useMatchStore.getState());
-   if(winner){
-    // setTimeout(() => {
-
-      router.push("/result");
-    // }, 2000);
-   }
-   return () => {
-     
-   }
-  }, [winner]);
+  // useEffect(() => {
+  //   console.log(useGameStore.getState());
+  //   console.log(useMatchStore.getState());
+  //   if (winner) {
+  //     // setTimeout(() => {
+  //     // router.push("/result");
+  //     // }, 2000);
+  //   }
+  //   return () => {};
+  // }, [winner]);
 
   // const [timer, setTimer] = useState(15);
 
