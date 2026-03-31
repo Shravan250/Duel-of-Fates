@@ -4,6 +4,7 @@ import { Server } from "socket.io";
 import cors from "cors";
 import { roomManager } from "./room/roomManager";
 import { socketHandler } from "./socket/socketHandler";
+import cardsRouter from "./routes/cards";
 
 const app = express();
 app.use(cors());
@@ -23,6 +24,9 @@ roomManager.initialize(io);
  * Connection Handling
  */
 socketHandler(io);
+
+//routes
+app.use("/cards", cardsRouter);
 
 const PORT = 3001;
 
