@@ -10,7 +10,7 @@ export function EffectRenderer({ effect }: { effect: Effect }) {
     return (
       <motion.div
         initial={{ rotate: 0, opacity: 0 }}
-        animate={{ rotate: 360, opacity: 1 }}
+        animate={{ rotate: 180, opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.8 }}
         className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
@@ -64,6 +64,7 @@ export function EffectRenderer({ effect }: { effect: Effect }) {
           color="text-red-500"
           side={effect.side}
           glow="rgba(239,68,68,0.9)"
+          isDebuff
           pulse
         />
       );

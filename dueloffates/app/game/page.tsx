@@ -75,11 +75,20 @@ export default function Game() {
         <Button onClick={() => trigger({ type: "HEAL", side: "PLAYER" })}>
           Player Heal
         </Button>
+        <Button onClick={() => trigger({ type: "HEAL", side: "OPPONENT" })}>
+          Opp Heal
+        </Button>
         <Button onClick={() => trigger({ type: "POISON", side: "PLAYER" })}>
           Player Poison
         </Button>
         <Button onClick={() => trigger({ type: "BUFF", side: "PLAYER" })}>
           Player Buff
+        </Button>
+        <Button onClick={() => trigger({ type: "BUFF", side: "OPPONENT" })}>
+          Opp Buff
+        </Button>
+        <Button onClick={() => trigger({ type: "DEBUFF", side: "PLAYER" })}>
+          Player Debuff
         </Button>
         <Button onClick={() => trigger({ type: "DEBUFF", side: "OPPONENT" })}>
           Opp Debuff
@@ -94,7 +103,7 @@ function Button({ children, onClick }: any) {
   return (
     <button
       onClick={onClick}
-      className="px-4 py-2 border border-amber-400 rounded-full bg-black/70 hover:bg-amber-400 hover:text-black transition-all"
+      className="px-4 py-2 border border-amber-400 rounded-full text-amber-400 bg-black/70 hover:bg-amber-400 hover:text-black transition-all"
     >
       {children}
     </button>

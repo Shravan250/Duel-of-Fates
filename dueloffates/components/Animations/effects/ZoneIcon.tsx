@@ -11,12 +11,14 @@ export function ZoneIcon({
   side,
   glow,
   pulse = false,
+  isDebuff = false,
 }: {
   icon: string;
   color: string;
   side: Side;
   glow: string;
   pulse?: boolean;
+  isDebuff?: boolean;
 }) {
   const isPlayer = side === "PLAYER";
 
@@ -26,7 +28,7 @@ export function ZoneIcon({
       [20, 40, 60, 80].map((x) => ({
         x,
         y: Math.random() * 80 + 20,
-        drift: Math.random() *  120 + 120,
+        drift: Math.random() * 120 + 120,
         rotate: Math.random() * 40 - 20,
       })),
     [],
@@ -41,47 +43,51 @@ export function ZoneIcon({
           filter: "blur(50px)",
         }}
         initial={{
-          y: isPlayer ? "100%" : "-100%",
+          y: isPlayer ? (isDebuff ? "0%" : "150%") : isDebuff ? "-150%" : "0%",
           opacity: 0,
           scaleY: 0.8,
         }}
         animate={{
-          y: "0%",
+          y: isPlayer ? (isDebuff ? "150%" : "0%") : isDebuff ? "0%" : "-150%",
           opacity: [0, 1, 0],
           scaleY: [0.8, 1.3, 1],
         }}
         transition={{
-          duration: 0.9,
+          duration: 1.2,
           ease: "easeOut",
         }}
       ></motion.div>
-      
+
       {/* ICON PARTICLES */}
       {particles.map((p, i) => (
         <motion.div
           key={i}
           initial={{
             opacity: 0,
-            y: 0,
+            y: isPlayer ? (isDebuff ? -150 : "0%") : isDebuff ? "0%" : 150,
             scale: 0.8,
           }}
           animate={{
-            y: isPlayer ? -p.drift : p.drift,
+            y: isDebuff
+              ? p.drift - (isPlayer ? 150 : 0)
+              : -p.drift + (isPlayer ? 0 : 150),
             opacity: [0, 1, 0],
             scale: pulse ? [0.8, 1.3, 1] : [0.8, 1.1, 1],
             rotate: [0, p.rotate],
           }}
           transition={{
-            duration: 0.9,
+            duration: 1.2,
             delay: i * 0.1,
             ease: "easeOut",
           }}
-          className="absolute"
+          className="absolute pointer-events-none"
           style={{
             left: `${p.x}%`,
+            transform: "translateX(-50%)",
+
+            // ONLY side controls position
             bottom: isPlayer ? `${p.y}px` : undefined,
             top: !isPlayer ? `${p.y}px` : undefined,
-            transform: "translateX(-50%)", // center icon itself
           }}
         >
           {/* Glow */}
