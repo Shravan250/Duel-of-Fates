@@ -5,6 +5,7 @@ import BattleArea from "@/components/BattleArea";
 import { BattleLogButton } from "@/components/BattleLogButton";
 import HeadUpDisplay from "@/components/HeadUpDisplay";
 import RenderCards from "@/components/RenderCards";
+import ResultOverlay from "@/components/ResultOverlay";
 import { socket } from "@/network/socket";
 import { AnimationEffect as Effect } from "@/types";
 import { useEffect, useState } from "react";
@@ -24,12 +25,13 @@ export default function Game() {
     }, 800);
   };
 
-  useEffect(() => {
-    return () => {
-      socket.emit("leaveRoom");
-      socket.disconnect();
-    };
-  }, []);
+  // useEffect(() => {
+  //   return () => {
+//     socket.emit("leaveRoom");
+//     socket.disconnect();
+  //   };
+  // }, []);
+
   return (
     <div className="relative min-h-screen bg-gray-100 p-4 md:p-6 lg:p-8 game-background">
       <div className="absolute top-4 right-4">
@@ -95,6 +97,8 @@ export default function Game() {
         </Button>
         <Button onClick={() => trigger({ type: "SWAP" })}>Swap</Button>
       </div>
+
+      <ResultOverlay />
     </div>
   );
 }

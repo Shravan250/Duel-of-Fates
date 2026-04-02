@@ -13,7 +13,7 @@ export class MatchEngine extends GameEngine {
   private currentTurn: number = 0;
   private selectedPlayerCard: string | null = null;
   private selectedOpponentCard: string | null = null;
-  private winner: "PLAYER" | "OPPONENT" | null = null;
+  private winner: "PLAYER" | "OPPONENT" | "DRAW" | null = null;
   private isMatchOver: boolean = false;
   private timer: number = 15;
   private timerInterval: NodeJS.Timeout | null = null;
@@ -171,7 +171,11 @@ export class MatchEngine extends GameEngine {
   private checkWinCondition() {
     const health = this.healthEngine.getHp();
 
-    if (health.player === 0) {
+    if (health.player === 0 && health.opponent === 0) {
+      this.winner = "DRAW";
+      this.isMatchOver = true;
+      this.currentPhase = "END";
+    } else if (health.player === 0) {
       this.winner = "OPPONENT";
       this.isMatchOver = true;
       this.currentPhase = "END";
