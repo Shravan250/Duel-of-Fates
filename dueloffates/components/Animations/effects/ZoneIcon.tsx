@@ -3,7 +3,7 @@
 import { Side } from "@/types";
 import { motion } from "framer-motion";
 import { Icon } from "@iconify/react";
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 
 export function ZoneIcon({
   icon,
@@ -12,6 +12,7 @@ export function ZoneIcon({
   glow,
   pulse = false,
   isDebuff = false,
+  onDone,
 }: {
   icon: string;
   color: string;
@@ -19,8 +20,11 @@ export function ZoneIcon({
   glow: string;
   pulse?: boolean;
   isDebuff?: boolean;
+  onDone: () => void;
 }) {
   const isPlayer = side === "PLAYER";
+
+  const hasCompleted=useRef(false);
 
   // random positions
   const particles = useMemo(
@@ -37,6 +41,12 @@ export function ZoneIcon({
   return (
     <>
       <motion.div
+        onAnimationComplete={()=>{
+          if(!hasCompleted.current){
+            hasCompleted.current=true;
+            onDone();
+          }
+        }}
         className="absolute left-0 w-screen h-[40vh] overflow-hidden pointer-events-none"
         style={{
           background: `linear-gradient(to top, ${glow}, transparent)`,

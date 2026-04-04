@@ -1,13 +1,26 @@
 import { Side } from "@/types";
 import { motion } from "framer-motion";
 import { Icon } from "@iconify/react";
+import { useRef } from "react";
 
-
-export function SwordSlash({ from }: { from: Side }) {
+export function SwordSlash({
+  from,
+  onDone,
+}: {
+  from: Side;
+  onDone: () => void;
+}) {
   const isPlayer = from === "PLAYER";
+  const hasCompleted = useRef(false);
 
   return (
     <motion.div
+      onAnimationComplete={() => {
+        if (!hasCompleted.current) {
+          hasCompleted.current = true;
+          onDone();
+        }
+      }}
       initial={{
         x: isPlayer ? -150 : 150,
         y: isPlayer ? 20 : -20,

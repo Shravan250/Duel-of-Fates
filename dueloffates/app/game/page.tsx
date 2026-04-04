@@ -20,15 +20,15 @@ export default function Game() {
     setCounter(id);
     setEffects((prev) => [...prev, { ...effect, id }]);
 
-    setTimeout(() => {
-      setEffects((prev) => prev.filter((e) => e.id !== id));
-    }, 800);
+    // setTimeout(() => {
+    //   setEffects((prev) => prev.filter((e) => e.id !== id));
+    // }, 1200);
   };
 
   // useEffect(() => {
   //   return () => {
-//     socket.emit("leaveRoom");
-//     socket.disconnect();
+  //     socket.emit("leaveRoom");
+  //     socket.disconnect();
   //   };
   // }, []);
 
@@ -56,7 +56,9 @@ export default function Game() {
       <div className="fixed inset-0 pointer-events-none z-50 flex items-center justify-center">
         <AnimatePresence>
           {effects.map((effect) => (
-            <EffectRenderer key={effect.id} effect={effect} />
+            <EffectRenderer key={effect.id} effect={effect} 
+              onDone={() => setEffects((prev) => prev.filter((e) => e.id !== effect.id))}
+            />
           ))}
         </AnimatePresence>
       </div>

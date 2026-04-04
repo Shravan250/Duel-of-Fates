@@ -4,23 +4,19 @@ import { Icon } from "@iconify/react";
 import { SwordSlash } from "./effects/SwordSlash";
 import { ZoneIcon } from "./effects/ZoneIcon";
 import { PotionThrow } from "./effects/PotionThrow";
+import Swap from "./effects/Swap";
 
-export function EffectRenderer({ effect }: { effect: Effect }) {
-  if (!effect.side)
-    return (
-      <motion.div
-        initial={{ rotate: 0, opacity: 0 }}
-        animate={{ rotate: 180, opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.8 }}
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-      >
-        <Icon icon="mdi:swap-vertical" className="w-28 h-28 text-amber-400" />
-      </motion.div>
-    );
+export function EffectRenderer({
+  effect,
+  onDone,
+}: {
+  effect: Effect;
+  onDone: () => void;
+}) {
+  if (!effect.side) return <Swap onDone={onDone} />;
   switch (effect.type) {
     case "ATTACK":
-      return <SwordSlash from={effect.side} />;
+      return <SwordSlash from={effect.side} onDone={onDone} />;
 
     case "SHIELD":
       return (
@@ -29,6 +25,7 @@ export function EffectRenderer({ effect }: { effect: Effect }) {
           color="text-blue-400"
           side={effect.side}
           glow="rgba(59,130,246,0.8)"
+          onDone={onDone}
         />
       );
 
@@ -40,11 +37,12 @@ export function EffectRenderer({ effect }: { effect: Effect }) {
           side={effect.side}
           glow="rgba(34,197,94,0.9)"
           pulse
+          onDone={onDone}
         />
       );
 
     case "POISON":
-      return <PotionThrow from={effect.side} />;
+      return <PotionThrow from={effect.side} onDone={onDone} />;
 
     case "BUFF":
       return (
@@ -54,6 +52,7 @@ export function EffectRenderer({ effect }: { effect: Effect }) {
           side={effect.side}
           glow="rgba(250,204,21,0.9)"
           pulse
+          onDone={onDone}
         />
       );
 
@@ -66,6 +65,7 @@ export function EffectRenderer({ effect }: { effect: Effect }) {
           glow="rgba(239,68,68,0.9)"
           isDebuff
           pulse
+          onDone={onDone}
         />
       );
 
